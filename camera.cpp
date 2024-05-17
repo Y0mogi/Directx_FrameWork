@@ -1,10 +1,15 @@
 #include "main.h"
 #include "renderer.h"
+#include "transform.h"
+#include "gameobject.h"
 #include "camera.h"
+
 
 void Camera::Init()
 {
-	_transform.position = {0.0f,5.0f,-10.0f};
+	if (_transform == nullptr)
+		_transform = Parent->GetComponent<Transform>();
+	_transform->position = {0.0f,5.0f,-10.0f};
 	_target = {0.0f,0.0f,0.0f};
 }
 
@@ -22,7 +27,7 @@ void Camera::Draw()
 	// ビューマトリックス設定
 	XMFLOAT3 up = { 0.0f,1.0f,0.0f };
 	XMMATRIX viewMatrix = XMMatrixLookAtLH(
-		XMLoadFloat3(&_transform.position),
+		XMLoadFloat3(&_transform->position),
 		XMLoadFloat3(&_target),
 		XMLoadFloat3(&up)
 	);
@@ -36,13 +41,4 @@ void Camera::Draw()
 
 	Renderer::SetProjectionMatrix(projectionMatrix);
 
-}
-
-Camera::Camera()
-	:GameObject()
-{
-}
-
-Camera::~Camera()
-{
 }

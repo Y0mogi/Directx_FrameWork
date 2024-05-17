@@ -1,22 +1,17 @@
 #pragma once
-#include "gameobject.h"
+#include "component.h"
 
-class Field :public	GameObject
+class Transform;
+
+class Field :public	Component
 {
 public:
-	void Init() override;
-	void Uninit() override;
-	void Update() override;
-	void Draw() override;
-
-	Field() = delete;
-	Field(const XMFLOAT3& pos, const XMFLOAT3& scl, const XMFLOAT4& color, const wchar_t* path);
-	~Field() override  { free((void*)_path); };
-
-	;
+	void Init(const XMFLOAT3& pos, const XMFLOAT3& scl, const XMFLOAT4& color, const wchar_t* path);
+	void Uninit();
+	void Update();
+	void Draw();
 private:
-	XMFLOAT4 _color{};
-	const wchar_t* _path{};
+	Transform* _transform;
 
 	ID3D11Buffer* _VertexBuffer = NULL;
 	ID3D11ShaderResourceView* _Texture = NULL;

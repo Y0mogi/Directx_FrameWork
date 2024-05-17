@@ -1,19 +1,18 @@
 #pragma once
-#include "gameobject.h"
+#include "component.h"
 
-class Camera : public GameObject
+class Camera : public Component
 {
 public:
-	void Init() override;
-	void Uninit()override;
-	void Update()override;
-	void Draw()override;
+	void Init();
+	void Uninit();
+	void Update();
+	void Draw();
 
 	void SetTarget(const XMFLOAT3& target) { this->_target = target; }
 
-	Camera();
-	~Camera() override;
 private:
+	Transform* _transform = nullptr;
 	XMFLOAT3 _target{};
 	XMFLOAT4X4 _viewMatrix{};
 };

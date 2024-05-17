@@ -2,116 +2,94 @@
 #include "main.h"
 #include "renderer.h"
 
-#include <memory>
 #include <list>
 
 #include "polygon2D.h"
 #include "field.h"
 #include "camera.h"
+#include "transform.h"
 
-//std::unique_ptr<Polygon2D> polygon{};
-//std::unique_ptr<Field>	field{};
-//std::unique_ptr<Camera> camera{};
+#include "gameobject.h"
 
-std::list<std::unique_ptr<GameObject>> Objects{};
+// オブジェクトのリストをグローバルに定義
+std::list<GameObject*> Objects{};
 
 void Manager::Init()
 {
-	Renderer::Init();
+    // レンダラーの初期化
+    Renderer::Init();
 
-	Objects.push_back(std::make_unique<Field>(
-		XMFLOAT3{ 0.f,0.f, 0.0f },
-		XMFLOAT3{ 50.f, 0.0f,50.f },
-		XMFLOAT4{ 1.0f, 1.0f, 1.0f, 1.0f },
-		L"asset\\texture\\field.png"
-	));
+    // ゲームオブジェクトを作成し、コンポーネントを追加
+    GameObject* obj = new GameObject();
+    obj->AddComponent<Transform>();
+    obj->AddComponent<Field>();
+    Objects.push_back(obj);
 
-	Objects.push_back(
-		std::make_unique<Polygon2D>(
-		XMFLOAT3{ 100.0f , 100.0f , 0.0f },
-		XMFLOAT2{ 200.0f , 200.0f },
-		XMFLOAT4{ 1.0f, 1.0f, 1.0f, 1.0f },
-		L"asset\\texture\\camera.jpg"
-	));
+    obj = new GameObject();
+    obj->AddComponent<Transform>();
+    obj->AddComponent<Polygon2D>();
+    Objects.push_back(obj);
 
-	Objects.push_back(std::make_unique<Camera>());
+    obj = new GameObject();
+    obj->AddComponent<Transform>();
+    obj->AddComponent<Camera>();
+    Objects.push_back(obj);
 
-	/*
-	polygon = std::make_unique<Polygon2D>(
-		XMFLOAT3{ 100.0f , 100.0f , 0.0f },
-		XMFLOAT2{ 200.0f , 200.0f },
-		XMFLOAT4{ 1.0f, 1.0f, 1.0f, 1.0f },
-		L"asset\\texture\\camera.jpg"
-	);
-	polygon->Init();
+    // 全オブジェクトを初期化
+    for (auto& it : Objects)
+    {
+        // Polygon2D コンポーネントがある場合、その初期化を行う
+        if (it->GetComponent<Polygon2D>())
+            it->GetComponent<Polygon2D>()->Init(XMFLOAT3{ 100.0f , 100.0f , 0.0f }, XMFLOAT2{ 200.0f , 200.0f }, XMFLOAT4{ 1.0f, 1.0f, 1.0f, 1.0f }, L"asset\\texture\\camera.jpg");
 
-	field = std::make_unique<Field>(
-		XMFLOAT3{ 0.f,0.f, 0.0f },
-		XMFLOAT3{ 50.f, 0.0f,50.f },
-		XMFLOAT4{ 1.0f, 1.0f, 1.0f, 1.0f },
-		L"asset\\texture\\field.png"
-	);
+        // Field コンポーネントがある場合、その初期化を行う
+        if (it->GetComponent<Field>())
+            it->GetComponent<Field>()->Init(XMFLOAT3{ 0.f,0.f, 0.0f }, XMFLOAT3{ 50.f, 0.0f,50.f }, XMFLOAT4{ 1.0f, 1.0f, 1.0f, 1.0f }, L"asset\\texture\\field.png");
 
-	field->Init();
+        // Camera コンポーネントがある場合、その初期化を行う
+        if (it->GetComponent<Camera>())
+            it->GetComponent<Camera>()->Init();
 
-	camera = std::make_unique<Camera>();
-	camera->Init();
-	*/
+        // Polygon2D コンポーネントがある場合、それを削除する
+        if (it->GetComponent<Polygon2D>())
+            it->RemoveComponent<Polygon2D>();
+    }
 
-	for (auto& it : Objects)
-	{
-		it->Init();
-	}
-
+    obj = nullptr;
 }
-
 
 void Manager::Uninit()
 {
-	//camera->Uninit();
-	//
-	//field->Uninit();
-	//
-	//polygon->Uninit();
+    // 全オブジェクトの後始末を行う
+    for (auto& it : Objects)
+    {
+        it->Uninit();
+    }
 
-	for (auto& it : Objects)
-	{
-		it->Uninit();
-	}
-	
-	Renderer::Uninit();
-
-	// poly��delete��Y�ꂸ��
+    // レンダラーの後始末を行う
+    Renderer::Uninit();
 }
 
 void Manager::Update()
 {
-	//polygon->Update();
-	//
-	//field->Update();
-	//
-	//camera->Update();
-
-	for (auto& it : Objects)
-	{
-		it->Update();
-	}
+    // 全オブジェクトの更新処理を行う
+    for (auto& it : Objects)
+    {
+        it->Update();
+    }
 }
 
 void Manager::Draw()
 {
-	Renderer::Begin();
-	
-	//camera->Draw();
-	//
-	//field->Draw();
-	//
-	//polygon->Draw();
+    // 描画開始
+    Renderer::Begin();
 
-	for (auto& it : Objects)
-	{
-		it->Draw();
-	}
+    // 全オブジェクトの描画処理を行う
+    for (auto& it : Objects)
+    {
+        it->Draw();
+    }
 
-	Renderer::End();
+    // 描画終了
+    Renderer::End();
 }

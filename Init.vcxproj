@@ -141,12 +141,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h" />
+    <ClInclude Include="component.h" />
     <ClInclude Include="field.h" />
     <ClInclude Include="gameobject.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="manager.h" />
+    <ClInclude Include="math_helper.h" />
     <ClInclude Include="polygon2D.h" />
     <ClInclude Include="renderer.h" />
+    <ClInclude Include="transform.h" />
     <ClInclude Include="XMFLOAT_Helper.h" />
   </ItemGroup>
   <ItemGroup>
