@@ -2,7 +2,8 @@
 #include "main.h"
 #include "renderer.h"
 #include <io.h>
-
+#include <dxgidebug.h>
+#include <wrl/client.h>
 
 D3D_FEATURE_LEVEL       Renderer::m_FeatureLevel = D3D_FEATURE_LEVEL_11_0;
 
@@ -26,14 +27,11 @@ ID3D11DepthStencilState* Renderer::m_DepthStateDisable{};
 ID3D11BlendState*		Renderer::m_BlendState{};
 ID3D11BlendState*		Renderer::m_BlendStateATC{};
 
-
-
+Microsoft::WRL::ComPtr<ID3D11Debug> mD3dDebug;
 
 void Renderer::Init()
 {
 	HRESULT hr = S_OK;
-
-
 
 
 	// デバイス、スワップチェーン作成
@@ -53,7 +51,7 @@ void Renderer::Init()
 	hr = D3D11CreateDeviceAndSwapChain( NULL,
 										D3D_DRIVER_TYPE_HARDWARE,
 										NULL,
-										0,
+										D3D11_CREATE_DEVICE_DEBUG,
 										NULL,
 										0,
 										D3D11_SDK_VERSION,
@@ -64,7 +62,7 @@ void Renderer::Init()
 										&m_DeviceContext );
 
 
-
+	m_Device->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(mD3dDebug.GetAddressOf()));
 
 
 
@@ -253,21 +251,36 @@ void Renderer::Init()
 
 void Renderer::Uninit()
 {
+	if (m_WorldBuffer) { m_WorldBuffer->Release(); m_WorldBuffer = nullptr; }
+	if (m_ViewBuffer) { m_ViewBuffer->Release(); m_ViewBuffer = nullptr; }
+	if (m_ProjectionBuffer) { m_ProjectionBuffer->Release(); m_ProjectionBuffer = nullptr; }
+	if (m_LightBuffer) { m_LightBuffer->Release(); m_LightBuffer = nullptr; }
+	if (m_MaterialBuffer) { m_MaterialBuffer->Release(); m_MaterialBuffer = nullptr; }
+	if (m_DepthStencilView) { m_DepthStencilView->Release(); m_DepthStencilView = nullptr; }
+	if (m_RenderTargetView) { m_RenderTargetView->Release(); m_RenderTargetView = nullptr; }
+	if (m_BlendState) { m_BlendState->Release(); m_BlendState = nullptr; }
+	if (m_BlendStateATC) { m_BlendStateATC->Release(); m_BlendStateATC = nullptr; }
+	if (m_DepthStateEnable) { m_DepthStateEnable->Release(); m_DepthStateEnable = nullptr; }
+	if (m_DepthStateDisable) { m_DepthStateDisable->Release(); m_DepthStateDisable = nullptr; }
 
-	m_WorldBuffer->Release();
-	m_ViewBuffer->Release();
-	m_ProjectionBuffer->Release();
-	m_LightBuffer->Release();
-	m_MaterialBuffer->Release();
+	if (m_DeviceContext) {
+		m_DeviceContext->ClearState();
+		m_DeviceContext->Flush();
+		m_DeviceContext->Release();
+		m_DeviceContext = nullptr;
+	}
 
+	if (m_SwapChain) { m_SwapChain->Release(); m_SwapChain = nullptr; }
+	if (m_Device) { m_Device->Release(); m_Device = nullptr; }
 
-	m_DeviceContext->ClearState();
-	m_RenderTargetView->Release();
-	m_SwapChain->Release();
-	m_DeviceContext->Release();
-	m_Device->Release();
-
+	// メモリリークの確認
+	if (mD3dDebug) {
+		mD3dDebug->ReportLiveDeviceObjects(D3D11_RLDO_SUMMARY);
+		mD3dDebug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
+		mD3dDebug = nullptr;
+	}
 }
+
 
 
 

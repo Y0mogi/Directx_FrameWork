@@ -51,8 +51,8 @@ void Manager::Init()
             it->GetComponent<Camera>()->Init();
 
         // Polygon2D コンポーネントがある場合、それを削除する
-        if (it->GetComponent<Polygon2D>())
-            it->RemoveComponent<Polygon2D>();
+        //if (it->GetComponent<Polygon2D>())
+        //    it->RemoveComponent<Polygon2D>();
     }
 
     obj = nullptr;

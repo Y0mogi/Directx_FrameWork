@@ -1,13 +1,20 @@
 #include "main.h"
 #include "manager.h"
-#include <thread>
 
+#include <cstdio>
+#include <cstdlib>
+#include <crtdbg.h>
+
+#define _CRTDBG_MAP_ALLOC
+#define new ::new(_NORMAL_BLOCK, __FILE__, __LINE__)
+#define malloc(X) _malloc_dbg(X,_NORMAL_BLOCK,__FILE__,__LINE__)
 
 const char* CLASS_NAME = "AppClass";
 const char* WINDOW_NAME = "DX11ゲーム";
 
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+
 
 
 HWND g_Window;
@@ -20,8 +27,8 @@ HWND GetWindow()
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-
-
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF | _CRTDBG_CHECK_ALWAYS_DF);
+	
 	WNDCLASSEX wcex;
 	{
 		wcex.cbSize = sizeof(WNDCLASSEX);
@@ -103,6 +110,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	Manager::Uninit();
 
 	CoUninitialize();
+
+	// メモリリークのダンプ
+	_CrtDumpMemoryLeaks();
 
 	return (int)msg.wParam;
 }
