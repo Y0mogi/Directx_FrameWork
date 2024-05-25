@@ -1,5 +1,6 @@
 #pragma once
 #include "component.h"
+#include <string>
 
 class Sprite : public Component
 {
@@ -9,11 +10,12 @@ public:
 	void Update();
 	void Draw();
 
-	Sprite(const XMFLOAT4& color);
+	void SetColor(const XMFLOAT4& color);
+	void LoadTexture(const std::wstring& path);
 
 private:
-	Transform* m_Transfrom = nullptr;
-	XMFLOAT4 m_Color{};
+	std::wstring _path;
+	XMFLOAT4 m_Color = { 1.0f,1.0f,1.0f ,1.0f };
 
 	ID3D11Buffer* m_VertexBuffer = NULL;
 	ID3D11ShaderResourceView* m_Texture = NULL;

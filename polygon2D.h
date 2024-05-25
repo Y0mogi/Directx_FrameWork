@@ -1,10 +1,11 @@
 #pragma once
 #include "component.h"
+#include <string>
 
 class Polygon2D :public Component
 {
 public:
-	void Init(const XMFLOAT3& pos, const XMFLOAT2& size, const XMFLOAT4& color, const wchar_t* path);
+	void Init(const XMFLOAT3& pos, const XMFLOAT2& size, const XMFLOAT4& color, const std::wstring& path);
 	void Uninit() override;
 	void Update() override;
 	void Draw() override;

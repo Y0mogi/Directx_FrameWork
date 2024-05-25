@@ -134,8 +134,12 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="field.cpp" />
     <ClCompile Include="gameobject.cpp" />
+    <ClCompile Include="input.cpp" />
+    <ClCompile Include="jump.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="manager.cpp" />
+    <ClCompile Include="modelRenderer.cpp" />
+    <ClCompile Include="player.cpp" />
     <ClCompile Include="polygon2D.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="sprite.cpp" />
@@ -145,9 +149,13 @@
     <ClInclude Include="component.h" />
     <ClInclude Include="field.h" />
     <ClInclude Include="gameobject.h" />
+    <ClInclude Include="input.h" />
+    <ClInclude Include="jump.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="manager.h" />
     <ClInclude Include="math_helper.h" />
+    <ClInclude Include="modelRenderer.h" />
+    <ClInclude Include="player.h" />
     <ClInclude Include="polygon2D.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="sprite.h" />

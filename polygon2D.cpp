@@ -1,10 +1,10 @@
 #include "main.h"
 #include "renderer.h"
 #include "polygon2D.h"
-#include <string>
 
 
-void Polygon2D::Init(const XMFLOAT3& pos, const XMFLOAT2& size, const XMFLOAT4& color, const wchar_t* path)
+
+void Polygon2D::Init(const XMFLOAT3& pos, const XMFLOAT2& size, const XMFLOAT4& color,const std::wstring& path)
 {
 
 	VERTEX_3D vertex[4]{};
@@ -44,11 +44,11 @@ void Polygon2D::Init(const XMFLOAT3& pos, const XMFLOAT2& size, const XMFLOAT4& 
 	sd.pSysMem = vertex;
 
 	Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_VertexBuffer);
-	std::wstring a = path;
+
 	// テクスチャ読み込み
 	TexMetadata metadata;
 	ScratchImage image;
-	LoadFromWICFile(a.c_str(), WIC_FLAGS_NONE, &metadata, image);
+	LoadFromWICFile(path.c_str(), WIC_FLAGS_NONE, &metadata, image);
 	
 	CreateShaderResourceView(Renderer::GetDevice(), image.GetImages(), image.GetImageCount(), metadata, &m_Texture);
 	assert(m_Texture);
@@ -90,6 +90,14 @@ void Polygon2D::Draw()
 	// 頂点バッファ設定
 	UINT stride = sizeof(VERTEX_3D);
 	UINT offset = 0;
+
+	// material設定
+	MATERIAL material;
+	ZeroMemory(&material, sizeof(material));
+	material.Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	material.TextureEnable = true;
+	Renderer::SetMaterial(material);
+
 	Renderer::GetDeviceContext()->IASetVertexBuffers(0, 1, &m_VertexBuffer, &stride, &offset);
 
 	// テクスチャ設定

@@ -10,7 +10,7 @@ public:
 	void Draw();
 
 	void SetTarget(const XMFLOAT3& target) { this->_target = target; }
-
+	
 private:
 	Transform* _transform = nullptr;
 	XMFLOAT3 _target{};

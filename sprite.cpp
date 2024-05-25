@@ -1,5 +1,6 @@
 #include "main.h"
 #include "renderer.h"
+
 #include "transform.h"
 #include "sprite.h"
 #include "gameobject.h"
@@ -7,7 +8,19 @@
 
 void Sprite::Init()
 {
-	m_Transfrom = Parent->GetComponent<Transform>();
+	Renderer::CreateVertexShader(&m_VertexShader, &m_VertexLayout,
+		"shader\\unlitTextureVS.cso");
+
+	Renderer::CreatePixelShader(&m_PixelShader,
+		"shader\\unlitTexturePS.cso");
+
+	// テクスチャ読み込み
+	TexMetadata metadata;
+	ScratchImage image;
+	LoadFromWICFile(_path.c_str(), WIC_FLAGS_NONE, &metadata, image);
+
+	CreateShaderResourceView(Renderer::GetDevice(), image.GetImages(), image.GetImageCount(), metadata, &m_Texture);
+	assert(m_Texture);
 }
 
 void Sprite::Uninit()
@@ -27,6 +40,8 @@ void Sprite::Update()
 
 void Sprite::Draw()
 {
+	XMFLOAT3 pos = Parent->GetComponent<Transform>()->position;
+	XMFLOAT3 size = Parent->GetComponent<Transform>()->scale;
 
 	VERTEX_3D vertex[4]{};
 	// 頂点０番（左上の頂点）
@@ -64,22 +79,48 @@ void Sprite::Draw()
 	sd.pSysMem = vertex;
 
 	Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_VertexBuffer);
-	// テクスチャ読み込み
-	TexMetadata metadata;
-	ScratchImage image;
-	LoadFromWICFile(, WIC_FLAGS_NONE, &metadata, image);
 
-	CreateShaderResourceView(Renderer::GetDevice(), image.GetImages(), image.GetImageCount(), metadata, &m_Texture);
-	assert(m_Texture);
 
-	Renderer::CreateVertexShader(&m_VertexShader, &m_VertexLayout,
-		"shader\\unlitTextureVS.cso");
+	// 入力レイアウト
+	Renderer::GetDeviceContext()->IASetInputLayout(m_VertexLayout);
 
-	Renderer::CreatePixelShader(&m_PixelShader,
-		"shader\\unlitTexturePS.cso");
+	// シェーダー設定
+	Renderer::GetDeviceContext()->VSSetShader(m_VertexShader, NULL, 0);
+	Renderer::GetDeviceContext()->PSSetShader(m_PixelShader, NULL, 0);
 
+	// マトリックス設定
+	Renderer::SetWorldViewProjection2D();
+
+	// 頂点バッファ設定
+	UINT stride = sizeof(VERTEX_3D);
+	UINT offset = 0;
+
+	// material設定
+	MATERIAL material;
+	ZeroMemory(&material, sizeof(material));
+	material.Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	material.TextureEnable = true;
+	Renderer::SetMaterial(material);
+
+	Renderer::GetDeviceContext()->IASetVertexBuffers(0, 1, &m_VertexBuffer, &stride, &offset);
+
+	// テクスチャ設定
+	Renderer::GetDeviceContext()->PSSetShaderResources(0, 1, &m_Texture);
+
+	// プリミティブトポロジ設定
+	Renderer::GetDeviceContext()->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+
+	// ポリゴン描画
+	Renderer::GetDeviceContext()->Draw(4, 0);
 }
 
-Sprite::Sprite(const XMFLOAT4& color)
+void Sprite::SetColor(const XMFLOAT4& color)
 {
+	m_Color = color;
 }
+
+void Sprite::LoadTexture(const std::wstring& path)
+{
+	_path = path;
+}
+

@@ -6,7 +6,7 @@ class Transform;
 class Field :public	Component
 {
 public:
-	void Init(const XMFLOAT3& pos, const XMFLOAT3& scl, const XMFLOAT4& color, const wchar_t* path);
+	void Init(const XMFLOAT3& pos, const XMFLOAT3& scl, const XMFLOAT4& color,const std::wstring& path);
 	void Uninit();
 	void Update();
 	void Draw();

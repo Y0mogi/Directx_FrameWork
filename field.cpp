@@ -2,10 +2,11 @@
 #include "renderer.h"
 #include "transform.h"
 #include "gameobject.h"
-#include "field.h"
 #include <string>
+#include "field.h"
 
-void Field::Init(const XMFLOAT3& pos, const XMFLOAT3& scl, const XMFLOAT4& color, const wchar_t* path)
+
+void Field::Init(const XMFLOAT3& pos, const XMFLOAT3& scl, const XMFLOAT4& color,const std::wstring& path)
 {
 	if (_transform == nullptr)
 		_transform = Parent->GetComponent<Transform>();
@@ -55,7 +56,7 @@ void Field::Init(const XMFLOAT3& pos, const XMFLOAT3& scl, const XMFLOAT4& color
 	// テクスチャ読み込み
 	TexMetadata metadata;
 	ScratchImage image;
-	LoadFromWICFile(path, WIC_FLAGS_NONE, &metadata, image);
+	LoadFromWICFile(path.c_str(), WIC_FLAGS_NONE, &metadata, image);
 	CreateShaderResourceView(Renderer::GetDevice(), image.GetImages(), image.GetImageCount(), metadata, &_Texture);
 	assert(_Texture);
 

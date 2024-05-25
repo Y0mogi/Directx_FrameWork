@@ -1,8 +1,11 @@
 #include "gameobject.h"
+#include "transform.h"
 #include "component.h"
+
 
 GameObject::GameObject()
 {
+    AddComponent<Transform>();
 }
 
 GameObject::~GameObject()
