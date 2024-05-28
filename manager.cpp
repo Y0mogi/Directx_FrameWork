@@ -45,7 +45,7 @@ void Manager::Init()
     obj = new GameObject();
     obj->AddComponent<Camera>();
     Objects.push_back(obj);
-
+    
     // 全オブジェクトを初期化
     for (auto& it : Objects)
     {
@@ -53,7 +53,7 @@ void Manager::Init()
         if (it->GetComponent<Sprite>())
         {
             it->GetComponent<Sprite>()->LoadTexture(L"asset\\texture\\camera.jpg");
-            it->GetComponent<Transform>()->position = { 100,100,0 };
+            it->GetComponent<Transform>()->position = { 0,0,0 };
             it->GetComponent<Transform>()->scale = { 100,100,0 };
         }
 
