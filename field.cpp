@@ -122,6 +122,6 @@ void Field::Draw()
 	Renderer::GetDeviceContext()->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
 	// ƒ|ƒŠƒSƒ“•`‰æ
-	Renderer::GetDeviceContext()->Draw(4, 0);
+ 	Renderer::GetDeviceContext()->Draw(4, 0);
 
 }

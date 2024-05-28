@@ -1,3 +1,4 @@
+#define DEBUG_DISP_TEXTOUT
 
 #include "main.h"
 #include "renderer.h"
@@ -27,6 +28,11 @@ ID3D11DepthStencilState* Renderer::m_DepthStateDisable{};
 ID3D11BlendState*		Renderer::m_BlendState{};
 ID3D11BlendState*		Renderer::m_BlendStateATC{};
 
+#ifdef DEBUG_DISP_TEXTOUT
+HFONT Renderer::m_Font = nullptr;
+HFONT Renderer::m_OriginalFont = nullptr;
+#endif
+
 Microsoft::WRL::ComPtr<ID3D11Debug> mD3dDebug;
 
 void Renderer::Init()
@@ -35,6 +41,7 @@ void Renderer::Init()
 
 
 	// デバイス、スワップチェーン作成
+	DWORD deviceFlags = 0;
 	DXGI_SWAP_CHAIN_DESC swapChainDesc{};
 	swapChainDesc.BufferCount = 1;
 	swapChainDesc.BufferDesc.Width = SCREEN_WIDTH;
@@ -48,10 +55,17 @@ void Renderer::Init()
 	swapChainDesc.SampleDesc.Quality = 0;
 	swapChainDesc.Windowed = TRUE;
 
+	//デバッグ文字出力用設定
+#if defined(_DEBUG) && defined(DEBUG_DISP_TEXTOUT)
+	swapChainDesc.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+	swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_GDI_COMPATIBLE;
+	deviceFlags = D3D11_CREATE_DEVICE_DEBUG | D3D11_CREATE_DEVICE_BGRA_SUPPORT;
+#endif
+
 	hr = D3D11CreateDeviceAndSwapChain( NULL,
 										D3D_DRIVER_TYPE_HARDWARE,
 										NULL,
-										D3D11_CREATE_DEVICE_DEBUG,
+										deviceFlags,
 										NULL,
 										0,
 										D3D11_SDK_VERSION,
@@ -64,7 +78,16 @@ void Renderer::Init()
 
 	m_Device->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(mD3dDebug.GetAddressOf()));
 
+	//デバッグ文字出力用設定
+#if defined(_DEBUG) && defined(DEBUG_DISP_TEXTOUT)
+	hr = m_SwapChain->ResizeBuffers(0, SCREEN_WIDTH, SCREEN_HEIGHT, DXGI_FORMAT_UNKNOWN, DXGI_SWAP_CHAIN_FLAG_GDI_COMPATIBLE);
+	if (FAILED(hr))
+		return;
 
+	//フォントの作成
+	m_Font = CreateFont(48, 0, 0, 0, FW_DONTCARE, FALSE, FALSE, FALSE, DEFAULT_CHARSET, OUT_OUTLINE_PRECIS,
+		CLIP_DEFAULT_PRECIS, CLEARTYPE_QUALITY, VARIABLE_PITCH, TEXT("メイリオ"));
+#endif
 
 	// レンダーターゲットビュー作成
 	ID3D11Texture2D* renderTarget{};
@@ -245,12 +268,21 @@ void Renderer::Init()
 
 
 
+
 }
 
 
 
 void Renderer::Uninit()
 {
+#if defined(_DEBUG) && defined(DEBUG_DISP_TEXTOUT)
+	if (m_Font != NULL)
+	{
+		DeleteObject(m_Font);
+		m_Font = NULL;
+	}
+#endif
+
 	if (m_WorldBuffer) { m_WorldBuffer->Release(); m_WorldBuffer = nullptr; }
 	if (m_ViewBuffer) { m_ViewBuffer->Release(); m_ViewBuffer = nullptr; }
 	if (m_ProjectionBuffer) { m_ProjectionBuffer->Release(); m_ProjectionBuffer = nullptr; }
@@ -428,4 +460,61 @@ void Renderer::CreatePixelShader( ID3D11PixelShader** PixelShader, const char* F
 	delete[] buffer;
 }
 
+void Renderer::DrawDebugData(const char* name, const XMFLOAT3& pos, const bool& use, const int& idx, const XMFLOAT2& str_pos)
+{
+	char str[256];
+
+	sprintf(str, "%s%dPos:X.%f Y.%f Z.%f:Draw:%s", name, idx, pos.x, pos.y, pos.z, (use ? "true" : "false"));
+	DebugTextOut(str, str_pos.x, (str_pos.y * idx) + str_pos.y);
+
+}
+
+void Renderer::DebugTextOut(char* text, int x, int y){
+
+#if defined(_DEBUG) && defined(DEBUG_DISP_TEXTOUT)
+	HRESULT hr;
+
+	//バックバッファからサーフェスを取得する
+	IDXGISurface1* pBackSurface = NULL;
+	hr = m_SwapChain->GetBuffer(0, __uuidof(IDXGISurface1), (void**)&pBackSurface);
+
+	if (SUCCEEDED(hr))
+	{
+		//取得したサーフェスからデバイスコンテキストを取得する
+		HDC hdc;
+		hr = pBackSurface->GetDC(FALSE, &hdc);
+
+		if (SUCCEEDED(hr))
+		{
+			//システムのフォントを保存する
+			m_OriginalFont = (HFONT)SelectObject(hdc, m_Font);
+
+			//文字色を白に変更
+			SetTextColor(hdc, RGB(255, 255, 255));
+			//背景を透明に変更
+			SetBkMode(hdc, TRANSPARENT);
+
+			RECT rect;
+			rect.left = x;
+			rect.top = y;
+			rect.right = SCREEN_WIDTH;
+			rect.bottom = SCREEN_HEIGHT;
+
+			//テキスト出力
+			DrawText(hdc, text, (int)strlen(text), &rect, DT_LEFT);
+
+			//フォントを元に戻す
+			SelectObject(hdc, m_OriginalFont);
+
+			//デバイスコンテキストを解放する
+			pBackSurface->ReleaseDC(NULL);
+		}
+		//サーフェスを解放する
+		pBackSurface->Release();
+
+		//レンダリングターゲットがリセットされるのでセットしなおす
+		m_DeviceContext->OMSetRenderTargets(1, &m_RenderTargetView, m_DepthStencilView);
+	}
+#endif
+}
 

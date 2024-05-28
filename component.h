@@ -1,7 +1,13 @@
 #pragma once
+#ifndef COMPONENT_H
+#define COMPONENT_H
+
 
 class GameObject;
 
+/// <summary>
+/// コンポーネント基底クラス
+/// </summary>
 class Component
 {
 public:
@@ -16,3 +22,5 @@ public:
 public:
 	GameObject* Parent = nullptr;
 };
+
+#endif // COMPONENT_H

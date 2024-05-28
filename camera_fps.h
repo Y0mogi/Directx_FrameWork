@@ -1,10 +1,10 @@
 #pragma once
-#ifndef CAMERA_H
-#define CAMERA_H
+#ifndef CAMERA_FPS_H
+#define CAMERA_FPS_H
 
 #include "component.h"
 
-class Camera : public Component
+class Camera_FPS : public Component
 {
 public:
 	void Init();
@@ -12,8 +12,6 @@ public:
 	void Update();
 	void Draw();
 
-	void SetTarget(const XMFLOAT3& target) { this->_target = target; }
-	
 private:
 	Transform* _transform = nullptr;
 	XMFLOAT3 _target{};
@@ -21,4 +19,4 @@ private:
 	XMFLOAT4X4 _viewMatrix{};
 };
 
-#endif // CAMERA_H
+#endif // CAMERA_FPS_H

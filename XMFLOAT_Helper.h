@@ -1,5 +1,6 @@
-
 #pragma once
+#ifndef XMFLOAT_HELPER_H
+#define XMFLOAT_HELPER_H
 
 #include <DirectXMath.h>
 #include <initializer_list>
@@ -1335,3 +1336,4 @@ _NODISCARD static inline auto LowerToXMFLOAT3(const DirectX::XMFLOAT4& vec)
     return DirectX::XMFLOAT3{ vec.x, vec.y, vec.z };
 }
 
+#endif // !XMFLOAT_HELPER_H

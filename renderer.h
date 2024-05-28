@@ -1,7 +1,6 @@
 #pragma once
-
-
-
+#ifndef RENDERER_H
+#define RENDERER_H
 
 
 struct VERTEX_3D
@@ -63,8 +62,12 @@ private:
 	static ID3D11BlendState*		m_BlendState;
 	static ID3D11BlendState*		m_BlendStateATC;
 
+#ifdef DEBUG_DISP_TEXTOUT
+	static HFONT m_Font;
+	static HFONT m_OriginalFont;
+#endif
 
-
+	static void DebugTextOut(char* text, int x, int y);
 public:
 	static void Init();
 	static void Uninit();
@@ -88,5 +91,9 @@ public:
 	static void CreateVertexShader(ID3D11VertexShader** VertexShader, ID3D11InputLayout** VertexLayout, const char* FileName);
 	static void CreatePixelShader(ID3D11PixelShader** PixelShader, const char* FileName);
 
-
+	
+	static void DrawDebugData(const char* name, const XMFLOAT3& pos, const bool& use, const int& idx,
+		const XMFLOAT2& str_pos);
 };
+
+#endif // RENDERER_H

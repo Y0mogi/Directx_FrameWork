@@ -1,4 +1,7 @@
 #pragma once
+#ifndef POLYGON2D_H
+#define POLYGON2D_H
+
 #include "component.h"
 #include <string>
 
@@ -20,3 +23,4 @@ private:
 	ID3D11InputLayout* m_VertexLayout;
 };
 
+#endif // POLYGON2D_H

@@ -6,6 +6,7 @@
 #include "gameobject.h"
 #include "transform.h"
 #include "player.h"
+#include "math_helper.h"
 
 
 void Player::Init()

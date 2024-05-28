@@ -1,4 +1,8 @@
 #pragma once
+#ifndef TRANSFORM_H
+#define TRANSFORM_H
+
+
 #include "component.h"
 #include "main.h"
 
@@ -11,3 +15,5 @@ public:
 	
 	auto operator <=>(const Transform&) const = default;
 };
+
+#endif // !TRANSFORM_H

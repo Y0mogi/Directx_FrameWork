@@ -1,5 +1,6 @@
 #pragma once
-
+#ifndef INPUT_H
+#define INPUT_H
 
 class Input
 {
@@ -16,3 +17,5 @@ public:
 	static bool GetKeyTrigger( BYTE KeyCode );
 
 };
+
+#endif // !INPUT_H

@@ -1,4 +1,6 @@
 #pragma once
+#ifndef MODELRENDERER_H
+#define MODELRENDERER_H
 
 
 
@@ -72,3 +74,5 @@ public:
 	void DrawModel();
 
 };
+
+#endif // MODELRENDERER_H

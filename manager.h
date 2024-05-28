@@ -1,5 +1,6 @@
 #pragma once
-
+#ifndef MANAGER_H
+#define MANAGER_H
 
 class Manager
 {
@@ -11,3 +12,5 @@ public:
 	static void Draw();
 
 };
+
+#endif // MANAGER_H

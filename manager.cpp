@@ -10,6 +10,7 @@
 #include "sprite.h"
 #include "field.h"
 #include "camera.h"
+#include "camera_fps.h"
 #include "player.h"
 #include "transform.h"
 #include "jump.h"
@@ -36,6 +37,7 @@ void Manager::Init()
     obj->AddComponent<ModelRenderer>();
     obj->AddComponent<Jump>();
     obj->AddComponent<Player>();
+    //obj->AddComponent<Camera_FPS>();
     Objects.push_back(obj);
 
     obj = new GameObject();

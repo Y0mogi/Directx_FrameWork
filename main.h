@@ -31,6 +31,7 @@ using namespace DirectX;
 #define SCREEN_WIDTH	(1280)
 #define SCREEN_HEIGHT	(720)
 
+#define DEBUG_DISP_TEXTOUT
 
 HWND GetWindow();
 

@@ -5,11 +5,11 @@
 #include "input.h"
 #include "jump.h"
 
-XMFLOAT2 Jump::_accel = { 0.0f,-20.f };
 
 void Jump::Init()
 {
 	_transform = Parent->GetComponent<Transform>();
+	_accel = { 0.0f,-20.f };
 	return;
 }
 
@@ -20,8 +20,8 @@ void Jump::Uninit()
 
 void Jump::Update()
 {
-	static float spos{};
-	static float dt = 1.0f / 60.0f; 
+	static float spos{}; // ジャンプの始点
+	static float dt = 1.0f / 60.0f; // 媒介変数
 	
 	if (Input::GetKeyTrigger(VK_SPACE) && !_isJump){
 		_isJump = true;
@@ -41,6 +41,7 @@ void Jump::Update()
 		_transform->position.y = spos;
 	}
 
+	return;
 }
 
 void Jump::Draw()

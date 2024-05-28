@@ -1,4 +1,8 @@
 #pragma once
+#ifndef PLAYER_H
+#define PLAYER_H
+
+
 #include "component.h"
 
 class Player :public Component
@@ -16,3 +20,4 @@ private:
 	ID3D11InputLayout* _VertexLayout;
 };
 
+#endif // PLAYER_H
