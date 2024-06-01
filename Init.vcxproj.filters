@@ -16,6 +16,9 @@
     <Filter Include="Imgui">
       <UniqueIdentifier>{4ef4a0e0-9a9b-4375-ad36-39eeb0c1a315}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MagicEnum">
+      <UniqueIdentifier>{065bc649-8485-49bd-8a3f-cf97354a3688}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="polygon2D.cpp">
@@ -157,6 +160,33 @@
     </ClInclude>
     <ClInclude Include="collision.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="magic_enum\magic_enum.hpp">
+      <Filter>MagicEnum</Filter>
+    </ClInclude>
+    <ClInclude Include="magic_enum\magic_enum_all.hpp">
+      <Filter>MagicEnum</Filter>
+    </ClInclude>
+    <ClInclude Include="magic_enum\magic_enum_containers.hpp">
+      <Filter>MagicEnum</Filter>
+    </ClInclude>
+    <ClInclude Include="magic_enum\magic_enum_flags.hpp">
+      <Filter>MagicEnum</Filter>
+    </ClInclude>
+    <ClInclude Include="magic_enum\magic_enum_format.hpp">
+      <Filter>MagicEnum</Filter>
+    </ClInclude>
+    <ClInclude Include="magic_enum\magic_enum_fuse.hpp">
+      <Filter>MagicEnum</Filter>
+    </ClInclude>
+    <ClInclude Include="magic_enum\magic_enum_iostream.hpp">
+      <Filter>MagicEnum</Filter>
+    </ClInclude>
+    <ClInclude Include="magic_enum\magic_enum_switch.hpp">
+      <Filter>MagicEnum</Filter>
+    </ClInclude>
+    <ClInclude Include="magic_enum\magic_enum_utility.hpp">
+      <Filter>MagicEnum</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

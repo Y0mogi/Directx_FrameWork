@@ -168,6 +168,15 @@
     <ClInclude Include="Imgui\imstb_truetype.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="jump.h" />
+    <ClInclude Include="magic_enum\magic_enum.hpp" />
+    <ClInclude Include="magic_enum\magic_enum_all.hpp" />
+    <ClInclude Include="magic_enum\magic_enum_containers.hpp" />
+    <ClInclude Include="magic_enum\magic_enum_flags.hpp" />
+    <ClInclude Include="magic_enum\magic_enum_format.hpp" />
+    <ClInclude Include="magic_enum\magic_enum_fuse.hpp" />
+    <ClInclude Include="magic_enum\magic_enum_iostream.hpp" />
+    <ClInclude Include="magic_enum\magic_enum_switch.hpp" />
+    <ClInclude Include="magic_enum\magic_enum_utility.hpp" />
     <ClInclude Include="main.h" />
     <ClInclude Include="manager.h" />
     <ClInclude Include="math_helper.h" />

@@ -30,6 +30,9 @@ using namespace DirectX;
 #include "Imgui\imgui_impl_dx11.h"
 #include "Imgui\imgui_impl_win32.h"
 
+// MagicEnum
+#include "magic_enum/magic_enum_all.hpp"
+
 // XMFLOATƒwƒ‹ƒp
 #include "XMFLOAT_Helper.h"
 
