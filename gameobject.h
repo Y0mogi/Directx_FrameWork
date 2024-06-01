@@ -44,6 +44,21 @@ public:
 	}
 
 	/// <summary>
+	/// オブジェクトに複数のコンポーネントをアタッチ
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	/// <typeparam name="...Args"></typeparam>
+	/// <param name="...args"></param>
+	/// <returns></returns>
+	template<class T, typename... Args>
+	T* AddComponent(Args&&... args) {
+		T* tmp = new T(std::forward<Args>(args)...);
+		tmp->Parent = this;
+		_componentList.push_back(tmp);
+		return tmp;
+	}
+
+	/// <summary>
 	/// 持っているコンポーネントを削除する
 	/// </summary>
 	/// <typeparam name="T"></typeparam>

@@ -25,6 +25,11 @@ using namespace DirectX;
 
 #pragma comment (lib, "winmm.lib")
 
+// Imgui
+#include "Imgui\imgui.h"
+#include "Imgui\imgui_impl_dx11.h"
+#include "Imgui\imgui_impl_win32.h"
+
 // XMFLOATƒwƒ‹ƒp
 #include "XMFLOAT_Helper.h"
 

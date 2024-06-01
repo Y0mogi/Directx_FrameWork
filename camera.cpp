@@ -7,7 +7,6 @@
 #include "math_helper.h"
 
 
-
 void Camera::Init()
 {
 	if (_transform == nullptr)
@@ -28,6 +27,7 @@ void Camera::Uninit()
 
 void Camera::Update()
 {
+
 	if (Input::GetKeyPress('Q')){// Ž‹“_ù‰ñu¶v
 		_transform->rotation.y += (float)(M_PI * 0.01);
 		if (_transform->rotation.y > M_PI)

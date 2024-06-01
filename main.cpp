@@ -4,6 +4,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <crtdbg.h>
+#include "renderer.h"
 
 #define _CRTDBG_MAP_ALLOC
 #define new ::new(_NORMAL_BLOCK, __FILE__, __LINE__)
@@ -15,6 +16,8 @@ const char* WINDOW_NAME = "DX11ゲーム";
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
+// ImGuiのDX11ウィンドウプロシージャハンドラの宣言
+extern IMGUI_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 
 HWND g_Window;
@@ -59,6 +62,16 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	// 初期化
 	Manager::Init();
 
+	// ImGuiの初期化
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO();
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+	ImGui_ImplWin32_Init(GetWindow());
+	ImGui_ImplDX11_Init(Renderer::GetDevice(), Renderer::GetDeviceContext());
+	// フォントの設定
+	ImGui::StyleColorsDark(); // ダークテーマを使用
 
 
 	ShowWindow(g_Window, nCmdShow);
@@ -122,6 +135,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+	if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
+		return true;
 
 	switch(uMsg)
 	{
@@ -138,10 +153,26 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		}
 		break;
 
+	// Imgui用
+	case WM_LBUTTONDOWN:
+	case WM_LBUTTONUP:
+	case WM_RBUTTONDOWN:
+	case WM_RBUTTONUP:
+	case WM_MBUTTONDOWN:
+	case WM_MBUTTONUP:
+	case WM_MOUSEWHEEL:
+	case WM_XBUTTONDOWN:
+	case WM_XBUTTONUP:
+	case WM_XBUTTONDBLCLK:
+		ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam);
+		break;
+	///
+
 	default:
 		break;
 	}
 
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
+
 
