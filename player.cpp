@@ -11,7 +11,7 @@
 
 void Player::Init()
 {
-	Parent->GetComponent<ModelRenderer>()->Load("asset\\model\\player.obj");
+	Parent->GetComponent<ModelRenderer>()->Load("asset\\model\\nonderiRobo.obj");
 
 	Renderer::CreateVertexShader(&_VertexShader, &_VertexLayout,
 		"shader\\unlitTextureVS.cso");
