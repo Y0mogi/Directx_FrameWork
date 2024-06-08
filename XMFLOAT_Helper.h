@@ -1,6 +1,25 @@
+//=============================================================================
+// Contents   : DirectXMathのヘルパ関数
+//              
+// Author     : 髙橋 脩也
+// LastUpdate : 2024/06/06
+// Since      : 2024/06/01
+// 
+//   下記から引用
+// https://qiita.com/HnniTns/items/6e7edc82775a86923cef
+// https://qiita.com/HnniTns/items/f55102ca0bf4261028b3
+//
+// === 更新ログ ===
+//
+// 6 / 6 1340行目あたりから名前空間 XmfloatMathの関数を追加
+//
+//
+//=============================================================================
+
 #pragma once
 #ifndef XMFLOAT_HELPER_H
 #define XMFLOAT_HELPER_H
+
 
 #include <DirectXMath.h>
 #include <initializer_list>
@@ -10,6 +29,7 @@
 #include <limits>
 #include <algorithm>
 #include <numeric>
+
 
 // floatは誤差が発生するのでこの関数を定義しています
 template<typename Ty>
