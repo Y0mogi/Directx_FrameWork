@@ -50,6 +50,12 @@ void Player::Update()
 		Parent->GetComponent<Transform>()->position.z -= 0.1f;
 	}
 	
+	if (Input::GetKeyPress('T'))
+	{
+		Parent->GetComponent<Transform>()->RotateAround(Parent->GetComponent<Transform>()->position, Parent->GetComponent<Transform>()->GetForward(), 0.1f);
+	}
+
+	ImGui::Text("camera Rotation E:x.%f y.%f z.%f", Parent->GetComponent<Transform>()->rotation.ToXMFloat4().x, Parent->GetComponent<Transform>()->rotation.ToXMFloat4().y, Parent->GetComponent<Transform>()->rotation.ToXMFloat4().z);
 }
 
 void Player::Draw()
@@ -64,7 +70,7 @@ void Player::Draw()
 
 	XMMATRIX world, scl, rot, trans;
 	scl = XMMatrixScaling(Parent->GetComponent<Transform>()->scale.x, Parent->GetComponent<Transform>()->scale.y, Parent->GetComponent<Transform>()->scale.z);
-	rot = XMMatrixRotationRollPitchYaw(Parent->GetComponent<Transform>()->rotation.x, Parent->GetComponent<Transform>()->rotation.y, Parent->GetComponent<Transform>()->rotation.z);
+	rot = XMMatrixRotationQuaternion(Parent->GetComponent<Transform>()->rotation.ToXMVector());
 	trans = XMMatrixTranslation(Parent->GetComponent<Transform>()->position.x, Parent->GetComponent<Transform>()->position.y, Parent->GetComponent<Transform>()->position.z);
 	world = scl * rot * trans;
 	Renderer::SetWorldMatrix(world);

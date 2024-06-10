@@ -27,27 +27,23 @@ void Camera::Uninit()
 
 void Camera::Update()
 {
+	// クオータニオンでの回転
 
-	if (Input::GetKeyPress('Q')){// 視点旋回「左」
-		_transform->rotation.y += (float)(M_PI * 0.01);
-		if (_transform->rotation.y > M_PI)
-		{
-			_transform->rotation.y -= M_PI * 2.0f;
-		}
-
-		_transform->position.x = _target.x - sinf(_transform->rotation.y) * _length;
-		_transform->position.z = _target.z - cosf(_transform->rotation.y) * _length;
+	if (Input::GetKeyPress('Q')) {// 視点旋回「左」
+		// クォータニオンを作成して、Y軸を中心に逆方向に回転する
+		Quaternion rotationDelta = Quaternion::AngleAxis((float)(M_PI * 0.01), _transform->GetTop());
+		// 現在の回転に乗じる
+		_transform->rotation = rotationDelta * _transform->rotation;
 	}
 
-	if (Input::GetKeyPress('E')){// 視点旋回「右」
-		_transform->rotation.y -= (float)(M_PI * 0.01);
-		if (_transform->rotation.y < -M_PI)
-		{
-			_transform->rotation.y += M_PI * 2.0f;
-		}
 
-		_transform->position.x = _target.x - sinf(_transform->rotation.y) * _length;
-		_transform->position.z = _target.z - cosf(_transform->rotation.y) * _length;
+	
+	if (Input::GetKeyPress('E')) {// 視点旋回「右」
+		// クォータニオンを作成して、Y軸を中心に逆方向に回転する
+		Quaternion rotationDelta = Quaternion::AngleAxis((float)(-M_PI * 0.01), _transform->GetTop());
+		// 現在の回転に乗じる
+		_transform->rotation = rotationDelta * _transform->rotation;
+
 	}
 
 	// カメラを初期に戻す
@@ -57,7 +53,9 @@ void Camera::Update()
 		Init();
 	}
 
-	Renderer::DrawDebugData((char*)"a", _target, false, 1, { 500,500 });
+	UpdatePosition();
+
+	ImGui::Text("camera Rotation E:x.%f y.%f z.%f", _transform->rotation.ToXMFloat4().x, _transform->rotation.ToXMFloat4().y, _transform->rotation.ToXMFloat4().z);
 }
 
 void Camera::Draw()
@@ -79,4 +77,11 @@ void Camera::Draw()
 
 	Renderer::SetProjectionMatrix(projectionMatrix);
 
+}
+
+void Camera::UpdatePosition()
+{
+	XMFLOAT3 forward = _transform->GetForward();
+	_transform->position.x = _target.x - forward.x * _length;
+	_transform->position.z = _target.z - forward.z * _length;
 }

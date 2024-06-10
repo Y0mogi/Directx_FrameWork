@@ -97,7 +97,7 @@ void Field::Draw()
 	// ワールドマトリックス設定
 	XMMATRIX world, scl, rot, trans;
 	scl = XMMatrixScaling(_transform->scale.x, _transform->scale.y, _transform->scale.z);
-	rot = XMMatrixRotationRollPitchYaw(_transform->rotation.x, _transform->rotation.y, _transform->rotation.z);
+	rot = XMMatrixRotationQuaternion(_transform->rotation.ToXMVector());
 	trans = XMMatrixTranslation(_transform->position.x, _transform->position.y, _transform->position.z);
 	world = scl * rot * trans;
 	Renderer::SetWorldMatrix(world);

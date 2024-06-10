@@ -188,6 +188,9 @@
     <ClInclude Include="magic_enum\magic_enum_utility.hpp">
       <Filter>MagicEnum</Filter>
     </ClInclude>
+    <ClInclude Include="quaternion.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shader\common.hlsl" />

@@ -1,3 +1,4 @@
+#include <list>
 #include "gameobject.h"
 #include "transform.h"
 #include "component.h"

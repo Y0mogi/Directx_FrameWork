@@ -12,6 +12,8 @@ public:
 	void Update();
 	void Draw();
 
+	void UpdatePosition();
+
 	inline void SetTarget(const XMFLOAT3& target) { this->_target = target; }
 
 private:

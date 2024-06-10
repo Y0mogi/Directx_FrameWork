@@ -11,10 +11,10 @@ class OBBComponent : public Component
 public:
     XMFLOAT3 center;     // OBBの中心
     XMFLOAT3 extents;    // 各軸に沿った半径ベクトル
-    XMFLOAT3X3 axes;     // OBBの回転行列（各軸の方向）
+    XMFLOAT3X3 axis;     // OBBの回転行列（各軸の方向）
 
     OBBComponent() : center(0.0f,0.0f,0.0f), extents(1.0f, 1.0f, 1.0f) {
-        XMStoreFloat3x3(&axes, XMMatrixIdentity());
+        XMStoreFloat3x3(&axis, XMMatrixIdentity());
     }
 
     void Init(){};
@@ -35,13 +35,13 @@ private:
         // OBB同士の衝突判定を行う
 
         // 各軸のセット
-        XMVECTOR A0 = XMLoadFloat3(reinterpret_cast<const XMFLOAT3*>(&a.axes.m[0]));
-        XMVECTOR A1 = XMLoadFloat3(reinterpret_cast<const XMFLOAT3*>(&a.axes.m[1]));
-        XMVECTOR A2 = XMLoadFloat3(reinterpret_cast<const XMFLOAT3*>(&a.axes.m[2]));
+        XMVECTOR A0 = XMLoadFloat3(reinterpret_cast<const XMFLOAT3*>(&a.axis.m[0]));
+        XMVECTOR A1 = XMLoadFloat3(reinterpret_cast<const XMFLOAT3*>(&a.axis.m[1]));
+        XMVECTOR A2 = XMLoadFloat3(reinterpret_cast<const XMFLOAT3*>(&a.axis.m[2]));
 
-        XMVECTOR B0 = XMLoadFloat3(reinterpret_cast<const XMFLOAT3*>(&b.axes.m[0]));
-        XMVECTOR B1 = XMLoadFloat3(reinterpret_cast<const XMFLOAT3*>(&b.axes.m[1]));
-        XMVECTOR B2 = XMLoadFloat3(reinterpret_cast<const XMFLOAT3*>(&b.axes.m[2]));
+        XMVECTOR B0 = XMLoadFloat3(reinterpret_cast<const XMFLOAT3*>(&b.axis.m[0]));
+        XMVECTOR B1 = XMLoadFloat3(reinterpret_cast<const XMFLOAT3*>(&b.axis.m[1]));
+        XMVECTOR B2 = XMLoadFloat3(reinterpret_cast<const XMFLOAT3*>(&b.axis.m[2]));
 
         // 中心間ベクトル
         XMVECTOR D = XMLoadFloat3(&b.center) - XMLoadFloat3(&a.center);
@@ -52,7 +52,7 @@ private:
 
         // aの各軸についての検査
         for (int i = 0; i < 3; ++i) {
-            axis = XMFLOAT3(a.axes.m[i][0], a.axes.m[i][1], a.axes.m[i][2]);
+            axis = XMFLOAT3(a.axis.m[i][0], a.axis.m[i][1], a.axis.m[i][2]);
             ra = a.extents.x * fabsf(axis.x) + a.extents.y * fabsf(axis.y) + a.extents.z * fabsf(axis.z);
             rb = b.extents.x * fabsf(XMVectorGetX(XMVector3Dot(XMLoadFloat3(&axis), B0))) +
                 b.extents.y * fabsf(XMVectorGetX(XMVector3Dot(XMLoadFloat3(&axis), B1))) +
@@ -62,7 +62,7 @@ private:
 
         // bの各軸についての検査
         for (int i = 0; i < 3; ++i) {
-            axis = XMFLOAT3(b.axes.m[i][0], b.axes.m[i][1], b.axes.m[i][2]);
+            axis = XMFLOAT3(b.axis.m[i][0], b.axis.m[i][1], b.axis.m[i][2]);
             ra = a.extents.x * fabsf(XMVectorGetX(XMVector3Dot(XMLoadFloat3(&axis), A0))) +
                 a.extents.y * fabsf(XMVectorGetX(XMVector3Dot(XMLoadFloat3(&axis), A1))) +
                 a.extents.z * fabsf(XMVectorGetX(XMVector3Dot(XMLoadFloat3(&axis), A2)));
@@ -71,13 +71,13 @@ private:
         }
 
         // aとbの交差する軸についての検査
-        XMVECTOR axesA[3] = { A0, A1, A2 };
-        XMVECTOR axesB[3] = { B0, B1, B2 };
+        XMVECTOR axisA[3] = { A0, A1, A2 };
+        XMVECTOR axisB[3] = { B0, B1, B2 };
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
                 // 軸の外積
-                XMVECTOR cross = XMVector3Cross(axesA[i], axesB[j]);
+                XMVECTOR cross = XMVector3Cross(axisA[i], axisB[j]);
 
                 if (XMVector3Equal(cross, XMVectorZero())) continue;  // 外積がゼロ（軸が平行）の場合をスキップ
 
