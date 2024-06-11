@@ -109,6 +109,7 @@ public:
 			it->Uninit();
 		}
 	};
+
 	virtual void Update() {
 
 		for (auto& it : _objects)

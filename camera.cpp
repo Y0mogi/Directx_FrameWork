@@ -22,6 +22,7 @@ void Camera::Init()
 
 void Camera::Uninit()
 {
+	_transform = nullptr;
 
 }
 
@@ -81,7 +82,6 @@ void Camera::Draw()
 
 void Camera::UpdatePosition()
 {
-	XMFLOAT3 forward = _transform->GetForward();
-	_transform->position.x = _target.x - forward.x * _length;
-	_transform->position.z = _target.z - forward.z * _length;
+	_transform->position.x = _target.x - _transform->GetForward().x * _length;
+	_transform->position.z = _target.z - _transform->GetForward().z * _length;
 }
