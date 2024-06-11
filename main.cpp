@@ -22,6 +22,7 @@ extern IMGUI_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPA
 
 HWND g_Window;
 
+
 HWND GetWindow()
 {
 	return g_Window;
@@ -80,6 +81,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 	DWORD dwExecLastTime;
 	DWORD dwCurrentTime;
+	DWORD dwFrameCount;
 	timeBeginPeriod(1);
 	dwExecLastTime = timeGetTime();
 	dwCurrentTime = 0;
@@ -105,13 +107,17 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 			if((dwCurrentTime - dwExecLastTime) >= (1000 / 120))
 			{
+
 				dwExecLastTime = dwCurrentTime;
+
+
 
 				// XV
 				Manager::Update();
 
 				// •`‰æ
 				Manager::Draw();
+
 			}
 		}
 	}
