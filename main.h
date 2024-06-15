@@ -27,6 +27,9 @@ using namespace DirectX;
 
 // Imgui
 #include "Imgui\imgui.h"
+#include "Imgui\imstb_rectpack.h"
+#include "Imgui\imgui_internal.h"
+#include "Imgui\imgui_stdlib.h"
 #include "Imgui\imgui_impl_dx11.h"
 #include "Imgui\imgui_impl_win32.h"
 
@@ -45,3 +48,5 @@ HWND GetWindow();
 
 void Invoke(std::function<void()> Function, int Time);
 
+std::string utf8_encode(const std::wstring& wstr);
+std::wstring utf8_decode(const std::string& str);

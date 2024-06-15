@@ -5,6 +5,7 @@
 
 class GameObject;
 
+
 /// <summary>
 /// コンポーネント基底クラス
 /// </summary>
@@ -15,6 +16,11 @@ public:
 	virtual void Uninit() {};
 	virtual void Update() {};
 	virtual void Draw() {};
+
+	/// <summary>
+	/// ImGuiでコンポーネント内の情報を表示
+	/// </summary>
+	virtual void CompInfo() {};
 
 	Component() {};
 	virtual ~Component(){}

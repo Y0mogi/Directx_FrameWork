@@ -14,13 +14,23 @@ void Sprite::Init()
 	Renderer::CreatePixelShader(&m_PixelShader,
 		"shader\\unlitTexturePS.cso");
 
-	// テクスチャ読み込み
-	TexMetadata metadata;
-	ScratchImage image;
-	LoadFromWICFile(_path.c_str(), WIC_FLAGS_NONE, &metadata, image);
+	VERTEX_3D vertex[4]{};
 
-	CreateShaderResourceView(Renderer::GetDevice(), image.GetImages(), image.GetImageCount(), metadata, &m_Texture);
-	assert(m_Texture);
+	// 頂点バッファ生成
+	D3D11_BUFFER_DESC bd{};
+	bd.Usage = D3D11_USAGE_DYNAMIC;
+	bd.ByteWidth = sizeof(VERTEX_3D) * 4;
+	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+
+	D3D11_SUBRESOURCE_DATA sd{};
+	ZeroMemory(&sd, sizeof(sd));
+	sd.pSysMem = vertex;
+
+	Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_VertexBuffer);
+
+
+	this->CreateTexture(_path);
 }
 
 void Sprite::Uninit()
@@ -43,7 +53,12 @@ void Sprite::Draw()
 	XMFLOAT3 pos = Parent->GetComponent<Transform>()->position;
 	XMFLOAT3 size = Parent->GetComponent<Transform>()->scale;
 
-	VERTEX_3D vertex[4]{};
+	D3D11_MAPPED_SUBRESOURCE msr;
+	Renderer::GetDeviceContext()->Map(m_VertexBuffer, 0,
+		D3D11_MAP_WRITE_DISCARD, 0, &msr);
+
+	VERTEX_3D* vertex = (VERTEX_3D*)msr.pData;
+
 	// 頂点０番（左上の頂点）
 	vertex[0].Position = XMFLOAT3(pos.x - (size.x / 2.0f), pos.y - (size.y / 2.0f), 0.0f);
 	vertex[0].Normal = XMFLOAT3(0.0f, 0.0f, 0.0f);
@@ -68,18 +83,7 @@ void Sprite::Draw()
 	vertex[3].Diffuse = m_Color;
 	vertex[3].TexCoord = XMFLOAT2(1.0f, 1.0f);
 
-	// 頂点バッファ生成
-	D3D11_BUFFER_DESC bd{};
-	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(VERTEX_3D) * 4;
-	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	bd.CPUAccessFlags = 0;
-
-	D3D11_SUBRESOURCE_DATA sd{};
-	sd.pSysMem = vertex;
-
-	Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_VertexBuffer);
-
+	Renderer::GetDeviceContext()->Unmap(m_VertexBuffer, 0);
 
 	// 入力レイアウト
 	Renderer::GetDeviceContext()->IASetInputLayout(m_VertexLayout);
@@ -114,6 +118,35 @@ void Sprite::Draw()
 	Renderer::GetDeviceContext()->Draw(4, 0);
 }
 
+void Sprite::CompInfo()
+{
+	using namespace ImGui;
+	SeparatorText("SpriteComponent");
+	// 親表示
+	SeparatorText("ParentGameObjectTag");
+	Text(Parent->objectTag.c_str());
+
+	// 色変更
+	SeparatorText("TextureColor");
+	ColorEdit4("Color", reinterpret_cast<float*>(&this->m_Color), ImGuiColorEditFlags_Uint8);
+
+	// ファイルパス表示・変更
+	SeparatorText("FilePath");
+	static std::string tmp = utf8_encode(_path);
+	TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f),"Do not specify the wrong path!");
+	InputText(" ", &tmp); ImGui::SameLine();
+	if (Button("Change")) {
+		if (SaveFilePath(utf8_decode(tmp))) this->CreateTexture(_path);
+	}
+	
+
+	// 元画像プレビュー
+	SeparatorText("DrawRawImage");
+	ImGui::Image(m_Texture, ImVec2(200.f,200.f));
+
+	Separator();
+}
+
 void Sprite::SetColor(const XMFLOAT4& color)
 {
 	m_Color = color;
@@ -121,6 +154,25 @@ void Sprite::SetColor(const XMFLOAT4& color)
 
 void Sprite::LoadTexture(const std::wstring& path)
 {
-	_path = path;
+	SaveFilePath(path);
 }
 
+void Sprite::CreateTexture(const std::wstring& path){
+
+	if (m_Texture) m_Texture->Release(); // 
+
+	// テクスチャ読み込み
+	TexMetadata metadata;
+	ScratchImage image;
+	LoadFromWICFile(path.c_str(), WIC_FLAGS_NONE, &metadata, image);
+
+	CreateShaderResourceView(Renderer::GetDevice(), image.GetImages(), image.GetImageCount(), metadata, &m_Texture);
+	assert(m_Texture);
+}
+
+bool Sprite::SaveFilePath(const std::wstring& path)
+{
+	if (_path == path) return false;// パスが同じなら変更しない
+	_path = path;
+	return true;
+}

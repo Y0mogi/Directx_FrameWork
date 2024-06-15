@@ -11,6 +11,7 @@ public:
 
 	void Init();
 	void Update();
+	void CompInfo();
 	void Uninit();
 	void Draw();
 
@@ -74,12 +75,13 @@ public:
 		}
 		return false;  // å©Ç¬Ç©ÇÁÇ»Ç©Ç¡ÇΩèÍçá
 	}
-
 	GameObject();
+	GameObject(const std::string& tag);
 	~GameObject();
 
 public:
 	std::list<Component*> _componentList;
+	std::string objectTag = "NULL";
 };
 
 #endif // !GAMEOBJECT_H

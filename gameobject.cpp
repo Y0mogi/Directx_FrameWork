@@ -1,10 +1,17 @@
 #include <list>
+#include <string>
 #include "gameobject.h"
 #include "transform.h"
 #include "component.h"
 
 
 GameObject::GameObject()
+{
+    AddComponent<Transform>();
+}
+
+GameObject::GameObject(const std::string& tag)
+    :objectTag(tag)
 {
     AddComponent<Transform>();
 }
@@ -25,6 +32,12 @@ void GameObject::Init()
 void GameObject::Update()
 {
     for (auto& it : _componentList) it->Update();
+    
+}
+
+void GameObject::CompInfo()
+{
+    for (auto& it : _componentList) it->CompInfo();
 }
 
 void GameObject::Uninit()

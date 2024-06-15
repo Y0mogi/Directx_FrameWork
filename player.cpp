@@ -55,7 +55,7 @@ void Player::Update()
 		Parent->GetComponent<Transform>()->RotateAround(Parent->GetComponent<Transform>()->position, Parent->GetComponent<Transform>()->GetForward(), 0.1f);
 	}
 
-	ImGui::Text("camera Rotation E:x.%f y.%f z.%f", Parent->GetComponent<Transform>()->rotation.ToXMFloat4().x, Parent->GetComponent<Transform>()->rotation.ToXMFloat4().y, Parent->GetComponent<Transform>()->rotation.ToXMFloat4().z);
+	//ImGui::Text("camera Rotation E:x.%f y.%f z.%f", Parent->GetComponent<Transform>()->rotation.ToXMFloat4().x, Parent->GetComponent<Transform>()->rotation.ToXMFloat4().y, Parent->GetComponent<Transform>()->rotation.ToXMFloat4().z);
 }
 
 void Player::Draw()

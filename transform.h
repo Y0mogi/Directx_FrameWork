@@ -28,6 +28,23 @@ public:
       
 	};
 
+    
+    void CompInfo()override {
+        using namespace ImGui;
+        SeparatorText("Transform");
+        
+        DragFloat3("Position", reinterpret_cast<float*>(&position));
+
+        Text("Rotation is Can only display (2024/06/14)");
+        XMFLOAT4 rotF4 = rotation.ToXMFloat4();
+        DragFloat3("Rotation", reinterpret_cast<float*>(&rotF4));
+        //rotation.FromEulerAngles(rotF4.x, rotF4.y, rotF4.z);
+
+        DragFloat3("Scale", reinterpret_cast<float*>(&scale));
+        
+        Separator();
+    }
+
 	// ===•ûŒüƒxƒNƒgƒ‹‚ÌŽæ“¾===
    
     XMFLOAT3 GetForward() const {

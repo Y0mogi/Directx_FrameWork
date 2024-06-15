@@ -81,9 +81,18 @@ public:
         return ToXMFLOAT4(_quaternion);
     }
 
+
+
     // 演算子オーバーロード
     Quaternion operator*(const Quaternion& other) const {
         return Quaternion(XMQuaternionMultiply(_quaternion, other._quaternion));
+    }
+
+    /// <summary>
+    /// CompInfo用
+    /// </summary>
+    XMVECTOR& GetRotation() {
+        return _quaternion;
     }
 
 private:

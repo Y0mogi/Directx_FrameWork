@@ -17,6 +17,8 @@ public:
 	void Update();
 	void Draw();
 
+	void CompInfo() override;
+
 	/// <summary>
 	/// スプライトカラーの設定
 	/// </summary>
@@ -30,7 +32,19 @@ public:
 	void LoadTexture(const std::wstring& path);
 
 private:
-	std::wstring _path{};
+	
+	/// <summary>
+	/// <para>テクスチャの読み込み</para>
+	/// テクスチャの再度生成なので毎フレームの呼び出しは禁止
+	/// </summary>
+	void CreateTexture(const std::wstring& path);
+
+	/// <summary>
+	/// tmpPathへのパスの保存
+	/// </summary>
+	bool SaveFilePath(const std::wstring& path);
+private:
+	std::wstring _path{}; // メインパス
 	XMFLOAT4 m_Color = { 1.0f,1.0f,1.0f ,1.0f };
 
 	ID3D11Buffer* m_VertexBuffer = NULL;
