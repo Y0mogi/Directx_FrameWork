@@ -6,6 +6,7 @@
 #include "camera.h"
 #include "math_helper.h"
 
+using namespace DirectX::SimpleMath;
 
 void Camera::Init()
 {
@@ -23,46 +24,44 @@ void Camera::Init()
 void Camera::Uninit()
 {
 	_transform = nullptr;
-
 }
 
 void Camera::Update()
 {
-	// クオータニオンでの回転
+	// 回転の速度
+	float rotationSpeed = XM_PI * 0.01f;
 
-	//if (Input::GetKeyPress('Q')) {// 視点旋回「左」
-	//	// クォータニオンを作成して、Y軸を中心に逆方向に回転する
-	//	Quaternion rotationDelta = Quaternion::AngleAxis((float)(M_PI * 0.01), _transform->GetTop());
-	//	// 現在の回転に乗じる
-	//	_transform->rotation = rotationDelta * _transform->rotation;
-	//}
-	//
-	//
-	//
-	//if (Input::GetKeyPress('E')) {// 視点旋回「右」
-	//	// クォータニオンを作成して、Y軸を中心に逆方向に回転する
-	//	Quaternion rotationDelta = Quaternion::AngleAxis((float)(-M_PI * 0.01), _transform->GetTop());
-	//	// 現在の回転に乗じる
-	//	_transform->rotation = rotationDelta * _transform->rotation;
-	//
-	//}
+	// 上下左右の回転
+	if (Input::GetKeyPress('Q')) {
+		_yaw += rotationSpeed;
+	}
+
+	if (Input::GetKeyPress('E')) {
+		_yaw -= rotationSpeed;
+	}
+
+	if (Input::GetKeyPress('W')) {
+		_pitch -= rotationSpeed;
+	}
+
+	if (Input::GetKeyPress('S')) {
+		_pitch += rotationSpeed;
+	}
 
 	// カメラを初期に戻す
-	if (Input::GetKeyPress('P'))
-	{
+	if (Input::GetKeyPress('P')) {
 		Uninit();
 		Init();
 	}
 
-	//UpdatePosition();
+	UpdatePosition();
 
-	//ImGui::Text("camera Rotation E:x.%f y.%f z.%f", _transform->rotation.ToXMFloat4().x, _transform->rotation.ToXMFloat4().y, _transform->rotation.ToXMFloat4().z);
 }
 
 void Camera::Draw()
 {
 	// ビューマトリックス設定
-	XMFLOAT3 up = { 0.0f,1.0f,0.0f };
+	XMFLOAT3 up = _transform->GetTop();
 	XMMATRIX viewMatrix = XMMatrixLookAtLH(
 		XMLoadFloat3(&_transform->position),
 		XMLoadFloat3(&_target),
@@ -71,7 +70,7 @@ void Camera::Draw()
 
 	Renderer::SetViewMatrix(viewMatrix);
 	XMStoreFloat4x4(&_viewMatrix, viewMatrix);
-
+	
 	// プロジェクションマトリックス設定
 	XMMATRIX projectionMatrix;
 	projectionMatrix = XMMatrixPerspectiveFovLH(1.0f, (float)SCREEN_WIDTH / SCREEN_HEIGHT, 1.0f, 1000.0f);
@@ -80,8 +79,28 @@ void Camera::Draw()
 
 }
 
+void Camera::CompInfo()
+{
+	using namespace ImGui;
+	SeparatorText("Camera");
+	if (TreeNode("CAInfo")) {
+
+		DragFloat3("AtPosition", reinterpret_cast<float*>(&_target));
+		DragFloat("AtDistanth", reinterpret_cast<float*>(&_length));
+		TreePop();
+	}
+}
+
 void Camera::UpdatePosition()
 {
-	_transform->position.x = _target.x - _transform->GetForward().x * _length;
-	_transform->position.z = _target.z - _transform->GetForward().z * _length;
+	
+	// 回転の適用
+	_transform->rotation = Quaternion::CreateFromYawPitchRoll(_yaw, _pitch, 0.0f);
+
+	// ターゲット位置からの相対位置を計算
+	Vector3 relativePosition = Vector3(0.0f, 0.0f,_length + 0.0001f);
+	relativePosition = Vector3::Transform(relativePosition, _transform->rotation);
+
+	// 新しいカメラ位置を計算
+	_transform->position = XMFLOAT3(relativePosition);
 }

@@ -40,7 +40,7 @@ void ModelRenderer::DrawModel()
 		// ƒ|ƒŠƒSƒ“•`‰æ
 		Renderer::GetDeviceContext()->DrawIndexed(m_Model->SubsetArray[i].IndexNum, m_Model->SubsetArray[i].StartIndex, 0 );
 	}
-
+	
 }
 
 void ModelRenderer::Preload(const char *FileName)

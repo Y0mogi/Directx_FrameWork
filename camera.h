@@ -12,16 +12,20 @@ public:
 	void Update();
 	void Draw();
 
-	void UpdatePosition();
+	void CompInfo();
 
 	inline void SetTarget(const XMFLOAT3& target) { this->_target = target; }
 
 private:
+	void UpdatePosition();
+
+private:
 
 	Transform* _transform = nullptr;
+	XMFLOAT4X4 _viewMatrix{};
 	XMFLOAT3 _target{};
 	float _length;
-	XMFLOAT4X4 _viewMatrix{};
+	float _yaw, _pitch;   // ヨー角度,ピッチ角度
 };
 
 #endif // CAMERA_H

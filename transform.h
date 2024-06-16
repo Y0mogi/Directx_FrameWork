@@ -1,11 +1,23 @@
+//=============================================================================
+// Contents   : GameObjectの位置、回転、スケールを扱うクラス
+//              
+// Author     : 髙橋 脩也
+// LastUpdate : 2024/06/16
+// Since      : 2024/06/01
+//
+// === 更新ログ ===
+//
+// 6 / 16   QuaternionクラスをDirectXTKのQuaternionクラスに変更
+//
+//
+//=============================================================================
+
 #pragma once
 #ifndef TRANSFORM_H
 #define TRANSFORM_H
 
 #include "component.h"
-#include "quaternion.h"
 #include "main.h"
-
 
 /// <summary>
 /// オブジェクトの移動、回転、スケールを管理するコンポーネント
@@ -15,8 +27,9 @@ class Transform :public Component
 public:
 
 	// ==========基本メンバ=========
+
 	XMFLOAT3 position{ 0.0f,0.0f,0.0f };
-    Quaternion rotation;
+    DirectX::SimpleMath::Quaternion rotation{};
 	XMFLOAT3 scale{ 1.0f,1.0f,1.0f };
     
 	// =============================	
@@ -28,21 +41,28 @@ public:
       
 	};
 
-    
     void CompInfo()override {
         using namespace ImGui;
         SeparatorText("Transform");
-        
-        DragFloat3("Position", reinterpret_cast<float*>(&position));
+        if (TreeNode("TMInfo")) {
 
-        Text("Rotation is Can only display (2024/06/14)");
-        XMFLOAT4 rotF4 = rotation.ToXMFloat4();
-        DragFloat3("Rotation", reinterpret_cast<float*>(&rotF4));
-        //rotation.FromEulerAngles(rotF4.x, rotF4.y, rotF4.z);
+            DragFloat3("Position", reinterpret_cast<float*>(&position));
 
-        DragFloat3("Scale", reinterpret_cast<float*>(&scale));
-        
-        Separator();
+            Text("Rotation is Can only display (2024/06/14)");
+            
+            // クォータニオンを回転行列に変換
+            auto rotationMatrix = DirectX::SimpleMath::Matrix::CreateFromQuaternion(rotation);
+            // 回転行列からオイラー角を取得
+            float pitch, yaw, roll;
+            ExtractPitchYawRoll(rotationMatrix, pitch, yaw, roll);
+
+            XMFLOAT3 rotF3 = XMFLOAT3(pitch, yaw, roll);
+            DragFloat3("Rotation", reinterpret_cast<float*>(&rotF3));
+
+            DragFloat3("Scale", reinterpret_cast<float*>(&scale));
+
+            TreePop();
+        }
     }
 
 	// ===方向ベクトルの取得===
@@ -71,65 +91,24 @@ public:
     
 	// ========================
 
-
-    // === 回転 ===
-    
-    // オイラー角での回転の設定
-    void SetEulerAngles(const XMFLOAT3& angle) {
-        rotation = Quaternion::FromEulerAngles(angle.x, angle.y, angle.z);
-    }
-    void SetEulerAngles(float pitch, float yaw, float roll) {
-        rotation = Quaternion::FromEulerAngles(pitch, yaw, roll);
-    }
-    
-    /// <summary>
-    /// オイラー角での回転を取得します。
-    /// </summary>
-    XMFLOAT3 GetEulerAngles() const {
-        return ToXMFLOAT3(XMQuaternionRotationMatrix(rotation.ToRotationMatrix()));
-    }
-
-    // 自転
-    void Rotate(const XMFLOAT3& eulerAngles = {}) {
-        Quaternion deltaRotation = Quaternion::FromEulerAngles(eulerAngles.x, eulerAngles.y, eulerAngles.z);
-        rotation = rotation * deltaRotation;
-    }
-    void Rotate(float pitch = 0.0f, float yaw = 0.0f, float roll = 0.0f) {
-        Quaternion deltaRotation = Quaternion::FromEulerAngles(pitch, yaw, roll);
-        rotation = rotation * deltaRotation;
-    }
-
-    /// 公転
-    void RotateAround(const XMFLOAT3& point = {}, const XMFLOAT3& axis = {}, float angle ={}) {
-        // 平行移動
-        XMVECTOR pointVector = XMLoadFloat3(&point);
-        XMVECTOR posVector = XMLoadFloat3(&position);
-        posVector -= pointVector;
-
-        // 回転
-        Quaternion deltaRotation = Quaternion::AngleAxis(angle, axis);
-        posVector = XMVector3Rotate(posVector, deltaRotation.ToXMVector());
-
-        // 平行移動の復元
-        posVector += pointVector;
-        XMStoreFloat3(&position, posVector);
-
-        // 回転の適用
-        rotation = deltaRotation * rotation;
-    }
-    // ========================
-
 	auto operator <=>(const Transform&) const = default;
 
 private:
 
-	// 回転行列の行を取得して正規化するヘルパー関数
-	XMFLOAT3 GetDirectionVector(int row) const {
-        XMMATRIX rotationMatrix = rotation.ToRotationMatrix();
+    // 回転行列の行を取得して正規化するヘルパー関数
+    XMFLOAT3 GetDirectionVector(int row) const {
+        XMMATRIX rotationMatrix = DirectX::SimpleMath::Matrix::CreateFromQuaternion(rotation);
         XMFLOAT3 dir;
         XMStoreFloat3(&dir, rotationMatrix.r[row]);
         return VectorNormalize(dir);
-	}
+    }
+
+    // 回転行列からオイラー角を抽出するヘルパー関数
+    void ExtractPitchYawRoll(const DirectX::SimpleMath::Matrix& matrix, float& pitch, float& yaw, float& roll) const {
+        yaw = atan2f(matrix._23, matrix._33);
+        pitch = -asinf(matrix._13);
+        roll = atan2f(matrix._12, matrix._11);
+    }
 };
 
 #endif // !TRANSFORM_H

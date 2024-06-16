@@ -49,7 +49,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 		wcex.hIconSm = nullptr;
 
 		RegisterClassEx(&wcex);
-
+		
 
 		RECT rc = { 0, 0, (LONG)SCREEN_WIDTH, (LONG)SCREEN_HEIGHT };
 		AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
@@ -62,6 +62,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 	// ‰Šú‰»
 	Manager::Init();
+
 
 	// ImGui‚Ì‰Šú‰»
 	IMGUI_CHECKVERSION();
@@ -105,7 +106,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 		{
 			dwCurrentTime = timeGetTime();
 
-			if((dwCurrentTime - dwExecLastTime) >= (1000 / 120))
+			if((dwCurrentTime - dwExecLastTime) >= (1000 / 60))
 			{
 
 				dwExecLastTime = dwCurrentTime;

@@ -19,11 +19,17 @@
     <Filter Include="MagicEnum">
       <UniqueIdentifier>{065bc649-8485-49bd-8a3f-cf97354a3688}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DirectXTK">
+      <UniqueIdentifier>{1e3e6121-7783-4741-aaed-37c7b16ab8d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectXTK\Inc">
+      <UniqueIdentifier>{0de24265-3869-4d32-9b44-d8b708203514}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectXTK\Src">
+      <UniqueIdentifier>{52069c5e-1ab4-4b99-93b8-85de0f49f69a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="polygon2D.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="renderer.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -81,11 +87,125 @@
     <ClCompile Include="Imgui\imgui_stdlib.cpp">
       <Filter>Imgui</Filter>
     </ClCompile>
+    <ClCompile Include="Src\PrimitiveBatch.cpp">
+      <Filter>DirectXTK\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ScreenGrab.cpp">
+      <Filter>DirectXTK\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\SimpleMath.cpp">
+      <Filter>DirectXTK\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\SkinnedEffect.cpp">
+      <Filter>DirectXTK\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\SpriteBatch.cpp">
+      <Filter>DirectXTK\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\SpriteFont.cpp">
+      <Filter>DirectXTK\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ToneMapPostProcess.cpp">
+      <Filter>DirectXTK\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\VertexTypes.cpp">
+      <Filter>DirectXTK\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\WICTextureLoader.cpp">
+      <Filter>DirectXTK\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\AlphaTestEffect.cpp">
+      <Filter>DirectXTK\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\BasicEffect.cpp">
+      <Filter>DirectXTK\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\BasicPostProcess.cpp">
+      <Filter>DirectXTK\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\BinaryReader.cpp">
+      <Filter>DirectXTK\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\BufferHelpers.cpp">
+      <Filter>DirectXTK\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\CommonStates.cpp">
+      <Filter>DirectXTK\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\DDSTextureLoader.cpp">
+      <Filter>DirectXTK\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\DebugEffect.cpp">
+      <Filter>DirectXTK\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\DGSLEffect.cpp">
+      <Filter>DirectXTK\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\DGSLEffectFactory.cpp">
+      <Filter>DirectXTK\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\DirectXHelpers.cpp">
+      <Filter>DirectXTK\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\DualPostProcess.cpp">
+      <Filter>DirectXTK\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\DualTextureEffect.cpp">
+      <Filter>DirectXTK\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\EffectCommon.cpp">
+      <Filter>DirectXTK\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\EffectFactory.cpp">
+      <Filter>DirectXTK\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\EnvironmentMapEffect.cpp">
+      <Filter>DirectXTK\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GamePad.cpp">
+      <Filter>DirectXTK\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GeometricPrimitive.cpp">
+      <Filter>DirectXTK\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Geometry.cpp">
+      <Filter>DirectXTK\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GraphicsMemory.cpp">
+      <Filter>DirectXTK\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Keyboard.cpp">
+      <Filter>DirectXTK\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Model.cpp">
+      <Filter>DirectXTK\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ModelLoadCMO.cpp">
+      <Filter>DirectXTK\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ModelLoadSDKMESH.cpp">
+      <Filter>DirectXTK\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ModelLoadVBO.cpp">
+      <Filter>DirectXTK\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Mouse.cpp">
+      <Filter>DirectXTK\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\NormalMapEffect.cpp">
+      <Filter>DirectXTK\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\PBREffect.cpp">
+      <Filter>DirectXTK\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\PBREffectFactory.cpp">
+      <Filter>DirectXTK\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\pch.cpp">
+      <Filter>DirectXTK\Src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="polygon2D.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="renderer.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -197,10 +317,120 @@
     <ClInclude Include="Imgui\imgui_stdlib.h">
       <Filter>Imgui</Filter>
     </ClInclude>
+    <ClInclude Include="Src\PlatformHelpers.h">
+      <Filter>DirectXTK\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\SDKMesh.h">
+      <Filter>DirectXTK\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\SharedResourcePool.h">
+      <Filter>DirectXTK\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\vbo.h">
+      <Filter>DirectXTK\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\AlignedNew.h">
+      <Filter>DirectXTK\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Bezier.h">
+      <Filter>DirectXTK\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\BinaryReader.h">
+      <Filter>DirectXTK\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\DDS.h">
+      <Filter>DirectXTK\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\DemandCreate.h">
+      <Filter>DirectXTK\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\EffectCommon.h">
+      <Filter>DirectXTK\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Geometry.h">
+      <Filter>DirectXTK\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\LoaderHelpers.h">
+      <Filter>DirectXTK\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\pch.h">
+      <Filter>DirectXTK\Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\GraphicsMemory.h">
+      <Filter>DirectXTK\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\Keyboard.h">
+      <Filter>DirectXTK\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\Model.h">
+      <Filter>DirectXTK\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\Mouse.h">
+      <Filter>DirectXTK\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\PostProcess.h">
+      <Filter>DirectXTK\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\PrimitiveBatch.h">
+      <Filter>DirectXTK\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\ScreenGrab.h">
+      <Filter>DirectXTK\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\SimpleMath.h">
+      <Filter>DirectXTK\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\SpriteBatch.h">
+      <Filter>DirectXTK\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\SpriteFont.h">
+      <Filter>DirectXTK\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\VertexTypes.h">
+      <Filter>DirectXTK\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\WICTextureLoader.h">
+      <Filter>DirectXTK\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\Audio.h">
+      <Filter>DirectXTK\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\BufferHelpers.h">
+      <Filter>DirectXTK\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\CommonStates.h">
+      <Filter>DirectXTK\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\DDSTextureLoader.h">
+      <Filter>DirectXTK\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\DirectXHelpers.h">
+      <Filter>DirectXTK\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\Effects.h">
+      <Filter>DirectXTK\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\GamePad.h">
+      <Filter>DirectXTK\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\GeometricPrimitive.h">
+      <Filter>DirectXTK\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="directxTK_all.h">
+      <Filter>DirectXTK</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shader\common.hlsl" />
     <FxCompile Include="shader\unlitTexturePS.hlsl" />
     <FxCompile Include="shader\unlitTextureVS.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Src\TeapotData.inc">
+      <Filter>DirectXTK\Src</Filter>
+    </None>
+    <None Include="Inc\SimpleMath.inl">
+      <Filter>DirectXTK\Inc</Filter>
+    </None>
   </ItemGroup>
 </Project>

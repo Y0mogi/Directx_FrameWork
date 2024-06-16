@@ -21,20 +21,7 @@ void Camera_FPS::Uninit()
 
 void Camera_FPS::Update()
 {
-	//// カメラの注視点をプレイヤーの前方方向にセット
-	//float pitch = _transform->rotation.x; // カメラの仰角を取得
-	//float yaw = _transform->rotation.y; // カメラの回転角を取得
-	//
-	//// 前方方向を計算
-	//XMFLOAT3 forwardVector;
-	//forwardVector.x = sinf(yaw) * cosf(pitch);
-	//forwardVector.y = -sinf(pitch);
-	//forwardVector.z = cosf(yaw) * cosf(pitch);
-	//
-	//// カメラの注視点をプレイヤーの前方方向にセット
-	//_target = _transform->position + forwardVector;
-	//
-	////Renderer::DrawDebugData((char*)"a", _target, false, 1, { 500,500 });
+
 }
 
 void Camera_FPS::Draw()

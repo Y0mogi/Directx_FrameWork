@@ -37,7 +37,7 @@ void Sprite::Uninit()
 {
 	m_VertexBuffer->Release();
 	m_Texture->Release();
-
+	
 	m_VertexLayout->Release();
 	m_VertexShader->Release();
 	m_PixelShader->Release();
@@ -102,12 +102,12 @@ void Sprite::Draw()
 	// material設定
 	MATERIAL material;
 	ZeroMemory(&material, sizeof(material));
-	material.Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	material.Diffuse = m_Color;
 	material.TextureEnable = true;
 	Renderer::SetMaterial(material);
 
 	Renderer::GetDeviceContext()->IASetVertexBuffers(0, 1, &m_VertexBuffer, &stride, &offset);
-
+	
 	// テクスチャ設定
 	Renderer::GetDeviceContext()->PSSetShaderResources(0, 1, &m_Texture);
 
@@ -122,29 +122,25 @@ void Sprite::CompInfo()
 {
 	using namespace ImGui;
 	SeparatorText("SpriteComponent");
-	// 親表示
-	SeparatorText("ParentGameObjectTag");
-	Text(Parent->objectTag.c_str());
-
-	// 色変更
-	SeparatorText("TextureColor");
-	ColorEdit4("Color", reinterpret_cast<float*>(&this->m_Color), ImGuiColorEditFlags_Uint8);
-
-	// ファイルパス表示・変更
-	SeparatorText("FilePath");
-	static std::string tmp = utf8_encode(_path);
-	TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f),"Do not specify the wrong path!");
-	InputText(" ", &tmp); ImGui::SameLine();
-	if (Button("Change")) {
-		if (SaveFilePath(utf8_decode(tmp))) this->CreateTexture(_path);
-	}
 	
+	if (TreeNode("SPInfo")) {
+		// 色変更
+		SeparatorText("TextureColor");
+		ColorEdit4("Color", reinterpret_cast<float*>(&this->m_Color), ImGuiColorEditFlags_Uint8);
 
-	// 元画像プレビュー
-	SeparatorText("DrawRawImage");
-	ImGui::Image(m_Texture, ImVec2(200.f,200.f));
+		// ファイルパス表示・変更
+		SeparatorText("FilePath");
+		static std::string tmp = utf8_encode(_path);
+		TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Do not specify the wrong path!");
+		InputText(" ", &tmp); SameLine();
+		if (Button("Change")) if (SaveFilePath(utf8_decode(tmp))) this->CreateTexture(_path);
 
-	Separator();
+		// 元画像プレビュー
+		SeparatorText("DrawRawImage");
+		ImGui::Image(m_Texture, ImVec2(200.f, 200.f));
+
+		TreePop();
+	}
 }
 
 void Sprite::SetColor(const XMFLOAT4& color)

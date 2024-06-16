@@ -80,8 +80,8 @@ public:
 	~GameObject();
 
 public:
-	std::list<Component*> _componentList;
 	std::string objectTag = "NULL";
+	std::list<Component*> _componentList;
 };
 
 #endif // !GAMEOBJECT_H

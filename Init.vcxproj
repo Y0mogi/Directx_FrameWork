@@ -70,6 +70,12 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(ProjectDir)/Src/Shaders/Compiled/;$(ProjectDir)/Src/;$(ProjectDir)/Inc/;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(ProjectDir)/Src/Shaders/Compiled/;$(ProjectDir)/Src/;$(ProjectDir)/Inc/;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -121,7 +127,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -148,15 +154,54 @@
     <ClCompile Include="manager.cpp" />
     <ClCompile Include="modelRenderer.cpp" />
     <ClCompile Include="player.cpp" />
-    <ClCompile Include="polygon2D.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="sprite.cpp" />
+    <ClCompile Include="Src\AlphaTestEffect.cpp" />
+    <ClCompile Include="Src\BasicEffect.cpp" />
+    <ClCompile Include="Src\BasicPostProcess.cpp" />
+    <ClCompile Include="Src\BinaryReader.cpp" />
+    <ClCompile Include="Src\BufferHelpers.cpp" />
+    <ClCompile Include="Src\CommonStates.cpp" />
+    <ClCompile Include="Src\DDSTextureLoader.cpp" />
+    <ClCompile Include="Src\DebugEffect.cpp" />
+    <ClCompile Include="Src\DGSLEffect.cpp" />
+    <ClCompile Include="Src\DGSLEffectFactory.cpp" />
+    <ClCompile Include="Src\DirectXHelpers.cpp" />
+    <ClCompile Include="Src\DualPostProcess.cpp" />
+    <ClCompile Include="Src\DualTextureEffect.cpp" />
+    <ClCompile Include="Src\EffectCommon.cpp" />
+    <ClCompile Include="Src\EffectFactory.cpp" />
+    <ClCompile Include="Src\EnvironmentMapEffect.cpp" />
+    <ClCompile Include="Src\GamePad.cpp" />
+    <ClCompile Include="Src\GeometricPrimitive.cpp" />
+    <ClCompile Include="Src\Geometry.cpp" />
+    <ClCompile Include="Src\GraphicsMemory.cpp" />
+    <ClCompile Include="Src\Keyboard.cpp" />
+    <ClCompile Include="Src\Model.cpp" />
+    <ClCompile Include="Src\ModelLoadCMO.cpp" />
+    <ClCompile Include="Src\ModelLoadSDKMESH.cpp" />
+    <ClCompile Include="Src\ModelLoadVBO.cpp" />
+    <ClCompile Include="Src\Mouse.cpp" />
+    <ClCompile Include="Src\NormalMapEffect.cpp" />
+    <ClCompile Include="Src\PBREffect.cpp" />
+    <ClCompile Include="Src\PBREffectFactory.cpp" />
+    <ClCompile Include="Src\pch.cpp" />
+    <ClCompile Include="Src\PrimitiveBatch.cpp" />
+    <ClCompile Include="Src\ScreenGrab.cpp" />
+    <ClCompile Include="Src\SimpleMath.cpp" />
+    <ClCompile Include="Src\SkinnedEffect.cpp" />
+    <ClCompile Include="Src\SpriteBatch.cpp" />
+    <ClCompile Include="Src\SpriteFont.cpp" />
+    <ClCompile Include="Src\ToneMapPostProcess.cpp" />
+    <ClCompile Include="Src\VertexTypes.cpp" />
+    <ClCompile Include="Src\WICTextureLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h" />
     <ClInclude Include="camera_fps.h" />
     <ClInclude Include="collision.h" />
     <ClInclude Include="component.h" />
+    <ClInclude Include="directxTK_all.h" />
     <ClInclude Include="field.h" />
     <ClInclude Include="gameobject.h" />
     <ClInclude Include="Imgui\imconfig.h" />
@@ -168,6 +213,26 @@
     <ClInclude Include="Imgui\imstb_rectpack.h" />
     <ClInclude Include="Imgui\imstb_textedit.h" />
     <ClInclude Include="Imgui\imstb_truetype.h" />
+    <ClInclude Include="Inc\Audio.h" />
+    <ClInclude Include="Inc\BufferHelpers.h" />
+    <ClInclude Include="Inc\CommonStates.h" />
+    <ClInclude Include="Inc\DDSTextureLoader.h" />
+    <ClInclude Include="Inc\DirectXHelpers.h" />
+    <ClInclude Include="Inc\Effects.h" />
+    <ClInclude Include="Inc\GamePad.h" />
+    <ClInclude Include="Inc\GeometricPrimitive.h" />
+    <ClInclude Include="Inc\GraphicsMemory.h" />
+    <ClInclude Include="Inc\Keyboard.h" />
+    <ClInclude Include="Inc\Model.h" />
+    <ClInclude Include="Inc\Mouse.h" />
+    <ClInclude Include="Inc\PostProcess.h" />
+    <ClInclude Include="Inc\PrimitiveBatch.h" />
+    <ClInclude Include="Inc\ScreenGrab.h" />
+    <ClInclude Include="Inc\SimpleMath.h" />
+    <ClInclude Include="Inc\SpriteBatch.h" />
+    <ClInclude Include="Inc\SpriteFont.h" />
+    <ClInclude Include="Inc\VertexTypes.h" />
+    <ClInclude Include="Inc\WICTextureLoader.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="jump.h" />
     <ClInclude Include="magic_enum\magic_enum.hpp" />
@@ -184,11 +249,23 @@
     <ClInclude Include="math_helper.h" />
     <ClInclude Include="modelRenderer.h" />
     <ClInclude Include="player.h" />
-    <ClInclude Include="polygon2D.h" />
     <ClInclude Include="quaternion.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="scene.h" />
     <ClInclude Include="sprite.h" />
+    <ClInclude Include="Src\AlignedNew.h" />
+    <ClInclude Include="Src\Bezier.h" />
+    <ClInclude Include="Src\BinaryReader.h" />
+    <ClInclude Include="Src\DDS.h" />
+    <ClInclude Include="Src\DemandCreate.h" />
+    <ClInclude Include="Src\EffectCommon.h" />
+    <ClInclude Include="Src\Geometry.h" />
+    <ClInclude Include="Src\LoaderHelpers.h" />
+    <ClInclude Include="Src\pch.h" />
+    <ClInclude Include="Src\PlatformHelpers.h" />
+    <ClInclude Include="Src\SDKMesh.h" />
+    <ClInclude Include="Src\SharedResourcePool.h" />
+    <ClInclude Include="Src\vbo.h" />
     <ClInclude Include="transform.h" />
     <ClInclude Include="XMFLOAT_Helper.h" />
   </ItemGroup>
@@ -219,6 +296,10 @@
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">shader\%(Filename).cso</ObjectFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">shader\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Inc\SimpleMath.inl" />
+    <None Include="Src\TeapotData.inc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

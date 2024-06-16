@@ -22,6 +22,14 @@ using namespace DirectX;
 #pragma comment(lib,"DirectXTex_Release.lib")
 #endif
 
+// DirectXTK
+#include "Src\pch.h"
+#include "directxTK_all.h"
+#if _DEBUG
+#pragma comment(lib,"DirectXTK_Debug.lib")
+#else
+#pragma comment(lib,"DirectXTK_Release.lib")
+#endif
 
 #pragma comment (lib, "winmm.lib")
 

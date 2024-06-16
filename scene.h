@@ -6,7 +6,6 @@
 #include "modelRenderer.h"
 #include "jump.h"
 #include "player.h"
-#include "polygon2D.h"
 #include "field.h"
 #include "camera.h"
 #include "sprite.h"
@@ -50,7 +49,24 @@ public:
 			it->Init();
 			
 		}
-		//obj = nullptr;
+		
+	};
+	virtual void Uninit() {
+
+		for (auto& it : _objects) it->Uninit();
+
+	};
+	virtual void Update() {
+
+		for (auto& it : _objects) it->Update();
+
+		this->ImguiUpdate();
+
+	};
+	virtual void Draw() {
+
+		for (auto& it : _objects) it->Draw();
+
 	};
 
 	/// <summary>
@@ -92,101 +108,70 @@ public:
 	template<typename T>
 	T* GetGameObject() {
 		for (auto& it : _objects) {
-			if (typeid(*it) == typeid(T)) { // 型比較
+			if (typeid(*it) != typeid(T)) return nullptr; // 型比較
 				T* tmp = dynamic_cast<T*>(it.get());
-				if (tmp != nullptr) {
-					return tmp;
-				}
-			}
+				if (tmp != nullptr) return tmp;
 		}
-		return nullptr;
+		
 	}
 
 	template<typename T>
 	T* GetGameObject(std::string tag) {
 		for (auto& it : _objects) {
-			if (typeid(*it) == typeid(T)) { // 型比較
-				if ((*it).objectTag == tag) // タグ比較
-				{
-					T* tmp = dynamic_cast<T*>(it.get());
-					if (tmp != nullptr) {
-						return tmp;
-					}					
-				}
-				return nullptr;
-			}
+			if (typeid(*it) != typeid(T)) return nullptr;
+				if ((*it).objectTag != tag) return nullptr;// タグ比較
+				T* tmp = dynamic_cast<T*>(it.get());
+				if (tmp != nullptr) return tmp;
+
 		}
-		return nullptr;
+		
 	}
 
-	virtual void Uninit() {
 
-		for (auto& it : _objects)
-		{
-			it->Uninit();
-		}
-	};
-
-	virtual void Update() {
-
-		for (auto& it : _objects)
-		{
-			it->Update();
-		}
-
-		this->ImguiUpdate();
-
-	};
-	virtual void Draw() {
-
-		for (auto& it : _objects)
-		{
-			it->Draw();
-		}
-	};
 	
 protected:
 	std::list<std::unique_ptr<GameObject>> _objects{};
-
 private:
 	void ImguiUpdate() {
-
-		// Tree
 		// 各ゲームオブジェクトの情報をImGuiで表示
-		//for (auto& obj : this->_objects) {
-		//	
-		//	if (ImGui::TreeNode(obj.get()->objectTag.c_str())) {
-		//		for (auto& comp : obj->_componentList) {
-		//			std::string tmp = typeid(*comp).name();
-		//			tmp.erase(0, 5); // classのみ削除
-		//			if (ImGui::TreeNode(tmp.c_str())) {
-		//				comp->CompInfo();
-		//				ImGui::TreePop();
-		//			}
-		//		}
-		//		ImGui::TreePop();
-		//	}
-		//}
+		this->ImGuiWindowCreate_Popup();
+	}
 
-		{ // 子ウィンドウ
-			for (auto& obj : this->_objects) {
-				if (ImGui::Button(obj.get()->objectTag.c_str()))
-					ImGui::OpenPopup(obj.get()->objectTag.c_str());
-				if (ImGui::BeginPopupModal(obj.get()->objectTag.c_str(), NULL))
-				{
-					ImGui::SeparatorText("Components");
-					for (auto& comp : obj->_componentList) {
-						
-						comp->CompInfo();
-						
-					}
-					ImGui::Separator();
-					if (ImGui::Button("Close"))
-						ImGui::CloseCurrentPopup();
-					ImGui::EndPopup();
+	// ImGuiUpdateの際の表示方法
+	void ImGuiWindowCreate_Popup() {
+		for (auto& obj : this->_objects) {
+			if (ImGui::Button(obj.get()->objectTag.c_str()))
+				ImGui::OpenPopup(obj.get()->objectTag.c_str());
+			if (ImGui::BeginPopupModal(obj.get()->objectTag.c_str(), NULL)) {
+				if (ImGui::Button("Close"))
+					ImGui::CloseCurrentPopup();
+				// ImGui::SeparatorText("Components");
+				for (auto& comp : obj->_componentList) {
+
+					comp->CompInfo();
+					ImGui::NewLine();
 				}
+
+				
+				ImGui::NewLine();
+				ImGui::EndPopup();
 			}
 		}
+	}
+	void ImGuiWindowCreate_Tree() {
+		for (auto& obj : this->_objects) {
 
+			if (ImGui::TreeNode(obj.get()->objectTag.c_str())) {
+				for (auto& comp : obj->_componentList) {
+					std::string tmp = typeid(*comp).name();
+					tmp.erase(0, 5); // classのみ削除
+					if (ImGui::TreeNode(tmp.c_str())) {
+						comp->CompInfo();
+						ImGui::TreePop();
+					}
+				}
+				ImGui::TreePop();
+			}
+		}
 	}
 };

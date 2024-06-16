@@ -13,8 +13,8 @@ public:
 	void Draw();
 
 private:
-	XMFLOAT2 _accel{}; // 加速度
 	Transform* _transform = nullptr;
+	XMFLOAT2 _accel{}; // 加速度
 	XMFLOAT3 _dir{}; // 方向ベクトル
 	bool	_isJump;
 };

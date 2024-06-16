@@ -17,10 +17,6 @@
 #include "modelRenderer.h"
 #include "scene.h"
 
-float screenX;
-float screenY;
-float screenWidth;
-float screenHeight;
 
 Scene* _scene{};
 
@@ -74,7 +70,6 @@ void Manager::Draw()
 {
     // 描画開始
     Renderer::Begin();
-
 
     _scene->Draw();
 

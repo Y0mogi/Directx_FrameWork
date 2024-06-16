@@ -8,6 +8,7 @@
 
 void Field::Init(const XMFLOAT3& pos, const XMFLOAT3& scl, const XMFLOAT4& color,const std::wstring& path)
 {
+
 	if (_transform == nullptr)
 		_transform = Parent->GetComponent<Transform>();
 
@@ -97,7 +98,7 @@ void Field::Draw()
 	// ワールドマトリックス設定
 	XMMATRIX world, scl, rot, trans;
 	scl = XMMatrixScaling(_transform->scale.x, _transform->scale.y, _transform->scale.z);
-	rot = XMMatrixRotationQuaternion(_transform->rotation.ToXMVector());
+	rot = XMMatrixRotationQuaternion(_transform->rotation);
 	trans = XMMatrixTranslation(_transform->position.x, _transform->position.y, _transform->position.z);
 	world = scl * rot * trans;
 	Renderer::SetWorldMatrix(world);

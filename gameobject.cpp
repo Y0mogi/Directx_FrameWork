@@ -18,10 +18,7 @@ GameObject::GameObject(const std::string& tag)
 
 GameObject::~GameObject()
 {
-    for (auto it : _componentList)
-    {
-        delete it;
-    }
+    for (auto it : _componentList) delete it;
 }
 
 void GameObject::Init()
@@ -32,7 +29,6 @@ void GameObject::Init()
 void GameObject::Update()
 {
     for (auto& it : _componentList) it->Update();
-    
 }
 
 void GameObject::CompInfo()
