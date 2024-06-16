@@ -14,7 +14,7 @@ public:
 
 	void CompInfo();
 
-	inline void SetTarget(const XMFLOAT3& target) { this->_target = target; }
+	inline void SetTarget(Transform* pTarget) { this->_target = pTarget; }
 
 private:
 	void UpdatePosition();
@@ -22,10 +22,10 @@ private:
 private:
 
 	Transform* _transform = nullptr;
+	Transform* _target = nullptr;
 	XMFLOAT4X4 _viewMatrix{};
-	XMFLOAT3 _target{};
-	float _length;
-	float _yaw, _pitch;   // ヨー角度,ピッチ角度
+	float _length, _yaw, _pitch;
+
 };
 
 #endif // CAMERA_H

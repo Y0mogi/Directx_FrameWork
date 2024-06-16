@@ -1,19 +1,20 @@
 #pragma once
+#include <list>
+#include <memory>
+#include <utility>
+
 #include "main.h"
+#include "renderer.h"
 #include "component.h"
 #include "gameobject.h"
-
+#include "transform.h"
 #include "modelRenderer.h"
+
 #include "jump.h"
 #include "player.h"
 #include "field.h"
 #include "camera.h"
 #include "sprite.h"
-#include "transform.h"
-#include <list>
-#include <memory>
-#include <utility>
-
 
 
 class Scene
@@ -69,6 +70,57 @@ public:
 
 	};
 
+
+	/// <summary>
+	/// 複数のコンポーネントを追加したゲームオブジェクトを追加する
+	/// </summary>
+	template<typename... Components> // 可変長テンプレート
+	GameObject* AddObjComp(std::string tag)
+	{
+		GameObject* obj = new GameObject(tag,this);
+		(obj->AddComponent<Components>(), ...); // パラメータパックの展開
+		AddGameObject(obj);
+		return obj;
+	}
+
+	template<typename T>
+	T* GetGameObject() {
+		for (auto& it : _objects) {
+			if (typeid(*it) == typeid(T)) { // 型比較
+				T* tmp = dynamic_cast<T*>(it.get());
+				if (tmp != nullptr) return tmp;
+			}
+		}
+		return nullptr;
+	}
+
+	template<typename T>
+	T* GetGameObject(std::string tag) {
+		for (auto& it : _objects) {
+			if (typeid(*it) == typeid(T)){
+				if ((*it).objectTag == tag) {// タグ比較
+					auto* tmp = dynamic_cast<T*>(it.get());
+					if (tmp != nullptr) return tmp;
+				}
+			}
+		}
+		return nullptr;
+	}
+
+	GameObject* GetGameObject(std::string tag) {
+		for (auto& it : _objects) {
+			if ((*it).objectTag == tag) {
+				auto* tmp = it.get();
+				if (tmp != nullptr) return tmp;
+			}
+		}
+		return nullptr;
+	}
+	
+protected:
+	std::list<std::unique_ptr<GameObject>> _objects{};
+private:
+
 	/// <summary>
 	/// ゲームオブジェクトの追加
 	/// </summary>
@@ -93,45 +145,7 @@ public:
 		return object;
 	}
 
-	/// <summary>
-	/// 複数のコンポーネントを追加したゲームオブジェクトを追加する
-	/// </summary>
-	template<typename... Components> // 可変長テンプレート
-	GameObject* AddObjComp(std::string tag)
-	{
-		GameObject* obj = new GameObject(tag);
-		(obj->AddComponent<Components>(), ...); // パラメータパックの展開
-		AddGameObject(obj);
-		return obj;
-	}
 
-	template<typename T>
-	T* GetGameObject() {
-		for (auto& it : _objects) {
-			if (typeid(*it) != typeid(T)) return nullptr; // 型比較
-				T* tmp = dynamic_cast<T*>(it.get());
-				if (tmp != nullptr) return tmp;
-		}
-		
-	}
-
-	template<typename T>
-	T* GetGameObject(std::string tag) {
-		for (auto& it : _objects) {
-			if (typeid(*it) != typeid(T)) return nullptr;
-				if ((*it).objectTag != tag) return nullptr;// タグ比較
-				T* tmp = dynamic_cast<T*>(it.get());
-				if (tmp != nullptr) return tmp;
-
-		}
-		
-	}
-
-
-	
-protected:
-	std::list<std::unique_ptr<GameObject>> _objects{};
-private:
 	void ImguiUpdate() {
 		// 各ゲームオブジェクトの情報をImGuiで表示
 		this->ImGuiWindowCreate_Popup();
@@ -146,7 +160,7 @@ private:
 				if (ImGui::Button("Close"))
 					ImGui::CloseCurrentPopup();
 				// ImGui::SeparatorText("Components");
-				for (auto& comp : obj->_componentList) {
+				for (auto& comp : obj->componentList) {
 
 					comp->CompInfo();
 					ImGui::NewLine();
@@ -162,7 +176,7 @@ private:
 		for (auto& obj : this->_objects) {
 
 			if (ImGui::TreeNode(obj.get()->objectTag.c_str())) {
-				for (auto& comp : obj->_componentList) {
+				for (auto& comp : obj->componentList) {
 					std::string tmp = typeid(*comp).name();
 					tmp.erase(0, 5); // classのみ削除
 					if (ImGui::TreeNode(tmp.c_str())) {

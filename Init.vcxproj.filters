@@ -204,6 +204,9 @@
     <ClCompile Include="Src\pch.cpp">
       <Filter>DirectXTK\Src</Filter>
     </ClCompile>
+    <ClCompile Include="scene.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="renderer.h">

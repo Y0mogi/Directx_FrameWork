@@ -5,6 +5,7 @@
 
 class Component;
 
+
 class GameObject
 {
 public:
@@ -22,7 +23,7 @@ public:
 	/// <returns>コンポーネントのポインタ</returns>
 	template<class T>
 	T* GetComponent(){
-		for (auto& it : _componentList) {
+		for (auto& it : componentList) {
 			T* tmp = dynamic_cast<T*>(it);
 			if (tmp != nullptr)
 				return tmp;
@@ -39,7 +40,7 @@ public:
 	T* AddComponent(){
 		T* tmp = new T();
 		tmp->Parent = this;
-		_componentList.push_back(tmp);
+		componentList.push_back(tmp);
 		return tmp;
 	}
 
@@ -54,7 +55,7 @@ public:
 	T* AddComponent(Args&&... args) {
 		T* tmp = new T(std::forward<Args>(args)...);
 		tmp->Parent = this;
-		_componentList.push_back(tmp);
+		componentList.push_back(tmp);
 		return tmp;
 	}
 
@@ -65,23 +66,26 @@ public:
 	/// <returns>削除が成功したか</returns>
 	template<class T>
 	bool RemoveComponent() {
-		for (auto it = _componentList.begin(); it != _componentList.end(); ++it) {
+		for (auto it = componentList.begin(); it != componentList.end(); ++it) {
 			if (typeid(**it) == typeid(T)) {  // typeid で型を比較
 				Component* tmp = *it;
-				it = _componentList.erase(it);  // リストから要素を削除し、イテレータを更新
+				it = componentList.erase(it);  // リストから要素を削除し、イテレータを更新
 				delete tmp;  // メモリを解放
 				return true;  // 成功
 			}
 		}
 		return false;  // 見つからなかった場合
 	}
+
 	GameObject();
-	GameObject(const std::string& tag);
+	GameObject(class Scene* scene);
+	GameObject(const std::string& tag,class Scene* scene);
 	~GameObject();
 
 public:
-	std::string objectTag = "NULL";
-	std::list<Component*> _componentList;
+	std::string objectTag{};
+	std::list<Component*> componentList{};
+	class Scene* scene = nullptr;
 };
 
 #endif // !GAMEOBJECT_H
