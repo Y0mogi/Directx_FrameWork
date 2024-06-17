@@ -72,17 +72,12 @@ void Manager::Draw()
 {
     // 描画開始
     Renderer::Begin();
-    //Renderer::GetPrimitiveBatch()->Begin();
-
+   
     _scene->Draw();
-
-    ///auto b = BoundingBox({ 0, 0, 0 }, {5,5,5});
-    //DX::Draw(Renderer::GetPrimitiveBatch(), b);
 
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
-    //Renderer::GetPrimitiveBatch()->End();
     // 描画終了
     Renderer::End();
 }

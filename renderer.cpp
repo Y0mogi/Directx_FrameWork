@@ -31,12 +31,6 @@ ID3D11BlendState*		Renderer::m_BlendStateATC{};
 
 Microsoft::WRL::ComPtr<ID3D11Debug> mD3dDebug;
 
-// DirectXTK DebugDraw用
-std::unique_ptr<DirectX::PrimitiveBatch<DirectX::VertexPositionColor>> Renderer::primitiveBatch;
-std::unique_ptr<BasicEffect> Renderer::basicEffect;
-Microsoft::WRL::ComPtr<ID3D11InputLayout> Renderer::inputLayout;
-std::unique_ptr<CommonStates> Renderer::m_states;
-
 
 void Renderer::Init()
 {
@@ -253,21 +247,6 @@ void Renderer::Init()
 	SetMaterial(material);
 
 
-	// デバッグ用初期化
-	primitiveBatch = std::make_unique<DirectX::PrimitiveBatch<DirectX::VertexPositionColor>>(m_DeviceContext);
-	basicEffect = std::make_unique<BasicEffect>(m_Device);
-
-	basicEffect->SetProjection(XMMatrixOrthographicOffCenterRH(0,
-		SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 1));
-	basicEffect->SetVertexColorEnabled(true);
-	
-	void const* shaderByteCode;
-	size_t byteCodeLength;
-
-	basicEffect->GetVertexShaderBytecode(&shaderByteCode, &byteCodeLength);
-
-	CreateInputLayoutFromEffect<VertexPositionColor>(m_Device,basicEffect.get(),
-			inputLayout.ReleaseAndGetAddressOf());
 }
 
 
@@ -312,17 +291,10 @@ void Renderer::Uninit()
 
 void Renderer::Begin()
 {
-
-	float clearColor[4] = { 0.7f, 0.0f, 0.0f, 1.0f };
+	float clearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 	m_DeviceContext->ClearRenderTargetView( m_RenderTargetView, clearColor );
 	m_DeviceContext->ClearDepthStencilView( m_DepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
-	
 
-	// debug ==============
-	basicEffect->Apply(m_DeviceContext);
-	m_DeviceContext->IASetInputLayout(inputLayout.Get());
-
-	// ====================
 }
 
 

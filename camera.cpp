@@ -60,6 +60,13 @@ void Camera::Update()
 
 	_transform->rotation = Quaternion::CreateFromYawPitchRoll(_yaw, _pitch, 0.0f);
 
+	auto a = BoundingBox();
+	auto b = BoundingBox();
+
+	if (a.Intersects(b)) {
+		auto b = 1;
+	}
+
 	UpdatePosition();
 
 }
