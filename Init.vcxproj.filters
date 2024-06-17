@@ -207,6 +207,9 @@
     <ClCompile Include="scene.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="DebugDraw.cpp">
+      <Filter>DirectXTK</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="renderer.h">
@@ -420,6 +423,9 @@
       <Filter>DirectXTK\Inc</Filter>
     </ClInclude>
     <ClInclude Include="directxTK_all.h">
+      <Filter>DirectXTK</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugDraw.h">
       <Filter>DirectXTK</Filter>
     </ClInclude>
   </ItemGroup>

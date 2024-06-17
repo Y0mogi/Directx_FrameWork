@@ -139,6 +139,7 @@
   <ItemGroup>
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="camera_fps.cpp" />
+    <ClCompile Include="DebugDraw.cpp" />
     <ClCompile Include="field.cpp" />
     <ClCompile Include="gameobject.cpp" />
     <ClCompile Include="Imgui\imgui.cpp" />
@@ -202,6 +203,7 @@
     <ClInclude Include="camera_fps.h" />
     <ClInclude Include="collision.h" />
     <ClInclude Include="component.h" />
+    <ClInclude Include="DebugDraw.h" />
     <ClInclude Include="directxTK_all.h" />
     <ClInclude Include="field.h" />
     <ClInclude Include="gameobject.h" />

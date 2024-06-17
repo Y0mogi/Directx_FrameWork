@@ -21,5 +21,6 @@
 #include "Inc\SpriteFont.h"
 #include "Inc\VertexTypes.h"
 #include "Inc\WICTextureLoader.h"
+#include "DebugDraw.h"
 
 #endif // DIRECTXTK_ALL_H
