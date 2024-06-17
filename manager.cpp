@@ -42,6 +42,7 @@ void Manager::Uninit()
 
     _scene->Uninit();
 
+
     Input::Uninit();
 
     // レンダラーの後始末を行う
