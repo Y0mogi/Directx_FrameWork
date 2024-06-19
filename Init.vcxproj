@@ -154,6 +154,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="manager.cpp" />
     <ClCompile Include="modelRenderer.cpp" />
+    <ClCompile Include="mydebugdraw.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="scene.cpp" />
@@ -251,6 +252,7 @@
     <ClInclude Include="manager.h" />
     <ClInclude Include="math_helper.h" />
     <ClInclude Include="modelRenderer.h" />
+    <ClInclude Include="mydebugdraw.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="quaternion.h" />
     <ClInclude Include="renderer.h" />

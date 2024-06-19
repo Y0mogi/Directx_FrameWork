@@ -102,7 +102,7 @@ void Sprite::Draw()
 	// materialê›íË
 	MATERIAL material;
 	ZeroMemory(&material, sizeof(material));
-	material.Diffuse = m_Color;
+	material.Diffuse = {1,1,1,1};
 	material.TextureEnable = true;
 	Renderer::SetMaterial(material);
 

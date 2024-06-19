@@ -63,6 +63,7 @@ void Camera::Update()
 	auto a = BoundingBox();
 	auto b = BoundingBox();
 
+
 	if (a.Intersects(b)) {
 		auto b = 1;
 	}

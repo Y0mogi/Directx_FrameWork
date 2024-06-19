@@ -21,8 +21,8 @@ GameObject::GameObject(Scene* scene)
     this->scene = scene;
 }
 
-GameObject::GameObject(const std::string& tag, Scene* scene)
-    :objectTag(tag), scene(scene)
+GameObject::GameObject(const std::string& tag, Layer layer, Scene* scene)
+    :objectTag(tag), layer(layer), scene(scene)
 {
     AddComponent<Transform>();
 }

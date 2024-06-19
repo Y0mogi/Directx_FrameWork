@@ -2,6 +2,13 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 
+enum class Layer : int {
+	Layer_0,
+	Layer_1,
+	Layer_2,
+
+	Layer_Num,
+};
 
 class Component;
 
@@ -79,13 +86,14 @@ public:
 
 	GameObject();
 	GameObject(class Scene* scene);
-	GameObject(const std::string& tag,class Scene* scene);
+	GameObject(const std::string& tag,Layer layer,class Scene* scene);
 	~GameObject();
 
 public:
 	std::string objectTag{};
 	std::list<Component*> componentList{};
 	class Scene* scene = nullptr;
+	Layer layer{};
 };
 
 #endif // !GAMEOBJECT_H

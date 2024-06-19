@@ -2,6 +2,7 @@
 #include <list>
 #include <memory>
 #include <utility>
+#include <algorithm>
 
 #include "main.h"
 #include "renderer.h"
@@ -22,11 +23,13 @@ class Scene
 public:
 	virtual void Init()
 	{
+		using enum Layer;
+
 		// ゲームオブジェクトを作成し、コンポーネントを追加
-		AddObjComp<Field>("Field");
-		AddObjComp<ModelRenderer, Jump, Player>("Player");
-		AddObjComp<Sprite>("Sprite");
-		AddObjComp<Camera>("Camera");
+		AddObjComp<Sprite>("Sprite", Layer_2);
+		AddObjComp<Field>("Field",Layer_1);
+		AddObjComp<ModelRenderer, Jump, Player>("Player",Layer_1);
+		AddObjComp<Camera>("Camera",Layer_0);
 
 		// 全オブジェクトを初期化
 		for (auto& it : _objects)
@@ -66,8 +69,24 @@ public:
 	};
 	virtual void Draw() {
 
-		for (auto& it : _objects) it->Draw();
+		_objects.sort(
+			[this](const std::unique_ptr<GameObject>& a, const std::unique_ptr<GameObject>& b)
+			{
 
+				auto camera = this->GetGameObject<Camera>()->Parent->GetComponent<Transform>()->position;
+				return Distance(a->GetComponent<Transform>()->position, camera) > Distance(b->GetComponent<Transform>()->position, camera);
+			}
+		);
+
+		_objects.sort(
+		[](const std::unique_ptr<GameObject>& a , const std::unique_ptr<GameObject>& b)
+			{
+				return a->layer < b->layer;
+			}
+		);
+
+		for (auto& it : _objects) it->Draw();
+		
 	};
 
 
@@ -75,9 +94,9 @@ public:
 	/// 複数のコンポーネントを追加したゲームオブジェクトを追加する
 	/// </summary>
 	template<typename... Components> // 可変長テンプレート
-	GameObject* AddObjComp(std::string tag)
+	GameObject* AddObjComp(std::string tag, Layer layer)
 	{
-		GameObject* obj = new GameObject(tag,this);
+		GameObject* obj = new GameObject(tag, layer, this);
 		(obj->AddComponent<Components>(), ...); // パラメータパックの展開
 		AddGameObject(obj);
 		return obj;

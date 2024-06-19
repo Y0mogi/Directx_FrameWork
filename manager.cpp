@@ -18,6 +18,7 @@
 #include "scene.h"
 
 #include "DirectXCollision.h"
+#include "mydebugdraw.h"
 
 Scene* _scene{};
 
@@ -90,7 +91,7 @@ void Manager::Draw()
         auto box = BoundingBox();
         auto box_obb = BoundingBox({ 0,0,0 }, { 5,5,5 });
 
-        DX::Draw(Renderer::Getprimitiv(), box_obb);
+        DEBUG::Draw(box_obb);
         DX::Draw(Renderer::Getprimitiv(), box); // BoundingBox
 
         Renderer::Getprimitiv()->End();
