@@ -63,10 +63,10 @@ void Camera::Update()
 	auto a = BoundingBox();
 	auto b = BoundingBox();
 
-
 	if (a.Intersects(b)) {
-		auto b = 1;
+		ResolveCollision(a, b);
 	}
+
 
 	UpdatePosition();
 
@@ -114,4 +114,44 @@ void Camera::UpdatePosition()
 
 	// 新しいカメラ位置を計算
 	_transform->position = XMFLOAT3(relativePosition);
+}
+
+void Camera::ResolveCollision(DirectX::BoundingBox& box1, const DirectX::BoundingBox& box2) {
+	DirectX::XMVECTOR center1 = DirectX::XMLoadFloat3(&box1.Center);
+	DirectX::XMVECTOR extents1 = DirectX::XMLoadFloat3(&box1.Extents);
+	DirectX::XMVECTOR center2 = DirectX::XMLoadFloat3(&box2.Center);
+	DirectX::XMVECTOR extents2 = DirectX::XMLoadFloat3(&box2.Extents);
+
+	// Calculate the difference between the centers
+	DirectX::XMVECTOR delta = center1 - center2;
+	DirectX::XMVECTOR absDelta = DirectX::XMVectorAbs(delta);
+
+	// Calculate the penetration depth on each axis
+	DirectX::XMVECTOR penetration = extents1 + extents2 - absDelta;
+
+	// Find the axis of least penetration
+	if (DirectX::XMVector3Greater(penetration, DirectX::XMVectorZero())) {
+		DirectX::XMFLOAT3 pen;
+		DirectX::XMStoreFloat3(&pen, penetration);
+
+		if (pen.x < pen.y && pen.x < pen.z) {
+			// Push back along the X axis
+			float offset = pen.x * (DirectX::XMVectorGetX(delta) < 0 ? -1.0f : 1.0f);
+			box1.Center.x += offset;
+		}
+		else if (pen.y < pen.x && pen.y < pen.z) {
+			// Push back along the Y axis
+			float offset = pen.y * (DirectX::XMVectorGetY(delta) < 0 ? -1.0f : 1.0f);
+			box1.Center.y += offset;
+		}
+		else {
+			// Push back along the Z axis
+			float offset = pen.z * (DirectX::XMVectorGetZ(delta) < 0 ? -1.0f : 1.0f);
+			box1.Center.z += offset;
+		}
+	}
+}
+
+bool Camera::CheckCollision(const DirectX::BoundingBox& box1, const DirectX::BoundingBox& box2) {
+	return box1.Intersects(box2);
 }

@@ -139,6 +139,7 @@
   <ItemGroup>
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="camera_fps.cpp" />
+    <ClCompile Include="collision.cpp" />
     <ClCompile Include="DebugDraw.cpp" />
     <ClCompile Include="field.cpp" />
     <ClCompile Include="gameobject.cpp" />

@@ -18,7 +18,8 @@ public:
 
 private:
 	void UpdatePosition();
-
+	void ResolveCollision(DirectX::BoundingBox& box1, const DirectX::BoundingBox& box2);
+	bool CheckCollision(const DirectX::BoundingBox& box1, const DirectX::BoundingBox& box2);
 private:
 
 	Transform* _transform = nullptr;

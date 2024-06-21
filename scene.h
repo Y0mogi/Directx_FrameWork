@@ -54,6 +54,7 @@ public:
 			
 		}
 		
+
 	};
 	virtual void Uninit() {
 
@@ -73,7 +74,7 @@ public:
 			[this](const std::unique_ptr<GameObject>& a, const std::unique_ptr<GameObject>& b)
 			{
 
-				auto camera = this->GetGameObject<Camera>()->Parent->GetComponent<Transform>()->position;
+				auto camera = this->GetGameObject("Camera")->GetComponent<Transform>()->position;
 				return Distance(a->GetComponent<Transform>()->position, camera) > Distance(b->GetComponent<Transform>()->position, camera);
 			}
 		);
@@ -168,6 +169,8 @@ private:
 	void ImguiUpdate() {
 		// 各ゲームオブジェクトの情報をImGuiで表示
 		this->ImGuiWindowCreate_Popup();
+
+		//this->ImGuiWindowCreate_Tree();
 	}
 
 	// ImGuiUpdateの際の表示方法

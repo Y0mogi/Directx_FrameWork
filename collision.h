@@ -6,6 +6,7 @@
 #include <DirectXMath.h>
 #include <algorithm>
 
+/*
 class OBBComponent : public Component
 {
 public:
@@ -95,3 +96,4 @@ private:
         return true;
     }
 };
+*/
