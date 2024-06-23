@@ -10,9 +10,14 @@
 #include "gameobject.h"
 #include "transform.h"
 #include "modelRenderer.h"
+#include "collision_base.h"
+
+#include "orientedbox.h"
+#include "boxcollision.h"
 
 #include "jump.h"
 #include "player.h"
+#include "enemy.h"
 #include "field.h"
 #include "camera.h"
 #include "sprite.h"
@@ -27,8 +32,10 @@ public:
 
 		// ゲームオブジェクトを作成し、コンポーネントを追加
 		AddObjComp<Sprite>("Sprite", Layer_2);
-		AddObjComp<Field>("Field",Layer_1);
-		AddObjComp<ModelRenderer, Jump, Player>("Player",Layer_1);
+		AddObjComp<ModelRenderer, OrientedBox,Field>("Field",Layer_1);
+		auto a = AddObjComp<ModelRenderer,OrientedBox,Player>("Player",Layer_1);
+		a->GetComponent<Transform>()->scale = { 1,2,1 };
+		AddObjComp<ModelRenderer,OrientedBox, Jump, Enemy>("Enemy", Layer_1);
 		AddObjComp<Camera>("Camera",Layer_0);
 
 		// 全オブジェクトを初期化
@@ -44,7 +51,7 @@ public:
 
 			// Field コンポーネントがある場合、その初期化を行う
 			if (it->GetComponent<Field>())
-				it->GetComponent<Field>()->Init(XMFLOAT3{ 0.f,0.f, 0.0f}, XMFLOAT3{ 5.f, 0.0f,5.f }, XMFLOAT4{ 1.0f, 1.0f, 1.0f, 1.0f }, L"asset\\texture\\field.png");
+				it->GetComponent<Field>()->Init(XMFLOAT3{ 0.f,0.f, 0.0f}, XMFLOAT3{ 100.f, 0.0f,100.f }, XMFLOAT4{ 1.0f, 1.0f, 1.0f, 1.0f }, L"asset\\texture\\field.png");
 
 			// Camera コンポーネントがある場合、その初期化を行う
 			if (it->GetComponent<Camera>())
@@ -64,6 +71,8 @@ public:
 	virtual void Update() {
 
 		for (auto& it : _objects) it->Update();
+			
+		this->CollisionUpdate();
 
 		this->ImguiUpdate();
 
@@ -103,6 +112,15 @@ public:
 		return obj;
 	}
 
+	template<typename... Components> // 可変長テンプレート
+	GameObject* AddObjComp()
+	{
+		GameObject* obj = new GameObject(this);
+		(obj->AddComponent<Components>(), ...); // パラメータパックの展開
+		AddGameObject(obj);
+		return obj;
+	}
+
 	template<typename T>
 	T* GetGameObject() {
 		for (auto& it : _objects) {
@@ -137,13 +155,15 @@ public:
 		return nullptr;
 	}
 	
+	std::list<std::unique_ptr<GameObject>>* GetObjectList() { return &_objects; }
+
 protected:
 	std::list<std::unique_ptr<GameObject>> _objects{};
 private:
 
 	/// <summary>
 	/// ゲームオブジェクトの追加
-	/// </summary>
+	/// </summary> ========================
 	template<typename T, typename... Args>
 	T* AddGameObject(Args&&... args)
 	{
@@ -154,7 +174,6 @@ private:
 
 		return gameObject;
 	}
-
 	template<typename T>
 	T* AddGameObject(T* object)
 	{
@@ -165,6 +184,7 @@ private:
 		return object;
 	}
 
+	// ====================================
 
 	void ImguiUpdate() {
 		// 各ゲームオブジェクトの情報をImGuiで表示
@@ -207,6 +227,51 @@ private:
 					}
 				}
 				ImGui::TreePop();
+			}
+		}
+	}
+
+	// ====================================
+
+	bool IsOverLap(GameObject* a, GameObject* b) {
+		
+		if (a == nullptr || b == nullptr) return false;
+
+		auto collisionA = a->GetComponent<Collision_Base>();
+		auto collisionB = b->GetComponent<Collision_Base>();
+
+		switch (collisionA->GetCollisionType()) {
+			case CollisionType::AABB: {
+				return static_cast<BoxCollision*>(collisionA)->Intersects(collisionB);
+			}
+			case CollisionType::OBB: {
+				return static_cast<OrientedBox*>(collisionA)->Intersects(collisionB);
+			}
+			case CollisionType::Sphere: {
+				return false;
+			}
+
+			case CollisionType::Ray: {
+				return false;
+			}
+		}
+
+		return false;
+	}
+
+	/// <summary>
+	/// 衝突処理
+	/// </summary>
+	void CollisionUpdate() { 
+		for (auto& a : _objects) {
+			if (!a->GetComponent<Collision_Base>()) continue; // コリジョンがあるかチェック
+			if (!a->GetComponent<Collision_Base>()->IsActive()) continue; // 有効かチェック
+			for (auto& b : _objects) {
+				if (!b->GetComponent<Collision_Base>()) continue; // コリジョンがあるかチェック
+				if (!b->GetComponent<Collision_Base>()->IsActive()) continue; // 有効かチェック
+				if (a.get() == b.get()) continue; // 自身と判定しない
+				a->GetComponent<Collision_Base>()->SetIsHit(IsOverLap(a.get(), b.get())); // 接触結果をセットする
+				if(a->GetComponent<Collision_Base>()->IsHit())a->OnCollisionEnter(b.get());  // ヒットしていた場合は各コンポーネントの接触処理を呼び出す
 			}
 		}
 	}

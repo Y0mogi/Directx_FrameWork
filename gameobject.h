@@ -2,23 +2,29 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 
+/// <summary>
+/// ゲームオブジェクトの表示優先度
+/// </summary>
 enum class Layer : int {
-	Layer_0,
-	Layer_1,
-	Layer_2,
+	Layer_0,	// 3Dオブジェクトなど
+	Layer_1,	// 3Dオブジェクトなど
+	Layer_2,	// UIなどの2Dスプライトの描画に使用
 
 	Layer_Num,
 };
 
 class Component;
 
-
+/// <summary>
+/// GameObjectクラス
+/// </summary>
 class GameObject
 {
 public:
 
 	void Init();
 	void Update();
+	void OnCollisionEnter(GameObject* Collision);
 	void CompInfo();
 	void Uninit();
 	void Draw();

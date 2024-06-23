@@ -16,37 +16,14 @@ void Field::Init(const XMFLOAT3& pos, const XMFLOAT3& scl, const XMFLOAT4& color
 	_transform->scale = scl;
 
 	VERTEX_3D vertex[4];
-	// 頂点０番（左奥の頂点）
-	vertex[0].Position = XMFLOAT3(pos.x - (scl.x / 2.0f),pos.y,pos.z + (scl.z / 2.0f));
-	vertex[0].Normal = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	vertex[0].Diffuse = color;
-	vertex[0].TexCoord = XMFLOAT2(0.0f, 0.0f);
-	
-	// 頂点１番（右奥の頂点）
-	vertex[1].Position = XMFLOAT3(pos.x + (scl.x / 2.0f), pos.y, pos.z + (scl.z / 2.0f));
-	vertex[1].Normal = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	vertex[1].Diffuse = color;
-	vertex[1].TexCoord = XMFLOAT2(1.0f, 0.0f);
-	
-	// 頂点２番（左手前の頂点）
-	vertex[2].Position = XMFLOAT3(pos.x - (scl.x / 2.0f), pos.y, pos.z - (scl.z / 2.0f));
-	vertex[2].Normal = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	vertex[2].Diffuse = color;
-	vertex[2].TexCoord = XMFLOAT2(0.0f, 1.0f);
-	
-	// 頂点３番（右手前の頂点）
-	vertex[3].Position = XMFLOAT3(pos.x + (scl.x / 2.0f), pos.y, pos.z - (scl.z / 2.0f));
-	vertex[3].Normal = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	vertex[3].Diffuse = color;
-	vertex[3].TexCoord = XMFLOAT2(1.0f, 1.0f);
 
 
 	// 頂点バッファ生成
 	D3D11_BUFFER_DESC bd{};
-	bd.Usage = D3D11_USAGE_DEFAULT;
+	bd.Usage = D3D11_USAGE_DYNAMIC;
 	bd.ByteWidth = sizeof(VERTEX_3D) * 4;
 	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	bd.CPUAccessFlags = 0;
+	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
 	D3D11_SUBRESOURCE_DATA sd;
 	ZeroMemory(&sd, sizeof(sd));
@@ -87,7 +64,40 @@ void Field::Update()
 
 void Field::Draw()
 {
-	
+	D3D11_MAPPED_SUBRESOURCE msr{};
+	Renderer::GetDeviceContext()->Map(_VertexBuffer, 0,
+		D3D11_MAP_WRITE_DISCARD, 0, &msr);
+
+	VERTEX_3D* vertex = (VERTEX_3D*)msr.pData;
+
+	auto pos = _transform->position;
+
+	// 頂点０番（左奥の頂点）
+	vertex[0].Position = XMFLOAT3(-1, pos.y, 1);
+	vertex[0].Normal = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	vertex[0].Diffuse = { 1,1,1,1 };
+	vertex[0].TexCoord = XMFLOAT2(0.0f, 0.0f);
+
+	// 頂点１番（右奥の頂点）
+	vertex[1].Position = XMFLOAT3(1, pos.y, 1);
+	vertex[1].Normal = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	vertex[1].Diffuse = { 1,1,1,1 };
+	vertex[1].TexCoord = XMFLOAT2(1.0f, 0.0f);
+
+	// 頂点２番（左手前の頂点）
+	vertex[2].Position = XMFLOAT3(-1, pos.y, -1);
+	vertex[2].Normal = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	vertex[2].Diffuse = { 1,1,1,1 };
+	vertex[2].TexCoord = XMFLOAT2(0.0f, 1.0f);
+
+	// 頂点３番（右手前の頂点）
+	vertex[3].Position = XMFLOAT3(1, pos.y, -1);
+	vertex[3].Normal = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	vertex[3].Diffuse = { 1,1,1,1 };
+	vertex[3].TexCoord = XMFLOAT2(1.0f, 1.0f);
+
+	Renderer::GetDeviceContext()->Unmap(_VertexBuffer,0);
+
 	// 入力レイアウト
 	Renderer::GetDeviceContext()->IASetInputLayout(_VertexLayout);
 

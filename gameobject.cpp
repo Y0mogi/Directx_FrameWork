@@ -1,9 +1,10 @@
 #include <list>
 #include <string>
-#include "gameobject.h"
 #include "transform.h"
-#include "scene.h"
 #include "component.h"
+#include "gameobject.h"
+#include "scene.h"
+
 
 
 GameObject::GameObject()
@@ -17,7 +18,7 @@ GameObject::GameObject(Scene* scene)
     :scene(scene)
 {
     AddComponent<Transform>();
-    objectTag = "GameObject";
+    objectTag = "GameObject" + scene->GetObjectList()->size();
     this->scene = scene;
 }
 
@@ -40,6 +41,13 @@ void GameObject::Init()
 void GameObject::Update()
 {
     for (auto& it : componentList) it->Update();
+}
+
+void GameObject::OnCollisionEnter(GameObject* collision) {
+    for (auto& it : componentList) {
+        auto tmp = dynamic_cast<CollisionEvent*>(it);
+        if (tmp) tmp->OnCollisionEnter(collision);
+    }
 }
 
 void GameObject::CompInfo()

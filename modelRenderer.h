@@ -72,6 +72,7 @@ public:
 	void Load( const char *FileName );
 
 	void DrawModel();
+	void DrawModel(const char* modelName);
 
 };
 

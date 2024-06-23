@@ -43,6 +43,46 @@ void ModelRenderer::DrawModel()
 	
 }
 
+void ModelRenderer::DrawModel(const char* modelName)
+{
+	// 指定されたモデルがロードされているか確認
+	if (m_ModelPool.count(modelName) == 0)
+	{
+		return;
+	}
+
+	// モデルのポインタを取得
+	MODEL* model = m_ModelPool[modelName];
+
+	// 頂点バッファ設定
+	UINT stride = sizeof(VERTEX_3D);
+	UINT offset = 0;
+	Renderer::GetDeviceContext()->IASetVertexBuffers(0, 1, &model->VertexBuffer, &stride, &offset);
+
+	// インデックスバッファ設定
+	Renderer::GetDeviceContext()->IASetIndexBuffer(model->IndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+
+	// プリミティブトポロジ設定
+	Renderer::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	// サブセットごとに描画
+	for (unsigned int i = 0; i < model->SubsetNum; i++)
+	{
+		// マテリアル設定
+		Renderer::SetMaterial(model->SubsetArray[i].Material.Material);
+
+		// テクスチャ設定
+		if (model->SubsetArray[i].Material.Texture)
+		{
+			Renderer::GetDeviceContext()->PSSetShaderResources(0, 1, &model->SubsetArray[i].Material.Texture);
+		}
+
+		// ポリゴン描画
+		Renderer::GetDeviceContext()->DrawIndexed(model->SubsetArray[i].IndexNum, model->SubsetArray[i].StartIndex, 0);
+	}
+}
+
+
 void ModelRenderer::Preload(const char *FileName)
 {
 	if (m_ModelPool.count(FileName) > 0)

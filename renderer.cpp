@@ -31,10 +31,6 @@ ID3D11BlendState*		Renderer::m_BlendStateATC{};
 
 Microsoft::WRL::ComPtr<ID3D11Debug> mD3dDebug;
 
-std::unique_ptr<PrimitiveBatch<VertexPositionColor>> Renderer::m_Batch;
-std::unique_ptr<BasicEffect> Renderer::m_Effect;
-Microsoft::WRL::ComPtr<ID3D11InputLayout> Renderer::m_inputLayout;
-
 void Renderer::Init()
 {
 	HRESULT hr = S_OK;
@@ -79,7 +75,7 @@ void Renderer::Init()
 	m_SwapChain->GetBuffer( 0, __uuidof( ID3D11Texture2D ), ( LPVOID* )&renderTarget );
 	m_Device->CreateRenderTargetView( renderTarget, NULL, &m_RenderTargetView );
 	renderTarget->Release();
-
+	
 
 	// デプスステンシルバッファ作成
 	ID3D11Texture2D* depthStencile{};
@@ -225,7 +221,7 @@ void Renderer::Init()
 
 
 
-
+	
 
 	// ライト初期化
 	LIGHT light{};
@@ -244,36 +240,7 @@ void Renderer::Init()
 	material.TextureEnable = TRUE;
 	SetMaterial(material);
 
-	{
-		m_Batch = std::make_unique<PrimitiveBatch<VertexPositionColor>>(m_DeviceContext);
-		m_Effect = std::make_unique<BasicEffect>(m_Device);
 
-		m_Effect->SetProjection(XMMatrixOrthographicOffCenterRH(
-			0,
-			SCREEN_WIDTH,
-			SCREEN_HEIGHT,
-			0,
-			1.0f,
-			1000.0f)
-		);
-		m_Effect->SetVertexColorEnabled(true);
-
-		static const D3D11_INPUT_ELEMENT_DESC layout[] =
-		{
-			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "NORMAL",   0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 4 * 3, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 4 * 6, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 4 * 10, D3D11_INPUT_PER_VERTEX_DATA, 0 }
-		};
-
-		CreateInputLayoutFromEffect(
-			m_Device,
-			m_Effect.get(),
-			layout,
-			std::size(layout),
-			m_inputLayout.ReleaseAndGetAddressOf()
-		);
-	}
 }
 
 
@@ -460,52 +427,33 @@ void Renderer::CreatePixelShader( ID3D11PixelShader** PixelShader, const char* F
 	delete[] buffer;
 }
 
-void Renderer::SetEffect()
+void Renderer::BeginWireFrame()
 {
-	m_DeviceContext->OMSetRenderTargets(1, &m_RenderTargetView, m_DepthStencilView);
+	// ラスタライザステート設定
+	D3D11_RASTERIZER_DESC rasterizerDesc{};
+	rasterizerDesc.FillMode = D3D11_FILL_WIREFRAME;
+	rasterizerDesc.CullMode = D3D11_CULL_NONE;
+	rasterizerDesc.DepthClipEnable = TRUE;
+	rasterizerDesc.MultisampleEnable = FALSE;
 
-	m_DeviceContext->OMSetBlendState(m_BlendState, Colors::Transparent, 0xFFFFFFFF);
-	m_DeviceContext->OMSetDepthStencilState(m_DepthStateEnable, 0);
+	ID3D11RasterizerState* rs;
+	m_Device->CreateRasterizerState(&rasterizerDesc, &rs);
 
-	// こいつ消すと出るんだけどなんでだよ
-	//m_Effect->Apply(m_DeviceContext);
-
-	m_DeviceContext->IASetInputLayout(m_inputLayout.Get());
+	m_DeviceContext->RSSetState(rs);
 }
 
-void Renderer::SetRenderingState()
+void Renderer::EndWireFrame()
 {
-	auto deviceContext = m_DeviceContext;
+	// ラスタライザステート設定
+	D3D11_RASTERIZER_DESC rasterizerDesc{};
+	rasterizerDesc.FillMode = D3D11_FILL_SOLID;
+	rasterizerDesc.CullMode = D3D11_CULL_BACK;
+	rasterizerDesc.DepthClipEnable = TRUE;
+	rasterizerDesc.MultisampleEnable = FALSE;
 
-    // レンダーターゲットとデプスステンシルを設定
-    deviceContext->OMSetRenderTargets(1, &m_RenderTargetView, m_DepthStencilView);
+	ID3D11RasterizerState* rs;
+	m_Device->CreateRasterizerState(&rasterizerDesc, &rs);
 
-    // ビューポート設定
-    D3D11_VIEWPORT viewport;
-    viewport.Width = (FLOAT)SCREEN_WIDTH;
-    viewport.Height = (FLOAT)SCREEN_HEIGHT;
-    viewport.MinDepth = 0.0f;
-    viewport.MaxDepth = 1.0f;
-    viewport.TopLeftX = 0;
-    viewport.TopLeftY = 0;
-    deviceContext->RSSetViewports(1, &viewport);
-
-    // ラスタライザステート設定
-    ID3D11RasterizerState* rs;
-    D3D11_RASTERIZER_DESC rasterizerDesc{};
-    rasterizerDesc.FillMode = D3D11_FILL_SOLID;
-    rasterizerDesc.CullMode = D3D11_CULL_BACK;
-    rasterizerDesc.DepthClipEnable = TRUE;
-    rasterizerDesc.MultisampleEnable = FALSE;
-
-    Renderer::GetDevice()->CreateRasterizerState(&rasterizerDesc, &rs);
-    deviceContext->RSSetState(rs);
-    rs->Release();
-
-    // ブレンドステート設定
-    float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
-    deviceContext->OMSetBlendState(m_BlendState, blendFactor, 0xFFFFFFFF);
-
-    // 深度ステンシルステート設定
-    deviceContext->OMSetDepthStencilState(m_DepthStateEnable, 0);
+	m_DeviceContext->RSSetState(rs);
 }
+

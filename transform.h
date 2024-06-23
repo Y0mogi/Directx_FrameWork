@@ -36,11 +36,6 @@ public:
 
 public:
 
-	// 使うか未定
-	void Update() override {
-      
-	};
-
     void CompInfo()override {
         using namespace ImGui;
         SeparatorText("Transform");
@@ -55,7 +50,6 @@ public:
             // 回転行列からオイラー角を取得
             float pitch, yaw, roll;
             ExtractPitchYawRoll(rotationMatrix, pitch, yaw, roll);
-
             XMFLOAT3 rotF3 = XMFLOAT3(pitch, yaw, roll);
             DragFloat3("Rotation", reinterpret_cast<float*>(&rotF3));
 
@@ -65,7 +59,7 @@ public:
         }
     }
 
-	// ===方向ベクトルの取得===
+	// ===ローカルの方向ベクトルの取得===
    
     XMFLOAT3 GetForward() const {
             return GetDirectionVector(2);

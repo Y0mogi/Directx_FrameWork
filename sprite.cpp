@@ -133,7 +133,7 @@ void Sprite::CompInfo()
 		static std::string tmp = utf8_encode(_path);
 		TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Do not specify the wrong path!");
 		InputText(" ", &tmp); SameLine();
-		if (Button("Change")) if (SaveFilePath(utf8_decode(tmp))) this->CreateTexture(_path);
+		if (Button("Change")) { if (SaveFilePath(utf8_decode(tmp))) this->CreateTexture(_path); };
 
 		// Œ³‰æ‘œƒvƒŒƒrƒ…[
 		SeparatorText("DrawRawImage");

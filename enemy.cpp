@@ -5,13 +5,14 @@
 #include "input.h"
 #include "gameobject.h"
 #include "transform.h"
-#include "player.h"
+#include "enemy.h"
 #include "math_helper.h"
 
 
-void Player::Init()
+void Enemy::Init()
 {
 	Parent->GetComponent<ModelRenderer>()->Load("asset\\model\\nonderiRobo.obj");
+	Parent->GetComponent<Transform>()->position.x += 20;
 
 	Renderer::CreateVertexShader(&_VertexShader, &_VertexLayout,
 		"shader\\unlitTextureVS.cso");
@@ -21,45 +22,62 @@ void Player::Init()
 
 }
 
-void Player::Uninit()
+void Enemy::Uninit()
 {
 	_VertexShader->Release();
 	_VertexLayout->Release();
 	_PixelShader->Release();
 }
 
-void Player::Update()	
+void Enemy::Update()
 {
 	using namespace DirectX::SimpleMath;
-	auto transform = Parent->GetComponent<Transform>();
+	static auto transform = Parent->GetComponent<Transform>();
 
-	//if (Input::GetKeyPress('A'))
+	//if (Input::GetKeyPress(VK_LEFT))
 	//{
 	//	Parent->GetComponent<Transform>()->position.x -= 0.1f;
 	//}
 	//
-	//if (Input::GetKeyPress('D'))
+	//if (Input::GetKeyPress(VK_RIGHT))
 	//{
 	//	Parent->GetComponent<Transform>()->position.x += 0.1f;
 	//}
 	//
-	//if (Input::GetKeyPress('W'))
+	//if (Input::GetKeyPress(VK_UP))
 	//{
 	//	Parent->GetComponent<Transform>()->position.z += 0.1f;
 	//}
 	//
-	//if (Input::GetKeyPress('S'))
+	//if (Input::GetKeyPress(VK_DOWN))
 	//{
 	//	Parent->GetComponent<Transform>()->position.z -= 0.1f;
 	//}
-	
-	if (Input::GetKeyPress('T')) {
-		transform->rotation *= Quaternion::CreateFromAxisAngle(transform->GetForward(), -DirectX::XM_PIDIV4 * 0.1f);
+	//
+
+	if (Input::GetKeyPress('J'))
+	{
+		Parent->GetComponent<Transform>()->position.x -= 0.1f;
+	}
+
+	if (Input::GetKeyPress('L'))
+	{
+		Parent->GetComponent<Transform>()->position.x += 0.1f;
+	}
+
+	if (Input::GetKeyPress('I'))
+	{
+		Parent->GetComponent<Transform>()->position.z += 0.1f;
+	}
+
+	if (Input::GetKeyPress('K'))
+	{
+		Parent->GetComponent<Transform>()->position.z -= 0.1f;
 	}
 
 }
 
-void Player::Draw()
+void Enemy::Draw()
 {
 	using namespace DirectX::SimpleMath;
 	// 入力レイアウト
@@ -77,5 +95,10 @@ void Player::Draw()
 	Renderer::SetWorldMatrix(world);
 
 
-	Parent->GetComponent<ModelRenderer>()->DrawModel("asset\\model\\nonderiRobo.obj");
+	Parent->GetComponent<ModelRenderer>()->DrawModel();
+}
+
+void Enemy::OnCollisionEnter(GameObject* collision)
+{
+	Parent->GetComponent<Transform>()->position.y += 0.1f;
 }

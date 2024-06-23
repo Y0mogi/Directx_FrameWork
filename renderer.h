@@ -62,11 +62,6 @@ private:
 	static ID3D11BlendState*		m_BlendState;
 	static ID3D11BlendState*		m_BlendStateATC;
 
-	// 
-	static std::unique_ptr<PrimitiveBatch<VertexPositionColor>> m_Batch;
-	static std::unique_ptr<BasicEffect> m_Effect;
-	static Microsoft::WRL::ComPtr<ID3D11InputLayout> m_inputLayout;
-	
 public:
 	static void Init();
 	static void Uninit();
@@ -87,10 +82,9 @@ public:
 	
 	static void CreateVertexShader(ID3D11VertexShader** VertexShader, ID3D11InputLayout** VertexLayout, const char* FileName);
 	static void CreatePixelShader(ID3D11PixelShader** PixelShader, const char* FileName);
-	
-	static PrimitiveBatch<VertexPositionColor>* Getprimitiv() { return m_Batch.get(); }
-	static void SetEffect();
-	static void SetRenderingState();
+
+	static void BeginWireFrame();
+	static void EndWireFrame();
 };
 
 #endif // RENDERER_H

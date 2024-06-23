@@ -25,7 +25,8 @@ void Jump::Update()
 	
 	if (Input::GetKeyTrigger(VK_SPACE) && !_isJump){
 		_isJump = true;
-		spos = _transform->position.y;
+		//spos = _transform->position.y;
+		spos = 0;
 		_dir.y = 10.f;
 	}
 

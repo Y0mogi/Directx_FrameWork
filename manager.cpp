@@ -60,7 +60,7 @@ void Manager::Update()
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
     ImGui::Begin("DebugWindow");
-    ImGui::SetWindowFontScale(1.2);
+    ImGui::SetWindowFontScale(1.2f);
 
     _scene->Update();
 
@@ -80,22 +80,6 @@ void Manager::Draw()
 
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-
-    // 動かんんんんんんんんんんんんんんんんんんんんんんんんんんんんんんんんんんんんんんんんんんんんんんんんん
-    { 
-        Renderer::SetEffect();
-        Renderer::SetRenderingState();
-
-        Renderer::Getprimitiv()->Begin();
-
-        auto box = BoundingBox();
-        auto box_obb = BoundingBox({ 0,0,0 }, { 5,5,5 });
-
-        DEBUG::Draw(box_obb);
-        DX::Draw(Renderer::Getprimitiv(), box); // BoundingBox
-
-        Renderer::Getprimitiv()->End();
-    }
 
     // 描画終了
     Renderer::End();

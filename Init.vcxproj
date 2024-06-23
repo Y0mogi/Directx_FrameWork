@@ -24,6 +24,7 @@
     <ProjectGuid>{a52f1b48-15f9-4df2-91f5-cd3a0d93a832}</ProjectGuid>
     <RootNamespace>Init</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>DirectX_FrameWork</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -137,10 +138,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="boxcollision.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="camera_fps.cpp" />
-    <ClCompile Include="collision.cpp" />
     <ClCompile Include="DebugDraw.cpp" />
+    <ClCompile Include="enemy.cpp" />
     <ClCompile Include="field.cpp" />
     <ClCompile Include="gameobject.cpp" />
     <ClCompile Include="Imgui\imgui.cpp" />
@@ -156,6 +158,7 @@
     <ClCompile Include="manager.cpp" />
     <ClCompile Include="modelRenderer.cpp" />
     <ClCompile Include="mydebugdraw.cpp" />
+    <ClCompile Include="orientedbox.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="scene.cpp" />
@@ -201,12 +204,14 @@
     <ClCompile Include="Src\WICTextureLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="boxcollision.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="camera_fps.h" />
-    <ClInclude Include="collision.h" />
+    <ClInclude Include="collision_base.h" />
     <ClInclude Include="component.h" />
     <ClInclude Include="DebugDraw.h" />
     <ClInclude Include="directxTK_all.h" />
+    <ClInclude Include="enemy.h" />
     <ClInclude Include="field.h" />
     <ClInclude Include="gameobject.h" />
     <ClInclude Include="Imgui\imconfig.h" />
@@ -254,6 +259,7 @@
     <ClInclude Include="math_helper.h" />
     <ClInclude Include="modelRenderer.h" />
     <ClInclude Include="mydebugdraw.h" />
+    <ClInclude Include="orientedbox.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="quaternion.h" />
     <ClInclude Include="renderer.h" />
