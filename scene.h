@@ -21,6 +21,7 @@
 #include "field.h"
 #include "camera.h"
 #include "sprite.h"
+#include "input.h"
 
 
 class Scene
@@ -29,14 +30,20 @@ public:
 	virtual void Init()
 	{
 		using enum Layer;
-
+		
 		// ゲームオブジェクトを作成し、コンポーネントを追加
-		AddObjComp<Sprite>("Sprite", Layer_2);
-		AddObjComp<ModelRenderer, OrientedBox,Field>("Field",Layer_1);
-		auto a = AddObjComp<ModelRenderer,OrientedBox,Player>("Player",Layer_1);
+		AddObjComp<Sprite>("Sprite", Layer_2 , Tag::None);
+		AddObjComp<ModelRenderer, OrientedBox,Field>("Field",Layer_1, Tag::Ground);
+		auto a = AddObjComp<ModelRenderer,OrientedBox,Player>("Player",Layer_1,Tag::Player);
 		a->GetComponent<Transform>()->scale = { 1,2,1 };
-		AddObjComp<ModelRenderer,OrientedBox, Jump, Enemy>("Enemy", Layer_1);
-		AddObjComp<Camera>("Camera",Layer_0);
+
+		for (int i = 0; i < 20; i++) {
+			auto name = std::string("Enemy") + std::to_string(i);
+			auto b = AddObjComp<ModelRenderer, OrientedBox, Jump, Enemy>(name, Layer_1, Tag::Enemy);
+			b->GetComponent<Transform>()->position = { (5.f * i),1,1 };
+		}
+		
+		AddObjComp<Camera>("Camera",Layer_0, Tag::None);
 
 		// 全オブジェクトを初期化
 		for (auto& it : _objects)
@@ -71,7 +78,7 @@ public:
 	virtual void Update() {
 
 		for (auto& it : _objects) it->Update();
-			
+
 		this->CollisionUpdate();
 
 		this->ImguiUpdate();
@@ -82,7 +89,6 @@ public:
 		_objects.sort(
 			[this](const std::unique_ptr<GameObject>& a, const std::unique_ptr<GameObject>& b)
 			{
-
 				auto camera = this->GetGameObject("Camera")->GetComponent<Transform>()->position;
 				return Distance(a->GetComponent<Transform>()->position, camera) > Distance(b->GetComponent<Transform>()->position, camera);
 			}
@@ -91,7 +97,7 @@ public:
 		_objects.sort(
 		[](const std::unique_ptr<GameObject>& a , const std::unique_ptr<GameObject>& b)
 			{
-				return a->layer < b->layer;
+				return a->GetLayer() < b->GetLayer();
 			}
 		);
 
@@ -104,9 +110,9 @@ public:
 	/// 複数のコンポーネントを追加したゲームオブジェクトを追加する
 	/// </summary>
 	template<typename... Components> // 可変長テンプレート
-	GameObject* AddObjComp(std::string tag, Layer layer)
+	GameObject* AddObjComp(std::string name, Layer layer,Tag tag = Tag::None)
 	{
-		GameObject* obj = new GameObject(tag, layer, this);
+		GameObject* obj = new GameObject(name,layer,tag ,this);
 		(obj->AddComponent<Components>(), ...); // パラメータパックの展開
 		AddGameObject(obj);
 		return obj;
@@ -133,10 +139,10 @@ public:
 	}
 
 	template<typename T>
-	T* GetGameObject(std::string tag) {
+	T* GetGameObject(std::string name) {
 		for (auto& it : _objects) {
 			if (typeid(*it) == typeid(T)){
-				if ((*it).objectTag == tag) {// タグ比較
+				if ((*it).objectName == name) {// タグ比較
 					auto* tmp = dynamic_cast<T*>(it.get());
 					if (tmp != nullptr) return tmp;
 				}
@@ -145,9 +151,9 @@ public:
 		return nullptr;
 	}
 
-	GameObject* GetGameObject(std::string tag) {
+	GameObject* GetGameObject(std::string name) {
 		for (auto& it : _objects) {
-			if ((*it).objectTag == tag) {
+			if (it->GetObjectName() == name) {
 				auto* tmp = it.get();
 				if (tmp != nullptr) return tmp;
 			}
@@ -196,9 +202,9 @@ private:
 	// ImGuiUpdateの際の表示方法
 	void ImGuiWindowCreate_Popup() {
 		for (auto& obj : this->_objects) {
-			if (ImGui::Button(obj.get()->objectTag.c_str()))
-				ImGui::OpenPopup(obj.get()->objectTag.c_str());
-			if (ImGui::BeginPopupModal(obj.get()->objectTag.c_str(), NULL)) {
+			if (ImGui::Button(obj->GetObjectName().c_str()))
+				ImGui::OpenPopup(obj->GetObjectName().c_str());
+			if (ImGui::BeginPopupModal(obj->GetObjectName().c_str(), NULL)) {
 				if (ImGui::Button("Close"))
 					ImGui::CloseCurrentPopup();
 				// ImGui::SeparatorText("Components");
@@ -217,7 +223,7 @@ private:
 	void ImGuiWindowCreate_Tree() {
 		for (auto& obj : this->_objects) {
 
-			if (ImGui::TreeNode(obj.get()->objectTag.c_str())) {
+			if (ImGui::TreeNode(obj->GetObjectName().c_str())) {
 				for (auto& comp : obj->componentList) {
 					std::string tmp = typeid(*comp).name();
 					tmp.erase(0, 5); // classのみ削除

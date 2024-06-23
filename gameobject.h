@@ -13,6 +13,15 @@ enum class Layer : int {
 	Layer_Num,
 };
 
+enum class Tag {
+	None,
+	Ground,
+	Player,
+	Enemy,
+
+	Tag_Num,
+};
+
 class Component;
 
 /// <summary>
@@ -90,16 +99,25 @@ public:
 		return false;  // å©Ç¬Ç©ÇÁÇ»Ç©Ç¡ÇΩèÍçá
 	}
 
+
+	std::string& GetObjectName() { return _objectName; }
+	Layer& GetLayer() { return _layer; }
+	Tag& GetTag() { return _tag; }
+
 	GameObject();
 	GameObject(class Scene* scene);
-	GameObject(const std::string& tag,Layer layer,class Scene* scene);
+	GameObject(const std::string& name,Layer layer,Tag tag,class Scene* scene);
 	~GameObject();
 
+
 public:
-	std::string objectTag{};
 	std::list<Component*> componentList{};
 	class Scene* scene = nullptr;
-	Layer layer{};
+
+private:
+	Tag			_tag{};
+	Layer		_layer{};
+	std::string _objectName{};
 };
 
 #endif // !GAMEOBJECT_H
