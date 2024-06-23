@@ -37,7 +37,7 @@ public:
 		auto a = AddObjComp<ModelRenderer,OrientedBox,Player>("Player",Layer_1,Tag::Player);
 		a->GetComponent<Transform>()->scale = { 1,2,1 };
 
-		for (int i = 0; i < 20; i++) {
+		for (int i = 0; i < 10; i++) {
 			auto name = std::string("Enemy") + std::to_string(i);
 			auto b = AddObjComp<ModelRenderer, OrientedBox, Jump, Enemy>(name, Layer_1, Tag::Enemy);
 			b->GetComponent<Transform>()->position = { (5.f * i),1,1 };
@@ -76,10 +76,14 @@ public:
 
 	};
 	virtual void Update() {
-		
+		static int frame = 0;
 		for (auto& it : _objects) it->Update();
 
-		this->CollisionUpdate();
+		frame++;
+		if (frame % 1 == 0) {
+			this->CollisionUpdate();
+			frame = 0;
+		}
 
 		this->ImguiUpdate();
 
@@ -277,9 +281,9 @@ private:
 			for (auto& b : _objects) {
 				if (!b->GetComponent<Collision_Base>()) continue; // コリジョンがあるかチェック
 				if (!b->GetComponent<Collision_Base>()->IsActive()) continue; // 有効かチェック
-				if (a.get() == b.get()) continue; // 自身と判定しない
-				a->GetComponent<Collision_Base>()->SetIsHit(IsOverLap(a.get(), b.get())); // 接触結果をセットする
-				if(a->GetComponent<Collision_Base>()->IsHit())a->OnCollisionEnter(b.get());  // ヒットしていた場合は各コンポーネントの接触処理を呼び出す
+				if (b.get() == a.get()) continue; // 自身と判定しない
+				a->GetComponent<Collision_Base>()->SetIsHit(IsOverLap(b.get(), a.get())); // 接触結果をセットする
+				if(a->GetComponent<Collision_Base>()->IsHit())b->OnCollisionEnter(a.get());  // ヒットしていた場合は各コンポーネントの接触処理を呼び出す
 			}
 		}
 	}
