@@ -76,7 +76,7 @@ public:
 
 	};
 	virtual void Update() {
-
+		
 		for (auto& it : _objects) it->Update();
 
 		this->CollisionUpdate();
@@ -238,13 +238,15 @@ private:
 	}
 
 	// ====================================
-
+	
 	bool IsOverLap(GameObject* a, GameObject* b) {
 		
 		if (a == nullptr || b == nullptr) return false;
 
 		auto collisionA = a->GetComponent<Collision_Base>();
 		auto collisionB = b->GetComponent<Collision_Base>();
+
+		if (!collisionA || !collisionB) return false;
 
 		switch (collisionA->GetCollisionType()) {
 			case CollisionType::AABB: {
