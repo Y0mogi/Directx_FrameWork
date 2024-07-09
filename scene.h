@@ -37,7 +37,7 @@ public:
 		auto a = AddObjComp<ModelRenderer,OrientedBox,Player>("Player",Layer_1,Tag::Player);
 		a->GetComponent<Transform>()->scale = { 1,2,1 };
 
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 30; i++) {
 			auto name = std::string("Enemy") + std::to_string(i);
 			auto b = AddObjComp<ModelRenderer, OrientedBox, Jump, Enemy>(name, Layer_1, Tag::Enemy);
 			b->GetComponent<Transform>()->position = { (5.f * i),1,1 };

@@ -133,8 +133,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 	CoUninitialize();
 
-	// メモリリークのダンプ
-	_CrtDumpMemoryLeaks();
+
 
 	return (int)msg.wParam;
 }
@@ -151,6 +150,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_DESTROY:
 		PostQuitMessage(0);
+		// メモリリークのダンプ
+		_CrtDumpMemoryLeaks();
 		break;
 
 	case WM_KEYDOWN:

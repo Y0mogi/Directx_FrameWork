@@ -10,6 +10,7 @@ public:
 	void Uninit();
 	void Update();
 	void Draw();
+
 private:
 	Transform* _transform;
 
