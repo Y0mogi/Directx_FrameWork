@@ -6,13 +6,16 @@
 /// ゲームオブジェクトの表示優先度
 /// </summary>
 enum class Layer : int {
-	Layer_0,	// 3Dオブジェクトなど
-	Layer_1,	// 3Dオブジェクトなど
-	Layer_2,	// UIなどの2Dスプライトの描画に使用
+	Layer_0,		// 3Dオブジェクトなど
+	Layer_1,		// 3Dオブジェクトなど
+	Layer_2,		// UIなどの2Dスプライトの描画に使用
 
 	Layer_Num,
 };
 
+/// <summary>
+/// GameObjectクラスのタグ
+/// </summary>
 enum class Tag {
 	None,
 	Ground,
@@ -31,17 +34,18 @@ class GameObject
 {
 public:
 
-	void Init();
-	void Update();
-	void OnCollisionEnter(GameObject* Collision);
-	void CompInfo();
-	void Uninit();
-	void Draw();
+	void Init();	// 初期化
+	void Update();	// 更新
+	void Uninit();	// 開放
+	void Draw();	// 描画
+
+	void OnCollisionEnter(GameObject* Collision);	// 衝突処理
+	void CompInfo();								// コンポーネントの情報表示
 
 	/// <summary>
 	/// アタッチされているコンポーネントの取得
 	/// </summary>
-	/// <typeparam name="T"></typeparam>
+	/// <typeparam name="T">取得したいコンポーネントの型</typeparam>
 	/// <returns>コンポーネントのポインタ</returns>
 	template<class T>
 	T* GetComponent(){
@@ -56,7 +60,7 @@ public:
 	/// <summary>
 	/// オブジェクトにコンポーネントをアタッチ
 	/// </summary>
-	/// <typeparam name="T">追加したいコンポーネントクラス名</typeparam>
+	/// <typeparam name="T">追加したいコンポーネントの型</typeparam>
 	/// <returns>追加したコンポーネントのポインタ</returns>
 	template<class T>
 	T* AddComponent(){
@@ -99,10 +103,14 @@ public:
 		return false;  // 見つからなかった場合
 	}
 
+	// getter
 
-	std::string& GetObjectName() { return _objectName; }
-	Layer& GetLayer() { return _layer; }
-	Tag& GetTag() { return _tag; }
+	std::string& GetObjectName()	{ return _objectName;	}
+	Layer& GetLayer()				{ return _layer;		}
+	Tag& GetTag()					{ return _tag;			}
+
+
+	// コンストラクタ・デストラクタ
 
 	GameObject();
 	GameObject(class Scene* scene);
@@ -111,13 +119,13 @@ public:
 
 
 public:
-	std::list<Component*> componentList{};
-	class Scene* scene = nullptr;
+	std::list<Component*> componentList{};	// 自身についているコンポーネント
+	class Scene* scene = nullptr;			// 自身を管理しているシーンのポインタ
 
 private:
-	Tag			_tag{};
-	Layer		_layer{};
-	std::string _objectName{};
+	Tag			_tag{};						// 自身のタグ
+	Layer		_layer{};					// 表示レイヤー
+	std::string _objectName{};				// オブジェクトの固有名詞
 };
 
 #endif // !GAMEOBJECT_H

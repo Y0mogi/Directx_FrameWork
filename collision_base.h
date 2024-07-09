@@ -1,5 +1,8 @@
 #pragma once
 
+/// <summary>
+/// 接触時のイベントの基底クラス
+/// </summary>
 class CollisionEvent {
 public:
 	virtual void OnCollisionEnter(GameObject* collision) {}; // 接触時の処理
@@ -8,16 +11,21 @@ public:
 	virtual ~CollisionEvent() {};
 };
 
+/// <summary>
+/// 当たり判定の種類判別に使用
+/// </summary>
 enum class CollisionType {
-	AABB,	
-	OBB,
-	Sphere,
-	Ray, 
+	AABB,				// 軸平行境界ボックス
+	OBB,				// 有向境界ボックス
+	Sphere,				// 球体
+	Ray,				// 光線
 
-	CollisionType_Num
+	CollisionType_Num	// タグの数
 };
 
-
+/// <summary>
+/// 
+/// </summary>
 class Collision_Base {
 public:
 
@@ -41,8 +49,8 @@ public:
 	virtual ~Collision_Base() {};
 
 private:
-	bool _isActive =  true;		// このコリジョンが有効か
+	bool _isActive =  true;		// 接触処理をするか
 	bool _isHit	   = false;		// 接触しているか
-	CollisionType  _type;		// コリジョンタイプ
+	CollisionType  _type{};		// 当たり判定の種類
 };
 

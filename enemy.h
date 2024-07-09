@@ -6,7 +6,7 @@
 #include "component.h"
 #include "collision_base.h"
 
-class Enemy :public Component,public CollisionEvent
+class Enemy :public Component, public CollisionEvent
 {
 public:
 	void Init() override;
@@ -17,7 +17,6 @@ public:
 	void OnCollisionEnter(GameObject* collision);
 
 private:
-
 	ID3D11VertexShader* _VertexShader;
 	ID3D11PixelShader* _PixelShader;
 	ID3D11InputLayout* _VertexLayout;

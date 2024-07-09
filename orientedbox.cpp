@@ -15,18 +15,18 @@ void OrientedBox::Init()
    
     Parent->GetComponent<ModelRenderer>()->Load("asset\\model\\BoxCollision.obj");
 
-    Renderer::CreateVertexShader(&_VertexShader, &_VertexLayout,
+    Renderer::CreateVertexShader(&_vertexShader, &_vertexLayout,
         "shader\\unlitTextureVS.cso");
 
-    Renderer::CreatePixelShader(&_PixelShader,
+    Renderer::CreatePixelShader(&_pixelShader,
         "shader\\unlitTexturePS.cso");
 }
 
 void OrientedBox::Uninit()
 {
-    _VertexShader->Release();
-    _VertexLayout->Release();
-    _PixelShader->Release();
+    _vertexShader->Release();
+    _vertexLayout->Release();
+    _pixelShader->Release();
 }
 
 void OrientedBox::Update()
@@ -34,7 +34,7 @@ void OrientedBox::Update()
     
     _collision.Center = _transform->position;
     _collision.Extents = _transform->scale;
-    _collision.Orientation = _transform->rotation;
+    _collision.Orientation  = _transform->rotation;
 
 }
 
@@ -44,11 +44,11 @@ void OrientedBox::Draw()
     
 
     // 入力レイアウト
-    Renderer::GetDeviceContext()->IASetInputLayout(_VertexLayout);
+    Renderer::GetDeviceContext()->IASetInputLayout(_vertexLayout);
 
     // シェーダー設定
-    Renderer::GetDeviceContext()->VSSetShader(_VertexShader, NULL, 0);
-    Renderer::GetDeviceContext()->PSSetShader(_PixelShader, NULL, 0);
+    Renderer::GetDeviceContext()->VSSetShader(_vertexShader, NULL, 0);
+    Renderer::GetDeviceContext()->PSSetShader(_pixelShader, NULL, 0);
 
     XMMATRIX world, scl, rot, trans;
     scl = DirectX::XMMatrixScaling(_transform->scale.x * 2, _transform->scale.y * 2, _transform->scale.z * 2);
@@ -83,25 +83,38 @@ void OrientedBox::CompInfo()
 
 bool OrientedBox::Intersects(Collision_Base* other) const
 {
-    switch (other->GetCollisionType()) {
-    case CollisionType::AABB: {
+    // 相手の当たり判定の種類を取得
+    switch (other->GetCollisionType()) { 
+    case CollisionType::AABB: { // 相手の当たり判定の種類ががAABBの場合
+
+        // BoxCollisionクラスにキャスト
         auto otherBox = static_cast<BoxCollision*>(other);
+
+        // キャストできたかチェック 出来ていなかったら return false
         if (!otherBox) return false;
+
+        // 交差しているかのチェックして結果をリターン 
         return this->_collision.Intersects(otherBox->GetCollision());
     }
-    case CollisionType::OBB: {
+    case CollisionType::OBB: { // 相手の当たり判定の種類ががOBBの場合
+
+        // OrientedBoxクラスにキャスト
         auto otherBox = static_cast<OrientedBox*>(other);
+
+        // キャストできたかチェック 出来ていなかったら return false
         if (!otherBox) return false;
+
+        // 交差しているかのチェックして結果をリターン
         return this->_collision.Intersects(otherBox->GetCollision());
     }
 
     case CollisionType::Sphere: {
-
+        // 未実装
         return false;
     }
 
     case CollisionType::Ray: {
-
+        // 未実装
         return false;
     }
     default:
@@ -112,11 +125,18 @@ bool OrientedBox::Intersects(Collision_Base* other) const
 
 bool OrientedBox::Contains(Collision_Base* other) const
 {
-    switch (other->GetCollisionType()) {
+    // 相手の当たり判定の種類を取得
+    switch (other->GetCollisionType()) {    
     case CollisionType::AABB: {
-        auto otherBox = static_cast<BoxCollision*>(other);
-        if (!otherBox) return false;
-        return _collision.Contains(otherBox->GetCollision());
+
+        // BoxCollisionにキャスト
+        auto otherBox = static_cast<BoxCollision*>(other);      
+
+        // キャストできたかチェック
+        if (!otherBox) return false;                            
+
+        // 内包しているかのチェックして結果をリターン
+        return this->_collision.Contains(otherBox->GetCollision());   
     }
     case CollisionType::OBB: {
         auto otherBox = static_cast<OrientedBox*>(other);
