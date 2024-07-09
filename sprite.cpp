@@ -58,7 +58,7 @@ void Sprite::Draw()
 		D3D11_MAP_WRITE_DISCARD, 0, &msr);
 
 	VERTEX_3D* vertex = (VERTEX_3D*)msr.pData;
-
+	
 	// 頂点０番（左上の頂点）
 	vertex[0].Position = XMFLOAT3(pos.x - (size.x / 2.0f), pos.y - (size.y / 2.0f), 0.0f);
 	vertex[0].Normal = XMFLOAT3(0.0f, 0.0f, 0.0f);
@@ -76,7 +76,7 @@ void Sprite::Draw()
 	vertex[2].Normal = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	vertex[2].Diffuse = m_Color;
 	vertex[2].TexCoord = XMFLOAT2(0.0f, 1.0f);
-
+	
 	// 頂点３番（右下の頂点）
 	vertex[3].Position = XMFLOAT3(pos.x + (size.x / 2.0f), pos.y + (size.y / 2.0f), 0.0f);
 	vertex[3].Normal = XMFLOAT3(0.0f, 0.0f, 0.0f);

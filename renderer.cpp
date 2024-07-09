@@ -1,5 +1,3 @@
-#define DEBUG_DISP_TEXTOUT
-
 #include "main.h"
 #include "renderer.h"
 #include <io.h>
