@@ -36,7 +36,7 @@ public:
 
     // gettter
 
-    inline BoundingOrientedBox& GetCollision() { return _collision; }
+    inline BoundingOrientedBox& GetCollision() { return m_Collision; }
 
 
 
@@ -47,14 +47,14 @@ public:
     
     
 private: 
-    BoundingOrientedBox _collision;
-    Transform*          _transform{};
+    BoundingOrientedBox m_Collision;
+    Transform*          m_Transform{};
     
     // デバッグ表示用
 
-    ID3D11VertexShader* _vertexShader{};
-    ID3D11InputLayout* _vertexLayout{};
-    ID3D11PixelShader* _pixelShader{};
+    ID3D11VertexShader* m_VertexShader{};
+    ID3D11InputLayout* m_VertexLayout{};
+    ID3D11PixelShader* m_PixelShader{};
     
 };
 

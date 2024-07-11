@@ -159,6 +159,8 @@
     <ClCompile Include="modelRenderer.cpp" />
     <ClCompile Include="mydebugdraw.cpp" />
     <ClCompile Include="orientedbox.cpp" />
+    <ClCompile Include="particlebase.cpp" />
+    <ClCompile Include="particleemitter.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="scene.cpp" />
@@ -260,6 +262,8 @@
     <ClInclude Include="modelRenderer.h" />
     <ClInclude Include="mydebugdraw.h" />
     <ClInclude Include="orientedbox.h" />
+    <ClInclude Include="particlebase.h" />
+    <ClInclude Include="particleemitter.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="quaternion.h" />
     <ClInclude Include="renderer.h" />

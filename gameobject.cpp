@@ -10,7 +10,7 @@
 GameObject::GameObject()
 {
     AddComponent<Transform>();
-    this->_objectName = "GameObject";
+    this->m_ObjectName = "GameObject";
     this->scene = nullptr;
 }
 
@@ -18,12 +18,12 @@ GameObject::GameObject(Scene* scene)
     :scene(scene)
 {
     AddComponent<Transform>();
-    this->_objectName = "GameObject" + scene->GetObjectList()->size();
+    this->m_ObjectName = "GameObject" + scene->GetObjectList()->size();
     this->scene = scene;
 }
 
 GameObject::GameObject(const std::string& name, Layer layer, Tag tag, Scene* scene)
-    :_objectName(name), _layer(layer), _tag(tag), scene(scene)
+    :m_ObjectName(name), m_Layer(layer), m_Tag(tag), scene(scene)
 {
     AddComponent<Transform>();
 }

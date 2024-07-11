@@ -53,7 +53,7 @@ public:
     
     // gettter
 
-    BoundingBox& GetCollision() { return _collision; }
+    BoundingBox& GetCollision() { return m_Collision; }
 
     // コンストラクタ・デストラクタ
 
@@ -63,8 +63,8 @@ public:
     
 
 private:
-    BoundingBox _collision;
-    Transform*  _transform{};
+    BoundingBox m_Collision;
+    Transform*  m_Transform{};
 };
 
 #endif // BOXCOLLISION

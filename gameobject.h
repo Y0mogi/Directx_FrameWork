@@ -105,9 +105,9 @@ public:
 
 	// getter
 
-	std::string& GetObjectName()	{ return _objectName;	}
-	Layer& GetLayer()				{ return _layer;		}
-	Tag& GetTag()					{ return _tag;			}
+	std::string& GetObjectName()	{ return m_ObjectName;	}
+	Layer& GetLayer()				{ return m_Layer;		}
+	Tag& GetTag()					{ return m_Tag;			}
 
 
 	// コンストラクタ・デストラクタ
@@ -123,9 +123,9 @@ public:
 	class Scene* scene = nullptr;			// 自身を管理しているシーンのポインタ
 
 private:
-	Tag			_tag{};						// 自身のタグ
-	Layer		_layer{};					// 表示レイヤー
-	std::string _objectName{};				// オブジェクトの固有名詞
+	Tag			m_Tag{};					// 自身のタグ
+	Layer		m_Layer{};					// 表示レイヤー
+	std::string m_ObjectName{};				// オブジェクトの固有名詞
 };
 
 #endif // !GAMEOBJECT_H

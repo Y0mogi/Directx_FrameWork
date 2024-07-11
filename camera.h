@@ -28,16 +28,16 @@ public:
 
 	void CompInfo();
 
-	inline void SetTarget(Transform* pTarget) { this->_target = pTarget; }
+	inline void SetTarget(Transform* pTarget) { this->m_Target = pTarget; }
 
 private:
 	void UpdatePosition();
 private:
 
-	Transform* _transform = nullptr;
-	Transform* _target = nullptr;
-	XMFLOAT4X4 _viewMatrix{};
-	float _length, _yaw, _pitch;
+	Transform* m_Transform = nullptr;
+	Transform* m_Target = nullptr;
+	XMFLOAT4X4 m_ViewMatrix{};
+	float m_Length, m_Yaw, m_Pitch;
 
 };
 
