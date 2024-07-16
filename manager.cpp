@@ -64,25 +64,22 @@ void Manager::Update()
 
     _scene->Update();
 
-
+    // ImGui更新終了
     ImGui::End();
     ImGui::EndFrame();
 }
 
 void Manager::Draw()
 {
- 
-
     // 描画開始
     Renderer::Begin();
    
     _scene->Draw();
 
+    // ImGui描画
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
     // 描画終了
     Renderer::End();
-
-
 }

@@ -2,9 +2,8 @@
 #include <string>
 #include "transform.h"
 #include "component.h"
-#include "gameobject.h"
 #include "scene.h"
-
+#include "gameobject.h"
 
 
 GameObject::GameObject()
@@ -18,8 +17,7 @@ GameObject::GameObject(Scene* scene)
     :scene(scene)
 {
     AddComponent<Transform>();
-    this->m_ObjectName = "GameObject" + scene->GetObjectList()->size();
-    this->scene = scene;
+    this->m_ObjectName = "GameObject" + scene->GetObjectList().size();
 }
 
 GameObject::GameObject(const std::string& name, Layer layer, Tag tag, Scene* scene)
@@ -43,6 +41,16 @@ void GameObject::Update()
     for (auto& it : componentList) it->Update();
 }
 
+void GameObject::Uninit()
+{
+    for (auto& it : componentList) it->Uninit();
+}
+
+void GameObject::Draw()
+{
+    for (auto& it : componentList) it->Draw();
+}
+
 void GameObject::OnCollisionEnter(GameObject* collision) {
     for (auto& it : componentList) {
         auto tmp = dynamic_cast<CollisionEvent*>(it);
@@ -53,14 +61,4 @@ void GameObject::OnCollisionEnter(GameObject* collision) {
 void GameObject::CompInfo()
 {
     for (auto& it : componentList) it->CompInfo();
-}
-
-void GameObject::Uninit()
-{
-    for (auto& it : componentList) it->Uninit();
-}
-
-void GameObject::Draw()
-{
-    for (auto& it : componentList) it->Draw();
 }

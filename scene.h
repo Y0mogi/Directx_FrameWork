@@ -37,7 +37,7 @@ public:
 		auto a = AddObjComp<ModelRenderer,OrientedBox,Player>("Player",Layer_1,Tag::Player);
 		a->GetComponent<Transform>()->scale = { 1,2,1 };
 
-		for (int i = 0; i < 30; i++) {
+		for (int i = 0; i < 1; i++) {
 			auto name = std::string("Enemy") + std::to_string(i);
 			auto b = AddObjComp<ModelRenderer, OrientedBox, Jump, Enemy>(name, Layer_1, Tag::Enemy);
 			b->GetComponent<Transform>()->position = { (5.f * i),1,1 };
@@ -75,6 +75,7 @@ public:
 		for (auto& it : _objects) it->Uninit();
 
 	};
+
 	virtual void Update() {
 		static int frame = 0;
 		for (auto& it : _objects) it->Update();
@@ -88,6 +89,7 @@ public:
 		this->ImguiUpdate();
 
 	};
+
 	virtual void Draw() {
 
 		_objects.sort(
@@ -164,16 +166,11 @@ public:
 		}
 		return nullptr;
 	}
-	
-	std::list<std::unique_ptr<GameObject>>* GetObjectList() { return &_objects; }
 
-protected:
-	std::list<std::unique_ptr<GameObject>> _objects{};
-private:
 
 	/// <summary>
 	/// ゲームオブジェクトの追加
-	/// </summary> ========================
+	/// </summary>
 	template<typename T, typename... Args>
 	T* AddGameObject(Args&&... args)
 	{
@@ -218,7 +215,7 @@ private:
 					ImGui::NewLine();
 				}
 
-				
+
 				ImGui::NewLine();
 				ImGui::EndPopup();
 			}
@@ -242,30 +239,39 @@ private:
 	}
 
 	// ====================================
-	
+
+	/// <summary>
+	/// 接触確認
+	/// </summary>
+	/// <param name="a">対象a</param>
+	/// <param name="b">対象b</param>
+	/// <returns>TRUE:接触 FALSE:未接触</returns>
 	bool IsOverLap(GameObject* a, GameObject* b) {
-		
+
+		// nullチェック
 		if (a == nullptr || b == nullptr) return false;
 
 		auto collisionA = a->GetComponent<Collision_Base>();
 		auto collisionB = b->GetComponent<Collision_Base>();
 
+		// コンポーネントの確認
 		if (!collisionA || !collisionB) return false;
 
+		// collisionAの当たり判定タイプにキャスト＆交差判定
 		switch (collisionA->GetCollisionType()) {
-			case CollisionType::AABB: {
-				return static_cast<BoxCollision*>(collisionA)->Intersects(collisionB);
-			}
-			case CollisionType::OBB: {
-				return static_cast<OrientedBox*>(collisionA)->Intersects(collisionB);
-			}
-			case CollisionType::Sphere: {
-				return false;
-			}
+		case CollisionType::AABB: {
+			return static_cast<BoxCollision*>(collisionA)->Intersects(collisionB);
+		}
+		case CollisionType::OBB: {
+			return static_cast<OrientedBox*>(collisionA)->Intersects(collisionB);
+		}
+		case CollisionType::Sphere: {
+			return false;
+		}
 
-			case CollisionType::Ray: {
-				return false;
-			}
+		case CollisionType::Ray: {
+			return false;
+		}
 		}
 
 		return false;
@@ -274,17 +280,29 @@ private:
 	/// <summary>
 	/// 衝突処理
 	/// </summary>
-	void CollisionUpdate() { 
+	void CollisionUpdate() {
 		for (auto& a : _objects) {
-			if (!a->GetComponent<Collision_Base>()) continue; // コリジョンがあるかチェック
-			if (!a->GetComponent<Collision_Base>()->IsActive()) continue; // 有効かチェック
+			// コリジョンがある & 有効か
+			if (!a->GetComponent<Collision_Base>()) continue;
+			if (!a->GetComponent<Collision_Base>()->IsActive()) continue;
 			for (auto& b : _objects) {
-				if (!b->GetComponent<Collision_Base>()) continue; // コリジョンがあるかチェック
-				if (!b->GetComponent<Collision_Base>()->IsActive()) continue; // 有効かチェック
-				if (b.get() == a.get()) continue; // 自身と判定しない
-				a->GetComponent<Collision_Base>()->SetIsHit(IsOverLap(b.get(), a.get())); // 接触結果をセットする
-				if(a->GetComponent<Collision_Base>()->IsHit())b->OnCollisionEnter(a.get());  // ヒットしていた場合は各コンポーネントの接触処理を呼び出す
+				// コリジョンがある & 有効か
+				if (!b->GetComponent<Collision_Base>()) continue;
+				if (!b->GetComponent<Collision_Base>()->IsActive()) continue;
+
+				// 自身と判定しない
+				if (b.get() == a.get()) continue;
+
+				// 接触結果をセットする
+				a->GetComponent<Collision_Base>()->SetIsHit(IsOverLap(b.get(), a.get()));
+
+				// ヒットしていた場合は各コンポーネントの接触処理を呼び出す
+				if (a->GetComponent<Collision_Base>()->IsHit())b->OnCollisionEnter(a.get());
 			}
 		}
 	}
+	
+	std::list<std::unique_ptr<GameObject>>& GetObjectList() { return _objects; }
+protected:
+	std::list<std::unique_ptr<GameObject>> _objects{};
 };

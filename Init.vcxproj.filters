@@ -28,6 +28,12 @@
     <Filter Include="DirectXTK\Src">
       <UniqueIdentifier>{52069c5e-1ab4-4b99-93b8-85de0f49f69a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="パーティクル">
+      <UniqueIdentifier>{5c016c96-ef58-48f2-9beb-bff413cccab9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="シーン">
+      <UniqueIdentifier>{f08ea133-081b-4b31-867a-e08fa3ba18d2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="renderer.cpp">
@@ -204,9 +210,6 @@
     <ClCompile Include="Src\pch.cpp">
       <Filter>DirectXTK\Src</Filter>
     </ClCompile>
-    <ClCompile Include="scene.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="DebugDraw.cpp">
       <Filter>DirectXTK</Filter>
     </ClCompile>
@@ -222,11 +225,17 @@
     <ClCompile Include="orientedbox.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="particleemitter.cpp">
+    <ClCompile Include="audio.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="particlebase.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="particleemitter.cpp">
+      <Filter>パーティクル</Filter>
+    </ClCompile>
+    <ClCompile Include="particle_flare.cpp">
+      <Filter>パーティクル</Filter>
+    </ClCompile>
+    <ClCompile Include="scene.cpp">
+      <Filter>シーン</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -301,9 +310,6 @@
     </ClInclude>
     <ClInclude Include="Imgui\imgui_impl_dx11.h">
       <Filter>Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="scene.h">
-      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="magic_enum\magic_enum.hpp">
       <Filter>MagicEnum</Filter>
@@ -458,11 +464,23 @@
     <ClInclude Include="orientedbox.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="particlebase.h">
+    <ClInclude Include="audio.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="particle_base.h">
+      <Filter>パーティクル</Filter>
+    </ClInclude>
     <ClInclude Include="particleemitter.h">
+      <Filter>パーティクル</Filter>
+    </ClInclude>
+    <ClInclude Include="particle_flare.h">
+      <Filter>パーティクル</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="scene.h">
+      <Filter>シーン</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

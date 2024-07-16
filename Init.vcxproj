@@ -138,6 +138,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="audio.cpp" />
     <ClCompile Include="boxcollision.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="camera_fps.cpp" />
@@ -159,8 +160,8 @@
     <ClCompile Include="modelRenderer.cpp" />
     <ClCompile Include="mydebugdraw.cpp" />
     <ClCompile Include="orientedbox.cpp" />
-    <ClCompile Include="particlebase.cpp" />
     <ClCompile Include="particleemitter.cpp" />
+    <ClCompile Include="particle_flare.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="scene.cpp" />
@@ -206,6 +207,7 @@
     <ClCompile Include="Src\WICTextureLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="audio.h" />
     <ClInclude Include="boxcollision.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="camera_fps.h" />
@@ -262,11 +264,13 @@
     <ClInclude Include="modelRenderer.h" />
     <ClInclude Include="mydebugdraw.h" />
     <ClInclude Include="orientedbox.h" />
-    <ClInclude Include="particlebase.h" />
+    <ClInclude Include="particle_base.h" />
     <ClInclude Include="particleemitter.h" />
+    <ClInclude Include="particle_flare.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="quaternion.h" />
     <ClInclude Include="renderer.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="scene.h" />
     <ClInclude Include="sprite.h" />
     <ClInclude Include="Src\AlignedNew.h" />
