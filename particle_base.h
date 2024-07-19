@@ -14,11 +14,12 @@ public:
 
 	virtual void Update() = 0;
 
-	inline bool GetEnable() const { return m_Enable; }
+	inline bool GetEnable() const { return this->m_Enable; }
 
 	Particle_Base(const XMFLOAT3& pos, const XMFLOAT4& color, const std::string& path){};
 	virtual ~Particle_Base() {};
 
+public:
 	bool					m_Enable{};		// 使用フラグ
 	unsigned short			m_LifeTime{};	// 表示時間(フレーム)
 	Transform				m_Transform{};	// 座標

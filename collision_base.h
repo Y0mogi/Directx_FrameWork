@@ -5,8 +5,8 @@
 /// </summary>
 class CollisionEvent {
 public:
-	virtual void OnCollisionEnter(GameObject* collision) {}; // ÚG‚Ìˆ—
-	virtual void ResolveCollision(GameObject* collision) {}; // ÚG‚Ì‰“š”½‰
+	virtual void OnCollisionEnter(const GameObject* collision) {}; // ÚG‚Ìˆ—
+	virtual void ResponseCollision(const GameObject* collision) {}; // ÚG‚Ì‰“š”½‰
 	
 	virtual ~CollisionEvent() {};
 };
@@ -32,15 +32,15 @@ public:
 
 	// Geter
 
-	inline bool			 IsActive()			const { return _isActive; }
-	inline bool			 IsHit()			const { return _isHit;	  }
-	inline CollisionType GetCollisionType() const { return _type;	  }
+	inline bool			 IsActive()			const { return m_IsActive; }
+	inline bool			 IsHit()			const { return m_IsHit;	  }
+	inline CollisionType GetCollisionType() const { return m_Type;	  }
 
 	// Seter
 
-	inline void SetIsActive(const bool& active) { _isActive = active; }
-	inline void SetIsHit   (const bool& hit)	{ _isHit	= hit;	  }
-	inline void SetCollisionType(const CollisionType& type) { _type = type; }
+	inline void SetIsActive(const bool& active) { m_IsActive = active; }
+	inline void SetIsHit   (const bool& hit)	{ m_IsHit	= hit;	  }
+	inline void SetCollisionType(const CollisionType& type) { m_Type = type; }
 	
 	virtual bool Intersects(Collision_Base* other) const = 0; // Œğ·‚µ‚Ä‚¢‚é‚©
 	virtual bool Contains(Collision_Base* other) const = 0;   // “à•ï‚µ‚Ä‚¢‚é‚©
@@ -49,8 +49,9 @@ public:
 	virtual ~Collision_Base() {};
 
 private:
-	bool _isActive =  true;		// ÚGˆ—‚ğ‚·‚é‚©
-	bool _isHit	   = false;		// ÚG‚µ‚Ä‚¢‚é‚©
-	CollisionType  _type{};		// “–‚½‚è”»’è‚Ìí—Ş
+	bool m_IsActive = true;		// ÚGˆ—‚ğ‚·‚é‚©
+	bool m_IsHit	= false;	// ÚG‚µ‚Ä‚¢‚é‚©
+	bool m_OldHit;				// ‘OƒtƒŒ[ƒ€‚ÌÚG”»’è
+	CollisionType  m_Type{};	// “–‚½‚è”»’è‚Ìí—Ş
 };
 

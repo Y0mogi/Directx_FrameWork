@@ -26,8 +26,8 @@ public:
 	}   
 
 	inline void Discard() { this->m_Discard = true; };	// 削除予約
-	void OnCollisionEnter(GameObject* Collision);	// 衝突処理
-	void CompInfo();								// コンポーネントの情報表示
+	void OnCollisionEnter(GameObject* Collision);		// 衝突処理
+	void CompInfo();									// コンポーネントの情報表示
 
 	/// <summary>
 	/// アタッチされているコンポーネントの取得

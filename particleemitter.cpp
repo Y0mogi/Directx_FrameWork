@@ -67,10 +67,6 @@ void ParticleEmitter::Uninit()
 	m_VertexLayout->Release();
 	m_VertexShader->Release();
 	m_PixelShader->Release();
-
-	for (auto it : m_Particles) {
-		delete it;
-	}
 }
 
 void ParticleEmitter::Update()
