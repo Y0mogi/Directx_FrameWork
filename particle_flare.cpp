@@ -7,7 +7,7 @@
 
 void Particle_flare::Update()
 {
-
+	
 	// 使用しているかチェック
 	if (m_Enable == false) {
 	
@@ -37,6 +37,7 @@ void Particle_flare::Update()
 		// 使用フラグをfalseに
 		if (m_LifeTime <= 0) m_Enable = false;
 	}
+
 }
 
 

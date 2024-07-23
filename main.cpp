@@ -1,14 +1,12 @@
+#ifdef _DEBUG
+#pragma push_macro("new")
+#undef new
+#endif
+
 #include "main.h"
 #include "manager.h"
-
-#include <cstdio>
-#include <cstdlib>
-#include <crtdbg.h>
 #include "renderer.h"
-
-#define _CRTDBG_MAP_ALLOC
-#define new ::new(_NORMAL_BLOCK, __FILE__, __LINE__)
-#define malloc(X) _malloc_dbg(X,_NORMAL_BLOCK,__FILE__,__LINE__)
+#include "memleakcheck.h"
 
 const char* CLASS_NAME = "AppClass";
 const char* WINDOW_NAME = "DirectX_FrameWork";
@@ -31,7 +29,10 @@ HWND GetWindow()
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF | _CRTDBG_CHECK_ALWAYS_DF);
+	// メモリリークチェックを有効にする
+	#ifdef _DEBUG
+	EnableMemoryLeakCheck();
+	#endif
 	
 	WNDCLASSEX wcex;
 	{
@@ -131,7 +132,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	Manager::Uninit();
 
 
-	CoUninitialize();
+	//CoUninitialize();
 
 
 
@@ -150,8 +151,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_DESTROY:
 		PostQuitMessage(0);
-		// メモリリークのダンプ
+
+		#ifdef _DEBUG
 		_CrtDumpMemoryLeaks();
+		#endif
+
 		break;
 
 	case WM_KEYDOWN:
@@ -186,8 +190,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 
+
 // Convert a wide Unicode string to an UTF8 string
-std::string utf8_encode(const std::wstring& wstr)
+std::string WStringToString(const std::wstring& wstr)
 {
 	if (wstr.empty()) return std::string();
 	int size_needed = WideCharToMultiByte(CP_UTF8, 0, &wstr[0], (int)wstr.size(), NULL, 0, NULL, NULL);
@@ -197,7 +202,7 @@ std::string utf8_encode(const std::wstring& wstr)
 }
 
 // Convert an UTF8 string to a wide Unicode String
-std::wstring utf8_decode(const std::string& str)
+std::wstring StringToWString(const std::string& str)
 {
 	if (str.empty()) return std::wstring();
 	int size_needed = MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), NULL, 0);
@@ -205,3 +210,7 @@ std::wstring utf8_decode(const std::string& str)
 	MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), &wstrTo[0], size_needed);
 	return wstrTo;
 }
+
+#ifdef _DEBUG
+#pragma pop_macro("new")
+#endif

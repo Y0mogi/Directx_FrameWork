@@ -143,8 +143,10 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="camera_fps.cpp" />
     <ClCompile Include="DebugDraw.cpp" />
+    <ClCompile Include="DirectWriteCustomFont.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="field.cpp" />
+    <ClCompile Include="game.cpp" />
     <ClCompile Include="gameobject.cpp" />
     <ClCompile Include="Imgui\imgui.cpp" />
     <ClCompile Include="Imgui\imgui_draw.cpp" />
@@ -157,6 +159,7 @@
     <ClCompile Include="jump.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="manager.cpp" />
+    <ClCompile Include="memleakcheck.cpp" />
     <ClCompile Include="modelRenderer.cpp" />
     <ClCompile Include="mydebugdraw.cpp" />
     <ClCompile Include="orientedbox.cpp" />
@@ -164,6 +167,7 @@
     <ClCompile Include="particle_flare.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="renderer.cpp" />
+    <ClCompile Include="result.cpp" />
     <ClCompile Include="scene.cpp" />
     <ClCompile Include="sprite.cpp" />
     <ClCompile Include="Src\AlphaTestEffect.cpp" />
@@ -205,6 +209,7 @@
     <ClCompile Include="Src\ToneMapPostProcess.cpp" />
     <ClCompile Include="Src\VertexTypes.cpp" />
     <ClCompile Include="Src\WICTextureLoader.cpp" />
+    <ClCompile Include="title.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="audio.h" />
@@ -214,9 +219,11 @@
     <ClInclude Include="collision_base.h" />
     <ClInclude Include="component.h" />
     <ClInclude Include="DebugDraw.h" />
+    <ClInclude Include="DirectWriteCustomFont.h" />
     <ClInclude Include="directxTK_all.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="field.h" />
+    <ClInclude Include="game.h" />
     <ClInclude Include="gameobject.h" />
     <ClInclude Include="Imgui\imconfig.h" />
     <ClInclude Include="Imgui\imgui.h" />
@@ -261,6 +268,7 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="manager.h" />
     <ClInclude Include="math_helper.h" />
+    <ClInclude Include="memleakcheck.h" />
     <ClInclude Include="modelRenderer.h" />
     <ClInclude Include="mydebugdraw.h" />
     <ClInclude Include="orientedbox.h" />
@@ -271,6 +279,7 @@
     <ClInclude Include="quaternion.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="result.h" />
     <ClInclude Include="scene.h" />
     <ClInclude Include="sprite.h" />
     <ClInclude Include="Src\AlignedNew.h" />
@@ -286,6 +295,8 @@
     <ClInclude Include="Src\SDKMesh.h" />
     <ClInclude Include="Src\SharedResourcePool.h" />
     <ClInclude Include="Src\vbo.h" />
+    <ClInclude Include="templatefactory.h" />
+    <ClInclude Include="title.h" />
     <ClInclude Include="transform.h" />
     <ClInclude Include="XMFLOAT_Helper.h" />
   </ItemGroup>

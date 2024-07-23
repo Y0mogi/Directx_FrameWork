@@ -1,26 +1,18 @@
-#include "manager.h"
 #include "main.h"
 #include "renderer.h"
-#include "input.h"
-
-#include <list>
-
-#include "gameobject.h"
-
-#include "sprite.h"
-#include "field.h"
-#include "camera.h"
-#include "camera_fps.h"
-#include "player.h"
-#include "transform.h"
-#include "jump.h"
-#include "modelRenderer.h"
 #include "scene.h"
+#include "manager.h"
 
-#include "DirectXCollision.h"
-#include "mydebugdraw.h"
+#include "input.h"
+#include "modelRenderer.h"
 
-Scene* _scene{};
+
+#include "title.h"
+#include "game.h"
+#include "result.h"
+
+Scene* Manager::m_NowScene{};
+Scene* Manager::m_NextScene{};
 
 void Manager::Init()
 {
@@ -29,21 +21,22 @@ void Manager::Init()
 
     Input::Init();
 
-    _scene = new Scene();
-    _scene->Init();
+    m_NowScene = new Title();
+    m_NowScene->Init();
 
 }
 
 void Manager::Uninit()
 {
+    m_NowScene->Uninit();
+    delete m_NowScene;
 
     // ImGuiの終了処理
     ImGui_ImplDX11_Shutdown();
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
 
-    _scene->Uninit();
-
+    ModelRenderer::UnloadAll();
 
     Input::Uninit();
 
@@ -62,11 +55,26 @@ void Manager::Update()
     ImGui::Begin("DebugWindow");
     ImGui::SetWindowFontScale(1.2f);
 
-    _scene->Update();
+
+    m_NowScene->Update();
 
     // ImGui更新終了
     ImGui::End();
     ImGui::EndFrame();
+
+    if (m_NextScene) {
+        if (m_NowScene) {
+            m_NowScene->Uninit();
+            delete m_NowScene;
+        }
+
+        ModelRenderer::UnloadAll();
+
+        m_NowScene = m_NextScene;
+        m_NowScene->Init();
+
+        m_NextScene = nullptr;
+    }
 }
 
 void Manager::Draw()
@@ -74,7 +82,7 @@ void Manager::Draw()
     // 描画開始
     Renderer::Begin();
    
-    _scene->Draw();
+    m_NowScene->Draw();
 
     // ImGui描画
     ImGui::Render();

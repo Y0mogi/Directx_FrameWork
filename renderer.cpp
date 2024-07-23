@@ -24,6 +24,7 @@ ID3D11DepthStencilState* Renderer::m_DepthStateDisable{};
 
 
 ID3D11BlendState*		Renderer::m_BlendState{};
+ID3D11BlendState*		Renderer::m_BlendStateAdd{};
 ID3D11BlendState*		Renderer::m_BlendStateATC{};
 
 
@@ -35,7 +36,6 @@ void Renderer::Init()
 
 
 	// デバイス、スワップチェーン作成
-	DWORD deviceFlags = 0;
 	DXGI_SWAP_CHAIN_DESC swapChainDesc{};
 	swapChainDesc.BufferCount = 1;
 	swapChainDesc.BufferDesc.Width = SCREEN_WIDTH;
@@ -54,7 +54,7 @@ void Renderer::Init()
 	hr = D3D11CreateDeviceAndSwapChain( NULL,
 										D3D_DRIVER_TYPE_HARDWARE,
 										NULL,
-										deviceFlags,
+										D3D11_CREATE_DEVICE_BGRA_SUPPORT,
 										NULL,
 										0,
 										D3D11_SDK_VERSION,
@@ -144,8 +144,12 @@ void Renderer::Init()
 
 	m_Device->CreateBlendState( &blendDesc, &m_BlendState );
 
+	blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
+	m_Device->CreateBlendState(&blendDesc, &m_BlendStateAdd);
+
 	blendDesc.AlphaToCoverageEnable = TRUE;
 	m_Device->CreateBlendState( &blendDesc, &m_BlendStateATC );
+	
 
 	float blendFactor[4] = {0.0f, 0.0f, 0.0f, 0.0f};
 	m_DeviceContext->OMSetBlendState(m_BlendState, blendFactor, 0xffffffff );
@@ -303,6 +307,17 @@ void Renderer::SetDepthEnable( bool Enable )
 		m_DeviceContext->OMSetDepthStencilState( m_DepthStateEnable, NULL );
 	else
 		m_DeviceContext->OMSetDepthStencilState( m_DepthStateDisable, NULL );
+
+}
+
+void Renderer::SetBlendAddEnable(bool Enable)
+{
+	float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+
+	if (Enable)
+		m_DeviceContext->OMSetBlendState(m_BlendStateAdd, blendFactor, 0xffffffff);
+	else
+		m_DeviceContext->OMSetBlendState(m_BlendState, blendFactor, 0xffffffff);
 
 }
 

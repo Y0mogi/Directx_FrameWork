@@ -31,6 +31,8 @@ public:
 	/// <param name="path">画像保存場所の相対パス</param>
 	void LoadTexture(const std::wstring& path);
 
+
+	Sprite(const XMFLOAT4& color, const wchar_t* path);
 private:
 	
 	/// <summary>
@@ -44,7 +46,7 @@ private:
 	/// </summary>
 	bool SaveFilePath(const std::wstring& path);
 private:
-	std::wstring _path{}; // メインパス
+	std::wstring m_Path{}; // メインパス
 	XMFLOAT4 m_Color = { 1.0f,1.0f,1.0f ,1.0f };
 
 	ID3D11Buffer* m_VertexBuffer = NULL;

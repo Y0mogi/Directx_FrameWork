@@ -8,20 +8,9 @@
 #include "renderer.h"
 #include "component.h"
 #include "gameobject.h"
-#include "transform.h"
-#include "modelRenderer.h"
 #include "collision_base.h"
-
 #include "orientedbox.h"
 #include "boxcollision.h"
-
-#include "jump.h"
-#include "player.h"
-#include "enemy.h"
-#include "field.h"
-#include "camera.h"
-#include "sprite.h"
-#include "input.h"
 
 
 class Scene
@@ -29,56 +18,18 @@ class Scene
 public:
 	virtual void Init()
 	{
-		using enum Layer;
-		
-		// ゲームオブジェクトを作成し、コンポーネントを追加
-		AddObjComp<Sprite>("Sprite", Layer_2 , Tag::None);
-		AddObjComp<ModelRenderer, OrientedBox,Field>("Field",Layer_1, Tag::Ground);
-		auto a = AddObjComp<ModelRenderer,OrientedBox,Player>("Player",Layer_1,Tag::Player);
-		a->GetComponent<Transform>()->scale = { 1,2,1 };
-
-		for (int i = 0; i < 1; i++) {
-			auto name = std::string("Enemy") + std::to_string(i);
-			auto b = AddObjComp<ModelRenderer, OrientedBox, Jump, Enemy>(name, Layer_1, Tag::Enemy);
-			b->GetComponent<Transform>()->position = { (5.f * i),1,1 };
-		}
-		
-		AddObjComp<Camera>("Camera",Layer_0, Tag::None);
-
-		// 全オブジェクトを初期化
-		for (auto& it : _objects)
-		{
-			// Polygon2D コンポーネントがある場合、その初期化を行う
-			if (it->GetComponent<Sprite>())
-			{
-				it->GetComponent<Sprite>()->LoadTexture(L"asset\\texture\\camera.jpg");
-				it->GetComponent<Transform>()->position = { 0,0,0 };
-				it->GetComponent<Transform>()->scale = { 100,100,0 };
-			}
-
-			// Field コンポーネントがある場合、その初期化を行う
-			if (it->GetComponent<Field>())
-				it->GetComponent<Field>()->Init(XMFLOAT3{ 0.f,0.f, 0.0f}, XMFLOAT3{ 100.f, 0.0f,100.f }, XMFLOAT4{ 1.0f, 1.0f, 1.0f, 1.0f }, L"asset\\texture\\field.png");
-
-			// Camera コンポーネントがある場合、その初期化を行う
-			if (it->GetComponent<Camera>())
-				it->GetComponent<Camera>()->Init();
-
-			it->Init();
-			
-		}
-		
 
 	};
+
 	virtual void Uninit() {
 
-		for (auto& it : _objects) it->Uninit();
-
+		for (auto& it : m_Objects) it->Uninit();
+		m_Objects.clear();
 	};
 
 	virtual void Update() {
 		static int frame = 0;
-		for (auto& it : _objects) it->Update();
+		for (auto& it : m_Objects) it->Update();
 
 		frame++;
 		if (frame % 1 == 0) {
@@ -92,62 +43,139 @@ public:
 
 	virtual void Draw() {
 
-		_objects.sort(
-			[this](const std::unique_ptr<GameObject>& a, const std::unique_ptr<GameObject>& b)
-			{
-				auto camera = this->GetGameObject("Camera")->GetComponent<Transform>()->position;
-				return Distance(a->GetComponent<Transform>()->position, camera) > Distance(b->GetComponent<Transform>()->position, camera);
-			}
-		);
+		// Zソート
+		//m_Objects.sort(
+		//	[this](const std::unique_ptr<GameObject>& a, const std::unique_ptr<GameObject>& b)
+		//	{
+		//		auto camera = this->GetGameObject("Camera")->GetComponent<Transform>()->position;
+		//		return Distance(a->GetComponent<Transform>()->position, camera) > Distance(b->GetComponent<Transform>()->position, camera);
+		//	}
+		//);
 
-		_objects.sort(
-		[](const std::unique_ptr<GameObject>& a , const std::unique_ptr<GameObject>& b)
+		// 描画順にソート
+		m_Objects.sort(
+			[](const std::unique_ptr<GameObject>& a, const std::unique_ptr<GameObject>& b)
 			{
 				return a->GetLayer() < b->GetLayer();
 			}
 		);
 
-		for (auto& it : _objects) it->Draw();
-		
+		for (auto& it : m_Objects) it->Draw();
+
 	};
 
+	//==============================================================================
+	// ゲームオブジェクト又はコンポーネントの追加
+	//==============================================================================
 
 	/// <summary>
 	/// 複数のコンポーネントを追加したゲームオブジェクトを追加する
 	/// </summary>
+	/// <typeparam name="...Components"></typeparam>
+	/// <param name="name"></param>
+	/// <param name="layer"></param>
+	/// <param name="tag"></param>
+	/// <param name="...components"></param>
+	/// <returns></returns>
 	template<typename... Components> // 可変長テンプレート
-	GameObject* AddObjComp(std::string name, Layer layer,Tag tag = Tag::None)
+	GameObject* AddObjComp(std::string name, Layer layer, Tag tag = Tag::None, Components&&... components)
 	{
-		GameObject* obj = new GameObject(name,layer,tag ,this);
-		(obj->AddComponent<Components>(), ...); // パラメータパックの展開
+		GameObject* obj = new GameObject(name, layer, tag, this);
+		(obj->AddComponent<Components>(std::forward<Components>(components)),...); // パラメータパックの展開
 		AddGameObject(obj);
+		obj->Init();  // コンポーネントを追加した後に初期化
 		return obj;
 	}
 
+	template<typename T> 
+	GameObject* AddObjComp(std::string name, Layer layer, Tag tag, T* component)
+	{
+		GameObject* obj = new GameObject(name, layer, tag, this);
+		(obj->AddComponent<T>(component));
+		AddGameObject(obj);
+		obj->Init();  // コンポーネントを追加した後に初期化
+		return obj;
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <typeparam name="...Components"></typeparam>
+	/// <returns></returns>
 	template<typename... Components> // 可変長テンプレート
 	GameObject* AddObjComp()
 	{
 		GameObject* obj = new GameObject(this);
 		(obj->AddComponent<Components>(), ...); // パラメータパックの展開
 		AddGameObject(obj);
+		obj->Init();  // コンポーネントを追加した後に初期化
 		return obj;
 	}
 
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	/// <typeparam name="...Args"></typeparam>
+	/// <param name="...args"></param>
+	/// <returns></returns>
+	template<typename T, typename... Args>
+	T* AddGameObject(Args&&... args)
+	{
+		// 渡された引数でゲームオブジェクトを作成
+		T* gameObject = new T(std::forward<Args>(args)...);
+		gameObject->Init();
+		m_Objects.emplace_back(gameObject);
+
+		return gameObject;
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	/// <param name="object"></param>
+	/// <returns></returns>
 	template<typename T>
-	T* GetGameObject() {
-		for (auto& it : _objects) {
-			if (typeid(*it) == typeid(T)) { // 型比較
-				T* tmp = dynamic_cast<T*>(it.get());
+	T* AddGameObject(T* object)
+	{
+		// 渡された引数でゲームオブジェクトを作成
+		//object->Init();
+		m_Objects.emplace_back(object);
+
+		return object;
+	}
+
+	//==============================================================================
+	// ゲームオブジェクト又はコンポーネントの取得
+	//==============================================================================
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	/// <returns></returns>
+	template<typename T>
+	GameObject* GetGameObject() {
+		for (auto& it : m_Objects) {
+			if (it->GetComponent<T>()) {
+				GameObject* tmp = it.get();
 				if (tmp != nullptr) return tmp;
 			}
 		}
 		return nullptr;
 	}
 
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	/// <param name="name"></param>
+	/// <returns></returns>
 	template<typename T>
 	T* GetGameObject(std::string name) {
-		for (auto& it : _objects) {
-			if (typeid(*it) == typeid(T)){
+		for (auto& it : m_Objects) {
+			if (typeid(*it) == typeid(T)) {
 				if ((*it).objectName == name) {// タグ比較
 					auto* tmp = dynamic_cast<T*>(it.get());
 					if (tmp != nullptr) return tmp;
@@ -157,8 +185,13 @@ public:
 		return nullptr;
 	}
 
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="name"></param>
+	/// <returns></returns>
 	GameObject* GetGameObject(std::string name) {
-		for (auto& it : _objects) {
+		for (auto& it : m_Objects) {
 			if (it->GetObjectName() == name) {
 				auto* tmp = it.get();
 				if (tmp != nullptr) return tmp;
@@ -167,32 +200,30 @@ public:
 		return nullptr;
 	}
 
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	/// <returns></returns>
+	template<typename T>
+	std::vector<GameObject*> GetGameObjects() {
+		std::vector<T*> returnList{};
+		for (auto& it : m_Objects) {
+			if (it->GetComponent<T>()) {
+				GameObject* tmp = it.get();
+				if (tmp != nullptr) returnList.push_back(tmp);
+			}
+		}
+		return returnList;
+	}
+
+	//==============================================================================
+	//
+	//==============================================================================
 
 	/// <summary>
-	/// ゲームオブジェクトの追加
+	/// ImGuiの更新
 	/// </summary>
-	template<typename T, typename... Args>
-	T* AddGameObject(Args&&... args)
-	{
-		// 渡された引数でゲームオブジェクトを作成
-		T* gameObject = new T(std::forward<Args>(args)...);
-		gameObject->Init();
-		_objects.emplace_back(gameObject);
-
-		return gameObject;
-	}
-	template<typename T>
-	T* AddGameObject(T* object)
-	{
-		// 渡された引数でゲームオブジェクトを作成
-		//object->Init();
-		_objects.emplace_back(object);
-
-		return object;
-	}
-
-	// ====================================
-
 	void ImguiUpdate() {
 		// 各ゲームオブジェクトの情報をImGuiで表示
 		this->ImGuiWindowCreate_Popup();
@@ -200,9 +231,11 @@ public:
 		//this->ImGuiWindowCreate_Tree();
 	}
 
-	// ImGuiUpdateの際の表示方法
+	/// <summary>
+	/// ImGuiの表示をポップアップで表示する
+	/// </summary>
 	void ImGuiWindowCreate_Popup() {
-		for (auto& obj : this->_objects) {
+		for (auto& obj : this->m_Objects) {
 			if (ImGui::Button(obj->GetObjectName().c_str()))
 				ImGui::OpenPopup(obj->GetObjectName().c_str());
 			if (ImGui::BeginPopupModal(obj->GetObjectName().c_str(), NULL)) {
@@ -221,8 +254,12 @@ public:
 			}
 		}
 	}
+
+	/// <summary>
+	/// ImGuiの表示をツリーで表示する
+	/// </summary>
 	void ImGuiWindowCreate_Tree() {
-		for (auto& obj : this->_objects) {
+		for (auto& obj : this->m_Objects) {
 
 			if (ImGui::TreeNode(obj->GetObjectName().c_str())) {
 				for (auto& comp : obj->componentList) {
@@ -281,11 +318,11 @@ public:
 	/// 衝突処理
 	/// </summary>
 	void CollisionUpdate() {
-		for (auto& a : _objects) {
+		for (auto& a : m_Objects) {
 			// コリジョンがある & 有効か
 			if (!a->GetComponent<Collision_Base>()) continue;
 			if (!a->GetComponent<Collision_Base>()->IsActive()) continue;
-			for (auto& b : _objects) {
+			for (auto& b : m_Objects) {
 				// コリジョンがある & 有効か
 				if (!b->GetComponent<Collision_Base>()) continue;
 				if (!b->GetComponent<Collision_Base>()->IsActive()) continue;
@@ -301,8 +338,10 @@ public:
 			}
 		}
 	}
-	
-	std::list<std::unique_ptr<GameObject>>& GetObjectList() { return _objects; }
+
+	std::list<std::unique_ptr<GameObject>>& GetObjectList() { return m_Objects; }
+
+	virtual ~Scene() {};
 protected:
-	std::list<std::unique_ptr<GameObject>> _objects{};
+	std::list<std::unique_ptr<GameObject>> m_Objects{};
 };

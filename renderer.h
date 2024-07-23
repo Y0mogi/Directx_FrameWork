@@ -60,6 +60,7 @@ private:
 	static ID3D11DepthStencilState* m_DepthStateDisable;
 
 	static ID3D11BlendState*		m_BlendState;
+	static ID3D11BlendState*		m_BlendStateAdd;
 	static ID3D11BlendState*		m_BlendStateATC;
 
 public:
@@ -69,6 +70,7 @@ public:
 	static void End();
 
 	static void SetDepthEnable(bool Enable);
+	static void SetBlendAddEnable(bool Enable);
 	static void SetATCEnable(bool Enable);
 	static void SetWorldViewProjection2D();
 	static void SetWorldMatrix(XMMATRIX WorldMatrix);
@@ -85,6 +87,8 @@ public:
 
 	static void BeginWireFrame();
 	static void EndWireFrame();
+
+	static IDXGISwapChain* GetSwapChain() { return m_SwapChain; }
 };
 
 #endif // RENDERER_H

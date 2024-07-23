@@ -57,6 +57,13 @@ public:
 		return tmp;
 	}
 
+	template<class T>
+	T* AddComponent(T* comp) {
+		comp->Parent = this;
+		this->componentList.push_back(comp);
+		return comp;
+	}
+
 	/// <summary>
 	/// オブジェクトに複数のコンポーネントをアタッチ
 	/// </summary>

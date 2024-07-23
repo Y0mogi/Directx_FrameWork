@@ -6,20 +6,24 @@ class Transform;
 class Field :public	Component
 {
 public:
-	void Init(const XMFLOAT3& pos, const XMFLOAT3& scl, const XMFLOAT4& color,const std::wstring& path);
+	void Init();
 	void Uninit();
 	void Update();
 	void Draw();
 
+	Field() {};
+	Field(const XMFLOAT4& color, const wchar_t* path);
+	~Field() override {};
+
 private:
-	Transform* _transform;
+	XMFLOAT4 m_Color{};
+	const wchar_t* m_Path{};
 
-	ID3D11Buffer* _VertexBuffer = NULL;
-	ID3D11ShaderResourceView* _Texture = NULL;
-
-	ID3D11VertexShader* _VertexShader;
-	ID3D11PixelShader* _PixelShader;
-	ID3D11InputLayout* _VertexLayout;
+	ID3D11Buffer* m_VertexBuffer = NULL;
+	ID3D11ShaderResourceView* m_Texture = NULL;
+	ID3D11VertexShader* m_VertexShader{};
+	ID3D11PixelShader* m_PixelShader{};
+	ID3D11InputLayout* m_VertexLayout{};
 };
 
 

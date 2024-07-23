@@ -28,43 +28,43 @@
 class BoxCollision : public Component, public Collision_Base
 {
 public:
-    // 初期化
-    void Init()     override; 
+	// 初期化
+	void Init()     override; 
 
-    // 更新
-    void Update()   override; 
+	// 更新
+	void Update()   override; 
 
-    // コンポーネントの情報表示
-    void CompInfo() override; 
+	// コンポーネントの情報表示
+	void CompInfo() override; 
 
-    /// <summary>
-    /// 自身との当たり判定の交差判定
-    /// </summary>
-    /// <param name="other">判定したい当たり判定のポインタ</param>
-    /// <returns>True:交差している False:交差していない</returns>
-    bool Intersects(Collision_Base* other) const override;
+	/// <summary>
+	/// 自身との当たり判定の交差判定
+	/// </summary>
+	/// <param name="other">判定したい当たり判定のポインタ</param>
+	/// <returns>True:交差している False:交差していない</returns>
+	bool Intersects(Collision_Base* other) const override;
 
-    /// <summary>
-    /// 自身との当たり判定のの内包判定
-    /// </summary>
-    /// <param name="other">判定したい当たり判定のポインタ</param>
-    /// <returns>True:内包している False:内包していない</returns>
-    bool Contains(Collision_Base* other) const override;
-    
-    // gettter
+	/// <summary>
+	/// 自身との当たり判定のの内包判定
+	/// </summary>
+	/// <param name="other">判定したい当たり判定のポインタ</param>
+	/// <returns>True:内包している False:内包していない</returns>
+	bool Contains(Collision_Base* other) const override;
+	
+	// gettter
 
-    BoundingBox& GetCollision() { return m_Collision; }
+	BoundingBox& GetCollision() { return m_Collision; }
 
-    // コンストラクタ・デストラクタ
+	// コンストラクタ・デストラクタ
 
-    inline BoxCollision() { SetCollisionType(CollisionType::AABB); }
-    inline ~BoxCollision() override {}
+	inline BoxCollision() { SetCollisionType(CollisionType::AABB); }
+	inline ~BoxCollision() override {}
 
-    
+	
 
 private:
-    BoundingBox m_Collision;
-    Transform*  m_Transform{};
+	BoundingBox         m_Collision;
+	class Transform*    m_Transform{};
 };
 
 #endif // BOXCOLLISION

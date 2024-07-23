@@ -14,7 +14,7 @@ public:
 	void Update() override;
 	void Draw() override;
 
-	void OnCollisionEnter(GameObject* collision);
+	void OnCollisionEnter(const GameObject* collision);
 
 private:
 	ID3D11VertexShader* _VertexShader;

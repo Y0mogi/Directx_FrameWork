@@ -6,17 +6,9 @@
 #include "field.h"
 
 
-void Field::Init(const XMFLOAT3& pos, const XMFLOAT3& scl, const XMFLOAT4& color,const std::wstring& path)
+void Field::Init()
 {
-
-	if (_transform == nullptr)
-		_transform = Parent->GetComponent<Transform>();
-
-	_transform->position = pos;
-	_transform->scale = scl;
-
 	VERTEX_3D vertex[4];
-
 
 	// 頂点バッファ生成
 	D3D11_BUFFER_DESC bd{};
@@ -29,19 +21,19 @@ void Field::Init(const XMFLOAT3& pos, const XMFLOAT3& scl, const XMFLOAT4& color
 	ZeroMemory(&sd, sizeof(sd));
 	sd.pSysMem = vertex;
 
-	Renderer::GetDevice()->CreateBuffer(&bd, &sd, &_VertexBuffer);
+	Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_VertexBuffer);
 
 	// テクスチャ読み込み
 	TexMetadata metadata;
 	ScratchImage image;
-	LoadFromWICFile(path.c_str(), WIC_FLAGS_NONE, &metadata, image);
-	CreateShaderResourceView(Renderer::GetDevice(), image.GetImages(), image.GetImageCount(), metadata, &_Texture);
-	assert(_Texture);
+	LoadFromWICFile(m_Path, WIC_FLAGS_NONE, &metadata, image);
+	CreateShaderResourceView(Renderer::GetDevice(), image.GetImages(), image.GetImageCount(), metadata, &m_Texture);
+	assert(m_Texture);
 
-	Renderer::CreateVertexShader(&_VertexShader, &_VertexLayout,
+	Renderer::CreateVertexShader(&m_VertexShader, &m_VertexLayout,
 		"shader\\unlitTextureVS.cso");
 
-	Renderer::CreatePixelShader(&_PixelShader,
+	Renderer::CreatePixelShader(&m_PixelShader,
 		"shader\\unlitTexturePS.cso");
 
 
@@ -49,12 +41,11 @@ void Field::Init(const XMFLOAT3& pos, const XMFLOAT3& scl, const XMFLOAT4& color
 
 void Field::Uninit()
 {
-	_VertexBuffer->Release();
-	_Texture->Release();
-
-	_VertexLayout->Release();
-	_VertexShader->Release();
-	_PixelShader->Release();
+	m_VertexBuffer->Release();
+	m_Texture->Release();
+	m_VertexLayout->Release();
+	m_VertexShader->Release();
+	m_PixelShader->Release();
 }
 
 void Field::Update()
@@ -64,13 +55,15 @@ void Field::Update()
 
 void Field::Draw()
 {
+	Transform* tramsform = Parent->GetComponent<Transform>();
+
 	D3D11_MAPPED_SUBRESOURCE msr{};
-	Renderer::GetDeviceContext()->Map(_VertexBuffer, 0,
+	Renderer::GetDeviceContext()->Map(m_VertexBuffer, 0,
 		D3D11_MAP_WRITE_DISCARD, 0, &msr);
 
 	VERTEX_3D* vertex = (VERTEX_3D*)msr.pData;
 
-	auto pos = _transform->position;
+	auto pos = tramsform->position;
 
 	// 頂点０番（左奥の頂点）
 	vertex[0].Position = XMFLOAT3(-1, pos.y, 1);
@@ -96,20 +89,20 @@ void Field::Draw()
 	vertex[3].Diffuse = { 1,1,1,1 };
 	vertex[3].TexCoord = XMFLOAT2(1.0f, 1.0f);
 
-	Renderer::GetDeviceContext()->Unmap(_VertexBuffer,0);
+	Renderer::GetDeviceContext()->Unmap(m_VertexBuffer,0);
 
 	// 入力レイアウト
-	Renderer::GetDeviceContext()->IASetInputLayout(_VertexLayout);
+	Renderer::GetDeviceContext()->IASetInputLayout(m_VertexLayout);
 
 	// シェーダー設定
-	Renderer::GetDeviceContext()->VSSetShader(_VertexShader, NULL, 0);
-	Renderer::GetDeviceContext()->PSSetShader(_PixelShader, NULL, 0);
+	Renderer::GetDeviceContext()->VSSetShader(m_VertexShader, NULL, 0);
+	Renderer::GetDeviceContext()->PSSetShader(m_PixelShader, NULL, 0);
 
 	// ワールドマトリックス設定
 	XMMATRIX world, scl, rot, trans;
-	scl = XMMatrixScaling(_transform->scale.x, _transform->scale.y, _transform->scale.z);
-	rot = XMMatrixRotationQuaternion(_transform->rotation);
-	trans = XMMatrixTranslation(_transform->position.x, _transform->position.y, _transform->position.z);
+	scl = XMMatrixScaling(tramsform->scale.x, tramsform->scale.y, tramsform->scale.z);
+	rot = XMMatrixRotationQuaternion(tramsform->rotation);
+	trans = XMMatrixTranslation(tramsform->position.x, tramsform->position.y, tramsform->position.z);
 	world = scl * rot * trans;
 	Renderer::SetWorldMatrix(world);
 
@@ -124,10 +117,10 @@ void Field::Draw()
 	material.TextureEnable = true;
 	Renderer::SetMaterial(material);
 
-	Renderer::GetDeviceContext()->IASetVertexBuffers(0, 1, &_VertexBuffer, &stride, &offset);
+	Renderer::GetDeviceContext()->IASetVertexBuffers(0, 1, &m_VertexBuffer, &stride, &offset);
 
 	// テクスチャ設定
-	Renderer::GetDeviceContext()->PSSetShaderResources(0, 1, &_Texture);
+	Renderer::GetDeviceContext()->PSSetShaderResources(0, 1, &m_Texture);
 
 	// プリミティブトポロジ設定
 	Renderer::GetDeviceContext()->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
@@ -135,4 +128,10 @@ void Field::Draw()
 	// ポリゴン描画
  	Renderer::GetDeviceContext()->Draw(4, 0);
 
+}
+
+Field::Field(const XMFLOAT4& color, const wchar_t* path)
+{
+	m_Color = color;
+	m_Path = path;
 }

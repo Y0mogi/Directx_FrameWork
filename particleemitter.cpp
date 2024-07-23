@@ -47,7 +47,7 @@ void ParticleEmitter::Init()
 	// テクスチャ読み込み
 	TexMetadata metadata;
 	ScratchImage image;
-	LoadFromWICFile(utf8_decode(m_Particles.front()->m_Path).c_str(), WIC_FLAGS_NONE, &metadata, image);
+	LoadFromWICFile(StringToWString(m_Path).c_str(), WIC_FLAGS_NONE, &metadata, image);
 	CreateShaderResourceView(Renderer::GetDevice(), image.GetImages(), image.GetImageCount(), metadata, &m_Texture);
 	assert(m_Texture);
 
@@ -71,8 +71,12 @@ void ParticleEmitter::Uninit()
 
 void ParticleEmitter::Update()
 {
+	int tmp = m_Count;
 	for (const auto& it : m_Particles) {
 		it->Update();
+
+		tmp--;
+		if (tmp < 0) break;
 	}
 }
 
@@ -86,10 +90,10 @@ void ParticleEmitter::Draw()
 	Renderer::GetDeviceContext()->PSSetShader(m_PixelShader, NULL, 0);
 
 	// カメラのマトリックスを取得
-	//XMMATRIX view = Manager
+	XMMATRIX view = Manager::GetScene()->GetGameObject<Camera>()->GetComponent<Camera>()->GetViewMatrix();
 
 	// viewマトリックスの逆行列をつくる
-	XMMATRIX viewInv;
+	XMMATRIX viewInv{};
 	viewInv = XMMatrixInverse(nullptr, view);
 	viewInv.r[3].m128_f32[0] = 0.0f;
 	viewInv.r[3].m128_f32[1] = 0.0f;
@@ -99,14 +103,6 @@ void ParticleEmitter::Draw()
 	UINT stride = sizeof(VERTEX_3D);
 	UINT offset = 0;
 	Renderer::GetDeviceContext()->IASetVertexBuffers(0, 1, &m_VertexBuffer, &stride, &offset);
-
-	// material設定
-	MATERIAL material;
-	ZeroMemory(&material, sizeof(material));
-	material.Diffuse = XMFLOAT4();
-	material.TextureEnable = true;
-	Renderer::SetMaterial(material);
-
 
 	// テクスチャ設定
 	Renderer::GetDeviceContext()->PSSetShaderResources(0, 1, &m_Texture);
@@ -118,10 +114,18 @@ void ParticleEmitter::Draw()
 	Renderer::SetDepthEnable(false);
 
 	// 加算合成有効
-	//Renderer::SetBlendAddEnable(true);
+	Renderer::SetBlendAddEnable(true);
 
 	for (const auto& it : m_Particles) {
-		if (it->GetEnable()) continue;
+		if (!it->GetEnable()) continue;
+
+		// material設定
+		MATERIAL material;
+		ZeroMemory(&material, sizeof(material));
+		material.Diffuse = it->m_Color;
+		material.TextureEnable = true;
+		Renderer::SetMaterial(material);
+
 		XMMATRIX world, scl, trans;
 		scl = XMMatrixScaling(it->m_Transform.scale.x,
 			it->m_Transform.scale.y,
@@ -141,6 +145,6 @@ void ParticleEmitter::Draw()
 	}
 
 	Renderer::SetDepthEnable(true);
-	//Renderer::SetBlendAddEnable(false);
+	Renderer::SetBlendAddEnable(false);
 
 }

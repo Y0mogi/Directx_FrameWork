@@ -98,7 +98,7 @@ void Enemy::Draw()
 	Parent->GetComponent<ModelRenderer>()->DrawModel();
 }
 
-void Enemy::OnCollisionEnter(GameObject* collision)
+void Enemy::OnCollisionEnter(const GameObject* collision)
 {
 	Parent->GetComponent<Transform>()->position.y += 0.1f;
 }

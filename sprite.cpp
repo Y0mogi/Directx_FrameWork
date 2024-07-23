@@ -30,7 +30,7 @@ void Sprite::Init()
 	Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_VertexBuffer);
 
 
-	this->CreateTexture(_path);
+	this->CreateTexture(m_Path);
 }
 
 void Sprite::Uninit()
@@ -130,10 +130,10 @@ void Sprite::CompInfo()
 
 		// ファイルパス表示・変更
 		SeparatorText("FilePath");
-		static std::string tmp = utf8_encode(_path);
+		static std::string tmp = WStringToString(m_Path);
 		TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Do not specify the wrong path!");
 		InputText(" ", &tmp); SameLine();
-		if (Button("Change")) { if (SaveFilePath(utf8_decode(tmp))) this->CreateTexture(_path); };
+		if (Button("Change")) { if (SaveFilePath(StringToWString(tmp))) this->CreateTexture(m_Path); };
 
 		// 元画像プレビュー
 		SeparatorText("DrawRawImage");
@@ -153,6 +153,12 @@ void Sprite::LoadTexture(const std::wstring& path)
 	SaveFilePath(path);
 }
 
+Sprite::Sprite(const XMFLOAT4& color, const wchar_t* path)
+{
+	m_Color = color;
+	m_Path = path;
+}
+
 void Sprite::CreateTexture(const std::wstring& path){
 
 	if (m_Texture) m_Texture->Release(); // 
@@ -168,7 +174,7 @@ void Sprite::CreateTexture(const std::wstring& path){
 
 bool Sprite::SaveFilePath(const std::wstring& path)
 {
-	if (_path == path) return false;// パスが同じなら変更しない
-	_path = path;
+	if (m_Path == path) return false;// パスが同じなら変更しない
+	m_Path = path;
 	return true;
 }

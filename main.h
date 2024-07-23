@@ -56,5 +56,5 @@ HWND GetWindow();
 
 void Invoke(std::function<void()> Function, int Time);
 
-std::string utf8_encode(const std::wstring& wstr);
-std::wstring utf8_decode(const std::string& str);
+std::string WStringToString(const std::wstring& wstr);
+std::wstring StringToWString(const std::string& str);
