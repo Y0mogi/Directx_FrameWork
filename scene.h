@@ -12,6 +12,14 @@
 #include "orientedbox.h"
 #include "boxcollision.h"
 
+/// <summary>
+/// 接触判定の更新頻度
+/// </summary>
+enum class COLLITION_UPDATE_FRAME : int {
+	Default = 1,	// 毎フレーム
+	Half	= 2,	// 2フレームに一度
+	COUNT
+};
 
 class Scene
 {
@@ -20,27 +28,26 @@ public:
 	{
 
 	};
-
 	virtual void Uninit() {
 
 		for (auto& it : m_Objects) it->Uninit();
 		m_Objects.clear();
 	};
-
 	virtual void Update() {
 		static int frame = 0;
-		for (auto& it : m_Objects) it->Update();
+		for (auto& it : m_Objects) { it->Update(); }
 
 		frame++;
-		if (frame % 1 == 0) {
+		if (frame % static_cast<int>(m_CUF) == 0) {
 			this->CollisionUpdate();
 			frame = 0;
 		}
 
+		// 削除予定オブジェクトの削除
+		m_Objects.remove_if([](const std::unique_ptr<GameObject>& object) {return object->IsDiscard(); });
+
 		this->ImguiUpdate();
-
 	};
-
 	virtual void Draw() {
 
 		// Zソート
@@ -87,11 +94,11 @@ public:
 		return obj;
 	}
 
-	template<typename T> 
-	GameObject* AddObjComp(std::string name, Layer layer, Tag tag, T* component)
+	template<typename Component> 
+	GameObject* AddObjComp(std::string name, Layer layer, Tag tag, Component* component)
 	{
 		GameObject* obj = new GameObject(name, layer, tag, this);
-		(obj->AddComponent<T>(component));
+		(obj->AddComponent<Component>(component));
 		AddGameObject(obj);
 		obj->Init();  // コンポーネントを追加した後に初期化
 		return obj;
@@ -140,7 +147,6 @@ public:
 	T* AddGameObject(T* object)
 	{
 		// 渡された引数でゲームオブジェクトを作成
-		//object->Init();
 		m_Objects.emplace_back(object);
 
 		return object;
@@ -341,7 +347,11 @@ public:
 
 	std::list<std::unique_ptr<GameObject>>& GetObjectList() { return m_Objects; }
 
+	inline void SetCUF(const COLLITION_UPDATE_FRAME& cuf) { m_CUF = cuf; }
+
 	virtual ~Scene() {};
 protected:
 	std::list<std::unique_ptr<GameObject>> m_Objects{};
+private:
+	COLLITION_UPDATE_FRAME m_CUF = COLLITION_UPDATE_FRAME::Default;
 };

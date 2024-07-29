@@ -11,4 +11,6 @@
 #endif
 #define new DBG_NEW
 
+
+
 void EnableMemoryLeakCheck(); // ŠÖ”‚ÌéŒ¾

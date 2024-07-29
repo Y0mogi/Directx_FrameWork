@@ -75,6 +75,7 @@ void Enemy::Update()
 		Parent->GetComponent<Transform>()->position.z -= 0.1f;
 	}
 
+	if (Input::GetKeyTrigger('G')) { Parent->Discard(); }
 }
 
 void Enemy::Draw()

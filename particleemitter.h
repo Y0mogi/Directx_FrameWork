@@ -17,11 +17,13 @@ public:
 	void Update()override;
 	void Draw()	override;
 
+	void CompInfo() override;
+
 	ParticleEmitter(const std::string& path,const int& count)
 		:m_Path(path),m_Count(count) {};
 	~ParticleEmitter() override {};
 private:
-	static const unsigned short PARTICLE_MAX = 1000;						// パーティクル最大数
+	static const unsigned short PARTICLE_MAX = 1000;			// パーティクル最大数
 	std::vector<std::unique_ptr<Particle_Base>> m_Particles;	// パーティクル
 
 	ID3D11Buffer*				m_VertexBuffer{};	// 頂点バッファ
@@ -29,8 +31,8 @@ private:
 	ID3D11VertexShader*			m_VertexShader{};	// 頂点シェーダー
 	ID3D11PixelShader*			m_PixelShader{};	// ピクセルシェーダー
 	ID3D11InputLayout*			m_VertexLayout{};	// 頂点レイアウト
-	std::string					m_Path{};
-	int							m_Count{};
+	std::string					m_Path{};			// 画像パス
+	int							m_Count{};			// 一度に表示する数
 };
 
 // ファクトリメソッドの実装

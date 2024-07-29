@@ -78,6 +78,10 @@ void ParticleEmitter::Update()
 		tmp--;
 		if (tmp < 0) break;
 	}
+
+	for (size_t i = m_Count; i < m_Particles.size(); i++) {
+		m_Particles[i]->m_Enable = false;
+	}
 }
 
 void ParticleEmitter::Draw()
@@ -147,4 +151,16 @@ void ParticleEmitter::Draw()
 	Renderer::SetDepthEnable(true);
 	Renderer::SetBlendAddEnable(false);
 
+}
+
+void ParticleEmitter::CompInfo()
+{
+	using namespace ImGui;
+	SeparatorText("ParticleEmitter");
+
+	if (TreeNode("PEInfo")) {
+		DragInt("ParticleCount", reinterpret_cast<int*>(&m_Count), 1, 0, PARTICLE_MAX);
+		
+		TreePop();
+	}
 }

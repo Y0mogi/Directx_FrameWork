@@ -3,6 +3,11 @@
 #undef new
 #endif
 
+#ifdef _DEBUG
+#pragma pop_macro("new")
+#endif
+
+
 #include "main.h"
 #include "manager.h"
 #include "renderer.h"
@@ -127,16 +132,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 	UnregisterClass(CLASS_NAME, wcex.hInstance);
 
-	
-
 	Manager::Uninit();
 
-
-	//CoUninitialize();
-
-
-
-	return (int)msg.wParam;
+	return _CrtDumpMemoryLeaks();
 }
 
 
@@ -211,6 +209,3 @@ std::wstring StringToWString(const std::string& str)
 	return wstrTo;
 }
 
-#ifdef _DEBUG
-#pragma pop_macro("new")
-#endif
