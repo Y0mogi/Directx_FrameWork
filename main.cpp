@@ -16,6 +16,10 @@
 const char* CLASS_NAME = "AppClass";
 const char* WINDOW_NAME = "DirectX_FrameWork";
 
+#ifdef _DEBUG
+int		g_CountFPS;								// FPSカウンタ
+char	g_DebugStr[2048] = "DirectX_FrameWork";	// デバッグ文字表示用
+#endif
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -88,9 +92,11 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 	DWORD dwExecLastTime;
 	DWORD dwCurrentTime;
+	DWORD dwFrameCount;
+	DWORD dwFPSLastTime;
 	timeBeginPeriod(1);
-	dwExecLastTime = timeGetTime();
-	dwCurrentTime = 0;
+	dwExecLastTime = dwFPSLastTime = timeGetTime();
+	dwCurrentTime = dwFrameCount = 0;
 
 	MSG msg;
 	while(1)
@@ -111,12 +117,23 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 		{
 			dwCurrentTime = timeGetTime();
 
+			if ((dwCurrentTime - dwFPSLastTime) >= 1000)	// 1秒ごとに実行
+			{
+#ifdef _DEBUG
+				g_CountFPS = dwFrameCount;
+#endif
+				dwFPSLastTime = dwCurrentTime;				// FPSを測定した時刻を保存
+				dwFrameCount = 0;							// カウントをクリア
+			}
+
 			if((dwCurrentTime - dwExecLastTime) >= (1000 / 60))
 			{
-
+#ifdef _DEBUG
+				wsprintf(g_DebugStr, WINDOW_NAME);
+				wsprintf(&g_DebugStr[strlen(g_DebugStr)], " FPS:%d", g_CountFPS);
+#endif
 				dwExecLastTime = dwCurrentTime;
-
-
+				
 
 				// 更新
 				Manager::Update();
@@ -124,6 +141,11 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 				// 描画
 				Manager::Draw();
 
+#ifdef _DEBUG
+				SetWindowText(g_Window, g_DebugStr);
+#endif
+
+				dwFrameCount++;
 			}
 		}
 	}

@@ -6,6 +6,7 @@
 #include "camera.h"
 #include "input.h"
 #include "scene.h"
+#include "manager.h"
 
 using namespace DirectX::SimpleMath;
 
@@ -58,8 +59,9 @@ void Camera::Update()
 		Init();
 	}
 
+	
 	m_Transform->rotation = Quaternion::CreateFromYawPitchRoll(m_Yaw, m_Pitch, 0.0f);
-
+	//m_Transform->rotation = Quaternion::LookRotation(m_Target->GetForward(),m_Target->GetUnder());
 
 	UpdatePosition();
 

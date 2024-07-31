@@ -17,6 +17,8 @@
 #include "particleemitter.h"
 #include "particle_flare.h"
 
+#include "audio.h"
+
 void Game::Init()
 {
 	using enum Layer;
@@ -40,13 +42,14 @@ void Game::Init()
 
 	a->GetComponent<Transform>()->scale = { 100,0,100 };
 	
-	a = AddObjComp<ModelRenderer, OrientedBox, Player>(
+	a = AddObjComp<ModelRenderer, OrientedBox, Player, Audio>(
 		"Player",
 		Layer_1,
 		Tag::Player,
 		ModelRenderer{},
 		OrientedBox{},
-		Player{});
+		Player{},
+		Audio{});
 	
 	a->GetComponent<Transform>()->scale = { 1,2,1 };
 	

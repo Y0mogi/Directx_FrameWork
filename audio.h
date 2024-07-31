@@ -1,7 +1,9 @@
 #pragma once
 #include "component.h"
 #include <xaudio2.h>
-
+#include <string>
+#include <vector>
+#include <chrono>
 
 struct AudioClip;
 
@@ -17,7 +19,7 @@ public:
 	/// <param name="path">ファイルの相対パス</param>
 	/// <param name="load">作ったクリップを保存するか</param>
 	/// <returns>AudioClipポインタ</returns>
-	[[nodiscard]] static AudioClip* CreateAudioClip(const char* path, bool load = false)noexcept(false);
+	[[nodiscard]] static AudioClip* CreateAudioClip(const char* path, bool load = false) noexcept(false);
 
 	using Component::Component;
 
@@ -28,54 +30,69 @@ public:
 	/// </summary>
 	/// <param name="FileName">ファイルへの相対パス</param>
 	/// <param name="tag">登録名</param>
-	void Load(const char* FileName, const std::string& tag)noexcept(false);
+	void Load(const char* FileName, const std::string& tag) noexcept(false);
 
 	/// <summary>
 	/// オーディオクリップを保存する
 	/// </summary>
 	/// <param name="clip">保存したいクリップのポインタ</param>
-	void Load(AudioClip* clip)noexcept(false);
+	void Load(AudioClip* clip) noexcept(false);
 
 	/// <summary>
 	/// 保存されているサウンドを再生する
 	/// </summary>
 	/// <param name="tag">登録名</param>
 	/// <param name="Loop">ループするか</param>
-	void Play(const std::string& tag, bool loop = false)noexcept(false);
+	void Play(const std::string& tag, bool loop = false) noexcept(false);
 
 	/// <summary>
 	/// 保存されているサウンドを再生する
 	/// </summary>
 	/// <param name="clip">保存されているクリップのポインタ</param>
 	/// <param name="loop">ループするか</param>
-	void Play(AudioClip* clip, bool loop = false)noexcept(false);
+	void Play(AudioClip* clip, bool loop = false) noexcept(false);
 
 	/// <summary>
 	/// 指定した再生中の音を止める
 	/// </summary>
 	/// <param name="tag">登録名</param>
-	void Stop(const std::string& tag)noexcept(false);
+	void Stop(const std::string& tag) noexcept(false);
 
 	/// <summary>
 	/// 指定した再生中の音を止める
 	/// </summary>
 	/// <param name="clip">保存されているクリップのポインタ</param>
-	void Stop(AudioClip* clip)noexcept(false);
-
+	void Stop(AudioClip* clip) noexcept(false);
 
 	/// <summary>
 	/// 現在の再生状態の取得
 	/// </summary>
 	/// <param name="tag">登録名</param>
 	/// <returns>TRUE:再生中 FALSE:停止中</returns>
-	bool IsSoundPlaying(const std::string& tag)noexcept(false);
+	bool IsSoundPlaying(const std::string& tag) noexcept(false);
 
 	/// <summary>
 	/// 現在の再生状態の取得
 	/// </summary>
 	/// <param name="clip">保存されているクリップのポインタ</param>
 	/// <returns>TRUE:再生中 FALSE:停止中</returns>
-	bool IsSoundPlaying(AudioClip* clip)noexcept(false);
+	bool IsSoundPlaying(AudioClip* clip) noexcept(false);
+
+	/// <summary>
+	/// ループ再生状態の取得
+	/// </summary>
+	/// <param name="tag">登録名</param>
+	/// <returns>TRUE:ループ再生中 FALSE:ループ再生していない</returns>
+	bool IsLooping(const std::string& tag) noexcept(false);
+
+	/// <summary>
+	/// ループ再生状態の取得
+	/// </summary>
+	/// <param name="clip">保存されているクリップのポインタ</param>
+	/// <returns>TRUE:ループ再生中 FALSE:ループ再生していない</returns>
+	bool IsLooping(AudioClip* clip) noexcept(false);
+
+	void CompInfo() override;
 
 private:
 	/// <summary>
@@ -83,22 +100,27 @@ private:
 	/// </summary>
 	/// <param name="clip">ターゲット</param>
 	/// <returns>TRUE:保存済み FALSE:未保存</returns>
-	static bool CompareAudioClip(AudioClip* target)noexcept(false);
+	static bool CompareAudioClip(AudioClip* target) noexcept(false);
+
+	float GetCurrentPlayTime(const std::string& tag);
 
 private:
-	static IXAudio2*				m_Xaudio;
-	static IXAudio2MasteringVoice*	m_MasteringVoice;
-	static std::vector<AudioClip*>	m_AudioClips;
+	static IXAudio2* m_Xaudio;
+	static IXAudio2MasteringVoice* m_MasteringVoice;
+	static std::vector<AudioClip*> m_AudioClips;
 };
 
 /// <summary>
 /// オーディオクリップ構造体
 /// </summary>
-struct AudioClip 
+struct AudioClip
 {
-	std::string				m_ClipName = "Default";	// クリップ名
-	IXAudio2SourceVoice*	m_SourceVoice{};		// 
-	BYTE*					m_SoundData{};			//
-	int						m_PlayLength{};			// 
-	int						m_Length{};				// 
+	std::string								m_ClipName = "Default"; // クリップ名
+	IXAudio2SourceVoice*					m_SourceVoice{};		// ソースボイス
+	BYTE*									m_SoundData{};			// サウンドデータ
+	int										m_PlayLength{};			// 再生長さ（サンプル数）
+	int										m_Length{};				// バイト数
+	int										m_SampleRate{};			// サンプルレート（Hz）
+	bool									m_IsLooping = false;	// ループ再生中かどうか
+	std::chrono::steady_clock::time_point	m_StartTime;			// 再生開始時間
 };

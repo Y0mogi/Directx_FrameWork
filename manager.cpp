@@ -11,6 +11,8 @@
 #include "game.h"
 #include "result.h"
 
+#include "audio.h"
+
 Scene* Manager::m_NowScene{};
 Scene* Manager::m_NextScene{};
 
@@ -20,6 +22,8 @@ void Manager::Init()
     Renderer::Init();
 
     Input::Init();
+
+    Audio::InitMaster();
 
     m_NowScene = new Title();
     m_NowScene->Init();
@@ -37,6 +41,8 @@ void Manager::Uninit()
     ImGui::DestroyContext();
 
     ModelRenderer::UnloadAll();
+
+    Audio::UninitMaster();
 
     Input::Uninit();
 
