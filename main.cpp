@@ -99,11 +99,11 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	dwCurrentTime = dwFrameCount = 0;
 
 	MSG msg;
-	while(1)
+	while (true)
 	{
-		if(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
-			if(msg.message == WM_QUIT)
+			if (msg.message == WM_QUIT)
 			{
 				break;
 			}
@@ -117,34 +117,32 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 		{
 			dwCurrentTime = timeGetTime();
 
-			if ((dwCurrentTime - dwFPSLastTime) >= 1000)	// 1秒ごとに実行
+			if ((dwCurrentTime - dwFPSLastTime) >= 1000)  // 1秒ごとに実行
 			{
 #ifdef _DEBUG
 				g_CountFPS = dwFrameCount;
 #endif
-				dwFPSLastTime = dwCurrentTime;				// FPSを測定した時刻を保存
-				dwFrameCount = 0;							// カウントをクリア
+				dwFPSLastTime = dwCurrentTime;  // FPSを測定した時刻を保存
+				dwFrameCount = 0;  // カウントをクリア
 			}
 
-			if((dwCurrentTime - dwExecLastTime) >= (1000 / 60))
+			if ((dwCurrentTime - dwExecLastTime) >= (1000 / 60))
 			{
-#ifdef _DEBUG
-				wsprintf(g_DebugStr, WINDOW_NAME);
-				wsprintf(&g_DebugStr[strlen(g_DebugStr)], " FPS:%d", g_CountFPS);
-#endif
-				dwExecLastTime = dwCurrentTime;
-				
+				float deltaTime = (dwCurrentTime - dwExecLastTime) / 1000.0f;
 
 				// 更新
-				Manager::Update();
+				Manager::Update(deltaTime);
 
 				// 描画
 				Manager::Draw();
 
 #ifdef _DEBUG
+				wsprintf(g_DebugStr, WINDOW_NAME);
+				wsprintf(&g_DebugStr[strlen(g_DebugStr)], " FPS:%d", g_CountFPS);
 				SetWindowText(g_Window, g_DebugStr);
 #endif
 
+				dwExecLastTime = dwCurrentTime;
 				dwFrameCount++;
 			}
 		}

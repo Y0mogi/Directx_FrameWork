@@ -16,9 +16,9 @@ void Result::Uninit()
 	Scene::Uninit();
 }
 
-void Result::Update()
+void Result::Update(const float& dt)
 {
-	Scene::Update();
+	Scene::Update(dt);
 	if (Input::GetKeyTrigger('T')) Manager::SetScene<Title>();
 }
 

@@ -18,10 +18,9 @@ void Jump::Uninit()
 	return;
 }
 
-void Jump::Update()
+void Jump::Update(const float& dt)
 {
 	static float spos{}; // ジャンプの始点
-	static float dt = 1.0f / 60.0f; // 媒介変数
 	
 	if (Input::GetKeyTrigger(VK_SPACE) && !_isJump){
 		_isJump = true;

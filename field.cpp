@@ -48,7 +48,7 @@ void Field::Uninit()
 	m_PixelShader->Release();
 }
 
-void Field::Update()
+void Field::Update(const float& dt)
 {
 
 }

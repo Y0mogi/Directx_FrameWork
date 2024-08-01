@@ -19,10 +19,10 @@ void Camera_FPS::Uninit()
 
 }
 
-void Camera_FPS::Update()
+void Camera_FPS::Update(const float& dt)
 {
-
 }
+
 
 void Camera_FPS::Draw()
 {

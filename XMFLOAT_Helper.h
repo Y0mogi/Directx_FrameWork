@@ -2300,6 +2300,7 @@ inline namespace XmfloatMath
         return rv;
     }
 
+
     _NODISCARD static inline constexpr auto ToDegrees(const DirectX::XMFLOAT3& radian)
     {
         DirectX::XMFLOAT3 rv{};
@@ -2342,6 +2343,15 @@ inline namespace XmfloatMath
         return rv;
     }
 
+    _NODISCARD static inline constexpr auto ToRadian(const float& degree)
+    {
+        float rv{};
+
+        rv = DirectX::XMConvertToRadians(degree);
+
+        return rv;
+    }
+
     _NODISCARD static inline constexpr auto ToDegrees(const float rad_x, const float rad_y, const float rad_z)
     {
         DirectX::XMFLOAT3 rv{};
@@ -2359,6 +2369,15 @@ inline namespace XmfloatMath
 
         rv.x = DirectX::XMConvertToDegrees(rad_x);
         rv.y = DirectX::XMConvertToDegrees(rad_y);
+
+        return rv;
+    }
+
+    _NODISCARD static inline constexpr auto ToDegrees(const float rad)
+    {
+        float rv{};
+
+        rv = DirectX::XMConvertToDegrees(rad);
 
         return rv;
     }

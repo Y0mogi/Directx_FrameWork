@@ -6,10 +6,10 @@ class Transform;
 class Field :public	Component
 {
 public:
-	void Init();
-	void Uninit();
-	void Update();
-	void Draw();
+	void Init() override;
+	void Uninit() override;
+	void Update(const float& dt) override;
+	void Draw() override;
 
 	Field() {};
 	Field(const XMFLOAT4& color, const wchar_t* path);

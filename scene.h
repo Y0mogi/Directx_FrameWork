@@ -33,16 +33,16 @@ public:
 		for (auto& it : m_Objects) it->Uninit();
 		m_Objects.clear();
 	};
-	virtual void Update() {
+	virtual void Update(const float& dt) {
 		static int frame = 0;
-		for (auto& it : m_Objects) { it->Update(); }
+		for (auto& it : m_Objects) { it->Update(dt); }
 
 		frame++;
 		if (frame % static_cast<int>(m_CUF) == 0) {
 			this->CollisionUpdate();
 			frame = 0;
 		}
-
+		
 		// 削除予定オブジェクトの削除
 		m_Objects.remove_if([](const std::unique_ptr<GameObject>& object) {return object->IsDiscard(); });
 
@@ -353,5 +353,5 @@ public:
 protected:
 	std::list<std::unique_ptr<GameObject>> m_Objects{};
 private:
-	COLLITION_UPDATE_FRAME m_CUF = COLLITION_UPDATE_FRAME::Default;
+	COLLITION_UPDATE_FRAME m_CUF = COLLITION_UPDATE_FRAME::Half;
 };

@@ -12,7 +12,7 @@ class GameObject
 public:
 
 	void Init();	// 初期化
-	void Update();	// 更新
+	void Update(const float& dt);	// 更新
 	void Uninit();	// 開放
 	void Draw();	// 描画
 	inline bool IsDiscard(){

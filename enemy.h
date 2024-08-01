@@ -11,7 +11,7 @@ class Enemy :public Component, public CollisionEvent
 public:
 	void Init() override;
 	void Uninit() override;
-	void Update() override;
+	void Update(const float& dt) override;
 	void Draw() override;
 
 	void OnCollisionEnter(const GameObject* collision);

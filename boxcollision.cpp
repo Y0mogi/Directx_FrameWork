@@ -10,7 +10,7 @@ void BoxCollision::Init()
 	m_Collision = BoundingBox(m_Transform->position,m_Transform->scale);
 }
 
-void BoxCollision::Update()
+void BoxCollision::Update(const float& dt)
 {
 	m_Collision.Center = m_Transform->position ;
 	m_Collision.Extents = m_Transform->scale;

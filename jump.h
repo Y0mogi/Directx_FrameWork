@@ -7,10 +7,10 @@
 class Jump : public Component
 {
 public:
-	void Init();
-	void Uninit();
-	void Update();
-	void Draw();
+	void Init() override;
+	void Uninit() override;
+	void Update(const float& dt) override;
+	void Draw() override;
 
 private:
 	Transform* _transform = nullptr;

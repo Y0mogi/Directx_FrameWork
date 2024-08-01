@@ -14,7 +14,7 @@ class Sprite : public Component
 public:
 	void Init();
 	void Uninit();
-	void Update();
+	void Update(const float& dt);
 	void Draw();
 
 	void CompInfo() override;

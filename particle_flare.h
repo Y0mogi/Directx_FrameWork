@@ -4,7 +4,7 @@
 class Particle_flare : public Particle_Base
 {
 public:
-	void Update() override;
+	void Update(const float& dt) override;
 
 	using Particle_Base::Particle_Base;
 	~Particle_flare()override {};

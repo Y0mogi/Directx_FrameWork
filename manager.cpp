@@ -50,7 +50,7 @@ void Manager::Uninit()
     Renderer::Uninit();
 }
 
-void Manager::Update()
+void Manager::Update(const float& dt)
 {
     Input::Update();
 
@@ -62,7 +62,7 @@ void Manager::Update()
     ImGui::SetWindowFontScale(1.2f);
 
 
-    m_NowScene->Update();
+    m_NowScene->Update(dt);
 
     // ImGui更新終了
     ImGui::End();

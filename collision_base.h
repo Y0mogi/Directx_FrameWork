@@ -8,6 +8,7 @@ public:
 	virtual void OnCollisionEnter(const GameObject* collision) {}; // ÚG‚Ìˆ—
 	virtual void ResponseCollision(const GameObject* collision) {}; // ÚG‚Ì‰“š”½‰
 	
+	
 	virtual ~CollisionEvent() {};
 };
 

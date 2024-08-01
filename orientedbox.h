@@ -12,7 +12,7 @@ public:
 	void Uninit() override;
 
 	// 開放
-	void Update() override;
+	void Update(const float& dt) override;
 
 	// 描画
 	void Draw()   override;
@@ -37,7 +37,6 @@ public:
 	// gettter
 
 	inline BoundingOrientedBox& GetCollision() { return m_Collision; }
-
 
 
 	// コンストラクタ・デストラクタ

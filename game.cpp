@@ -24,12 +24,12 @@ void Game::Init()
 	using enum Layer;
 
 	// ゲームオブジェクトを作成し、コンポーネントを追加
-	AddObjComp<Sprite>("Sprite", Layer_2, Tag::None,
-		Sprite{
-		XMFLOAT4{ 1.0f, 1.0f, 1.0f, 1.0f },
-		L"asset\\texture\\camera.jpg"
-		}
-	);
+	//AddObjComp<Sprite>("Sprite", Layer_2, Tag::None,
+	//	Sprite{
+	//	XMFLOAT4{ 1.0f, 1.0f, 1.0f, 1.0f },
+	//	L"asset\\texture\\camera.jpg"
+	//	}
+	//);
 
 	auto a = AddObjComp<ModelRenderer, OrientedBox, Field>(
 		"Field",
@@ -39,42 +39,42 @@ void Game::Init()
 		OrientedBox{},
 		Field{{ 1.0f, 1.0f, 1.0f, 1.0f },L"asset\\texture\\field.png"}
 	);
-
-	a->GetComponent<Transform>()->scale = { 100,0,100 };
+	a->GetComponent<Transform>()->scale = { 10000,0,10000 };
 	
-	a = AddObjComp<ModelRenderer, OrientedBox, Player, Audio>(
+
+	a = AddObjComp<ModelRenderer,Player, OrientedBox, Audio>(
 		"Player",
 		Layer_1,
 		Tag::Player,
 		ModelRenderer{},
-		OrientedBox{},
 		Player{},
+		OrientedBox{},
 		Audio{});
 	
-	a->GetComponent<Transform>()->scale = { 1,2,1 };
+	a->GetComponent<Transform>()->scale = { 1,1,1 };
 	
-	for (int i = 0; i < 1; i++) {
-		auto name = std::string("Enemy") + std::to_string(i);
-		auto b = AddObjComp<ModelRenderer, OrientedBox, Jump, Enemy>
-			(
-				name,
-				Layer_1,
-				Tag::Enemy,
-				ModelRenderer{},
-				OrientedBox{},
-				Jump{},
-				Enemy{}
-			);
-	
-		b->GetComponent<Transform>()->position = { (5.f * i),1,1 };
-	}
+	//for (int i = 0; i < 1; i++) {
+	//	auto name = std::string("Enemy") + std::to_string(i);
+	//	auto b = AddObjComp<ModelRenderer, OrientedBox, Jump, Enemy>
+	//		(
+	//			name,
+	//			Layer_1,
+	//			Tag::Enemy,
+	//			ModelRenderer{},
+	//			OrientedBox{},
+	//			Jump{},
+	//			Enemy{}
+	//		);
+	//
+	//	b->GetComponent<Transform>()->position = { (5.f * i),1,1 };
+	//}
 	
 	AddObjComp<Camera>("Camera", Layer_0, Tag::None, Camera{});
 
 
-	AddObjComp<ParticleEmitter>("Particle", Layer_1, Tag::None,
-		ParticleEmitter::Factory<Particle_flare>("asset\\texture\\smoke.png",90, { 0.3,0.3,0.3,1 })
-	);
+	//AddObjComp<ParticleEmitter>("Particle", Layer_1, Tag::None,
+	//	ParticleEmitter::Factory<Particle_flare>("asset\\texture\\smoke.png",90, { 0.3,0.3,0.3,1 })
+	//);
 }
 
 void Game::Uninit()
@@ -82,9 +82,9 @@ void Game::Uninit()
 	Scene::Uninit();
 }
 
-void Game::Update()
+void Game::Update(const float& dt)
 {
-	Scene::Update();
+	Scene::Update(dt);
 	if (Input::GetKeyTrigger('T')) Manager::SetScene<Result>();
 }
 

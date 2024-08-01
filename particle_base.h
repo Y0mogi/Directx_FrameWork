@@ -11,7 +11,7 @@ class ParticleEmitter;
 class Particle_Base {
 public:
 	
-	virtual void Update() = 0;
+	virtual void Update(const float& dt) = 0;
 
 	inline bool& GetEnable()		 { return this->m_Enable;	}
 	inline unsigned short& GetLife() { return this->m_LifeTime;	}

@@ -32,7 +32,7 @@ public:
 	void Init()     override; 
 
 	// 更新
-	void Update()   override; 
+	void Update(const float& dt)   override; 
 
 	// コンポーネントの情報表示
 	void CompInfo() override; 

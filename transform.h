@@ -29,7 +29,7 @@ public:
 	// ==========基本メンバ=========
 
 	XMFLOAT3						position{ 0.0f,0.0f,0.0f };
-	DirectX::SimpleMath::Quaternion rotation{};
+	DirectX::SimpleMath::Quaternion rotation = DirectX::SimpleMath::Quaternion::Identity;
 	XMFLOAT3						scale{ 1.0f,1.0f,1.0f };
 	
 	// =============================	
@@ -61,24 +61,24 @@ public:
 
 	// ===ローカルの方向ベクトルの取得===
    
-	XMFLOAT3 GetForward() const {
+	inline XMFLOAT3 GetForward() const {
 			return GetDirectionVector(2);
 		}
-	XMFLOAT3 GetBack() const {
+	inline XMFLOAT3 GetBack() const {
 			XMFLOAT3 back = GetDirectionVector(2);
 			return XMFLOAT3(-back.x, -back.y, -back.z);
 		}
-	XMFLOAT3 GetRight() const {
+	inline XMFLOAT3 GetRight() const {
 			return GetDirectionVector(0);
 		}
-	XMFLOAT3 GetLeft() const {
+	inline XMFLOAT3 GetLeft() const {
 			XMFLOAT3 left = GetDirectionVector(0);
 			return XMFLOAT3(-left.x, -left.y, -left.z);
 		}
-	XMFLOAT3 GetTop() const {
+	inline XMFLOAT3 GetUp() const {
 			return GetDirectionVector(1);
 		}
-	XMFLOAT3 GetUnder() const {
+	inline XMFLOAT3 GetUnder() const {
 			XMFLOAT3 under = GetDirectionVector(1);
 			return XMFLOAT3(-under.x, -under.y, -under.z);
 		}
@@ -90,9 +90,9 @@ public:
 	/// </summary>
 	/// <param name="clear">初期化する値</param>
 	inline void ClearPosition(const float& clear = 0.0f) {
-		this->position.x = 0.0f;
-		this->position.y = 0.0f;
-		this->position.z = 0.0f;
+		this->position.x = clear;
+		this->position.y = clear;
+		this->position.z = clear;
 		
 	}
 
@@ -101,9 +101,9 @@ public:
 	/// </summary>
 	/// <param name="clear">初期化する値</param>
 	inline void ClearRotation(const float& clear = 0.0f) {
-		this->rotation.x = 0.0f;
-		this->rotation.y = 0.0f;
-		this->rotation.z = 0.0f;
+		this->rotation.x = clear;
+		this->rotation.y = clear;
+		this->rotation.z = clear;
 	}
 
 	/// <summary>
@@ -111,14 +111,10 @@ public:
 	/// </summary>
 	/// <param name="clear">初期化する値</param>
 	inline void ClearScale(const float& clear = 0.0f) {
-		this->scale.x = 0.0f;
-		this->scale.y = 0.0f;
-		this->scale.z = 0.0f;
+		this->scale.x = clear;
+		this->scale.y = clear;
+		this->scale.z = clear;
 	}
-
-
-
-
 
 
 

@@ -1,9 +1,9 @@
 #include "main.h"
 #include "renderer.h"
-#include "transform.h"
-#include "gameobject.h"
 
 #include "camera.h"
+#include "gameobject.h"
+#include "transform.h"
 #include "input.h"
 #include "scene.h"
 #include "manager.h"
@@ -12,81 +12,72 @@ using namespace DirectX::SimpleMath;
 
 void Camera::Init()
 {
-	if (m_Transform == nullptr) m_Transform = Parent->GetComponent<Transform>();
+	if (m_Transform == nullptr){
+		m_Transform = Parent->GetComponent<Transform>();
 		NULLSEARCH(m_Transform)
-	m_Transform->position = {0.0f,5.0f,-10.0f};
+	}
 
-	if (m_Target == nullptr) m_Target = Parent->scene->GetGameObject("Player")->GetComponent<Transform>();
-		NULLSEARCH(m_Target)
+	if (m_Target == nullptr) {
+	m_Target = Parent->scene->GetGameObject("Player")->GetComponent<Transform>();
+	NULLSEARCH(m_Target)
+	}
+	
 
-	// 視点と注視点の距離を計算
-	float vx, vz;
-	vx = m_Transform->position.x - m_Target->position.x;
-	vz = m_Transform->position.z - m_Target->position.z;
-	m_Length = sqrtf(vx * vx + vz * vz);
+	//// 視点と注視点の距離を計算
+	//float vx, vz;
+	//vx = m_Transform->position.x - m_Target->position.x;
+	//vz = m_Transform->position.z - m_Target->position.z;
+	//m_Length = sqrtf(vx * vx + vz * vz);
 }
 
 void Camera::Uninit()
 {
-	m_Transform = nullptr;
 }
 
-void Camera::Update()
+void Camera::Update(const float& dt)
 {
-	// 回転の速度
-	static auto rotationSpeed = XM_PI * 0.01f;
-	
-	// 上下左右の回転
-	if (Input::GetKeyPress('Q')) {
-		m_Yaw += rotationSpeed;
-	}
-
-	if (Input::GetKeyPress('E')) {
-		m_Yaw -= rotationSpeed;
-	}
-
-	if (Input::GetKeyPress('W')) {
-		m_Pitch -= rotationSpeed;
-	}
-
-	if (Input::GetKeyPress('S')) {
-		m_Pitch += rotationSpeed;
-	}
-
-	// カメラを初期に戻す
-	if (Input::GetKeyPress('P')) {
-		Uninit();
-		Init();
-	}
-
-	
-	m_Transform->rotation = Quaternion::CreateFromYawPitchRoll(m_Yaw, m_Pitch, 0.0f);
-	//m_Transform->rotation = Quaternion::LookRotation(m_Target->GetForward(),m_Target->GetUnder());
-
-	UpdatePosition();
-
+	return;
 }
 
 void Camera::Draw()
 {
-	// ビューマトリックス設定
-	XMFLOAT3 up = m_Transform->GetTop();
+	m_Transform->rotation = m_Target->rotation;
+
+	// ターゲットの位置（XMFLOAT3で取得）
+	XMFLOAT3 targetPosition = m_Target->position;
+
+	// カメラのオフセット（ターゲットの後ろ上に配置）
+	XMFLOAT3 cameraOffset = m_Target->GetBack() * 15;
+
+	cameraOffset += m_Target->GetUp() * 4;
+
+	// カメラ位置を更新
+	XMFLOAT3 newPosition = XMFLOAT3(
+		targetPosition.x + cameraOffset.x,
+		targetPosition.y + cameraOffset.y,
+		targetPosition.z + cameraOffset.z
+	);
+
+	m_Transform->position = newPosition;
+
+	// カメラの向きをターゲットに合わせる
+	XMFLOAT3 up = m_Target->GetUp();
+	XMFLOAT3 forward = targetPosition + m_Target->GetForward() * 30;
+
+	// ビュー行列を設定
 	XMMATRIX viewMatrix = XMMatrixLookAtLH(
 		XMLoadFloat3(&m_Transform->position),
-		XMLoadFloat3(&m_Target->position),
+		XMLoadFloat3(&forward),
 		XMLoadFloat3(&up)
 	);
 
 	Renderer::SetViewMatrix(viewMatrix);
 	XMStoreFloat4x4(&m_ViewMatrix, viewMatrix);
-	
-	
+
 	// プロジェクションマトリックス設定
 	XMMATRIX projectionMatrix;
-	projectionMatrix = XMMatrixPerspectiveFovLH(1.0f, (float)SCREEN_WIDTH / SCREEN_HEIGHT, 1.0f, 1000.0f);
-
+	projectionMatrix = XMMatrixPerspectiveFovLH(1.0f, (float)SCREEN_WIDTH / SCREEN_HEIGHT, 0.1f, 10000.0f);
 	Renderer::SetProjectionMatrix(projectionMatrix);
-
 }
 
 void Camera::CompInfo()
@@ -105,7 +96,8 @@ void Camera::CompInfo()
 void Camera::UpdatePosition()
 {
 	// ターゲット位置からの相対位置を計算
-	Vector3 relativePosition = Vector3(m_Target->position.x, m_Target->position.y,m_Length + 0.0001f);
+	//Vector3 relativePosition = Vector3(m_Target->position.x, m_Target->position.y,m_Length + 0.0001f);
+	Vector3 relativePosition = Vector3(0, 10, 0 + 0.0001f);
 	relativePosition = Vector3::Transform(relativePosition, m_Transform->rotation);
 	
 	// 新しいカメラ位置を計算

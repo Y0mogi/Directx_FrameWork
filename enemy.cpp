@@ -29,7 +29,7 @@ void Enemy::Uninit()
 	_PixelShader->Release();
 }
 
-void Enemy::Update()
+void Enemy::Update(const float& dt)
 {
 	using namespace DirectX::SimpleMath;
 	static auto transform = Parent->GetComponent<Transform>();

@@ -36,9 +36,9 @@ void GameObject::Init()
     for (auto& it : componentList) it->Init();
 }
 
-void GameObject::Update()
+void GameObject::Update(const float& dt)
 {
-    for (auto& it : componentList) it->Update();
+    for (auto& it : componentList) it->Update(dt);
 }
 
 void GameObject::Uninit()

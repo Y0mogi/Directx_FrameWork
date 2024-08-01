@@ -43,7 +43,7 @@ void Sprite::Uninit()
 	m_PixelShader->Release();
 }
 
-void Sprite::Update()
+void Sprite::Update(const float& dt)
 {
 
 }

@@ -9,11 +9,11 @@
 #include "math_helper.h"
 
 #include "audio.h"
-
+#include "orientedbox.h"
 
 void Player::Init()
 {
-	Parent->GetComponent<ModelRenderer>()->Load("asset\\model\\sentouki.obj");
+	Parent->GetComponent<ModelRenderer>()->Load("asset\\model\\fighter.obj");
 
 	Renderer::CreateVertexShader(&m_VertexShader, &m_VertexLayout,
 		"shader\\unlitTextureVS.cso");
@@ -32,38 +32,62 @@ void Player::Uninit()
 	m_PixelShader->Release();
 }
 
-void Player::Update()	
+void Player::Update(const float& dt)
 {
 	using namespace DirectX::SimpleMath;
 	auto transform = Parent->GetComponent<Transform>();
+	static float speed = 0;
 
 	if (Input::GetKeyPress('A'))
 	{
-		Parent->GetComponent<Transform>()->position.x -= 0.1f;
+		transform->rotation *= Quaternion::CreateFromAxisAngle(transform->GetForward(), 0.1f);
 	}
 	
 	if (Input::GetKeyPress('D'))
 	{
-		Parent->GetComponent<Transform>()->position.x += 0.1f;
+		//Quaternion::Lerp(transform->rotation, Quaternion::CreateFromAxisAngle(transform->GetForward(), -0.1f),dt, transform->rotation);
+		transform->rotation *= Quaternion::CreateFromAxisAngle(transform->GetForward(), -0.1f);
+	}
+
+	if (Input::GetKeyPress('A') && Input::GetKeyPress('D')) {
+
+		// TODO:普通にミスってる
+		// ロールをゼロにするためのクォータニオンを作成
+		Quaternion noRoll = Quaternion::CreateFromAxisAngle(transform->GetForward(), 0.0f);
+
+		// 現在の回転とロールがゼロの回転との補間
+		transform->rotation = Quaternion::Slerp(transform->rotation, noRoll, dt * 5.0f);
 	}
 	
 	if (Input::GetKeyPress('W'))
 	{
-		Parent->GetComponent<Transform>()->position.z += 0.1f;
+		transform->rotation *= Quaternion::CreateFromAxisAngle(transform->GetLeft(), -0.1f);
 	}
 	
 	if (Input::GetKeyPress('S'))
 	{
-		Parent->GetComponent<Transform>()->position.z -= 0.1f;
-		if (!(Parent->GetComponent<Audio>()->IsSoundPlaying("lock"))) {
-			Parent->GetComponent<Audio>()->Play("lock");
-		}
+		transform->rotation *= Quaternion::CreateFromAxisAngle(transform->GetLeft(), 0.1f);
 	}
 	
-	if (Input::GetKeyPress('T')) {
-		transform->rotation *= Quaternion::CreateFromAxisAngle(transform->GetForward(), -DirectX::XM_PIDIV4 * 0.1f);
+	
+	//if (Input::GetKeyPress('T')) {
+	//	transform->rotation *= Quaternion::CreateFromAxisAngle(transform->GetForward(), -DirectX::XM_PIDIV4 * 0.1f);
+	//}
+
+
+	// 座標更新
+	
+	if (Input::GetKeyPress(VK_SHIFT)) {
+		speed++;
+	}
+	else {
+		speed--;
 	}
 
+	// スピードが早くなりすぎないようにクランプ
+	speed = std::clamp<float>(speed,300.f,1000.f);
+
+	transform->position += transform->GetForward() * speed * dt;
 }
 
 void Player::Draw()
@@ -84,5 +108,5 @@ void Player::Draw()
 	Renderer::SetWorldMatrix(world);
 
 
-	Parent->GetComponent<ModelRenderer>()->DrawModel("asset\\model\\sentouki.obj");
+	Parent->GetComponent<ModelRenderer>()->DrawModel("asset\\model\\fighter.obj");
 }

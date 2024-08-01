@@ -54,9 +54,9 @@ void Title::Uninit()
 	//NULLSEARCH(nullptr);
 }
 
-void Title::Update()
+void Title::Update(const float& dt)
 {
-	Scene::Update();
+	Scene::Update(dt);
 
 	if (Input::GetKeyTrigger('T')) Manager::SetScene<Game>();
 }

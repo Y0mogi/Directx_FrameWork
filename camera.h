@@ -18,13 +18,15 @@
 
 #include "component.h"
 
+class Transform;
+
 class Camera : public Component
 {
 public:
-	void Init();
-	void Uninit();
-	void Update();
-	void Draw();
+	void Init()override;
+	void Uninit()override;
+	void Update(const float& dt) override;
+	void Draw()override;
 
 	void CompInfo();
 
@@ -37,7 +39,7 @@ private:
 	Transform* m_Transform = nullptr;
 	Transform* m_Target = nullptr;
 	XMFLOAT4X4 m_ViewMatrix{};
-	float m_Length, m_Yaw, m_Pitch;
+	float m_Length{}, m_Yaw{}, m_Pitch{};
 };
 
 #endif // CAMERA_H

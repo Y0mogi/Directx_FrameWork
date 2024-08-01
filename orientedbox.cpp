@@ -29,7 +29,7 @@ void OrientedBox::Uninit()
     m_PixelShader->Release();
 }
 
-void OrientedBox::Update()
+void OrientedBox::Update(const float& dt)
 {
     
     m_Collision.Center = m_Transform->position;

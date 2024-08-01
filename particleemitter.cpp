@@ -69,11 +69,11 @@ void ParticleEmitter::Uninit()
 	m_PixelShader->Release();
 }
 
-void ParticleEmitter::Update()
+void ParticleEmitter::Update(const float& dt)
 {
 	int tmp = m_Count;
 	for (const auto& it : m_Particles) {
-		it->Update();
+		it->Update(dt);
 
 		tmp--;
 		if (tmp < 0) break;

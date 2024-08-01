@@ -5,7 +5,7 @@
 #include "gameobject.h"
 
 
-void Particle_flare::Update()
+void Particle_flare::Update(const float& dt)
 {
 	
 	// 使用しているかチェック
