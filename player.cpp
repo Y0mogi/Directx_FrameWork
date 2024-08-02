@@ -36,11 +36,11 @@ void Player::Update(const float& dt)
 {
 	using namespace DirectX::SimpleMath;
 	auto transform = Parent->GetComponent<Transform>();
-	static float speed = 0;
+	
 
 	if (Input::GetKeyPress('A'))
 	{
-		transform->rotation *= Quaternion::CreateFromAxisAngle(transform->GetForward(), 0.1f);
+		transform->rotation *= Quaternion::CreateFromAxisAngle(transform->GetForward(), 5 * dt);
 	}
 	
 	if (Input::GetKeyPress('D'))
@@ -78,16 +78,20 @@ void Player::Update(const float& dt)
 	// 座標更新
 	
 	if (Input::GetKeyPress(VK_SHIFT)) {
-		speed++;
+		m_Speed +=10;
 	}
 	else {
-		speed--;
+		m_Speed--;
 	}
 
-	// スピードが早くなりすぎないようにクランプ
-	speed = std::clamp<float>(speed,300.f,1000.f);
+	//if (speed <= 200) {
+	//	transform->rotation = Quaternion::Slerp(transform->rotation, Quaternion::FromToRotation(transform->GetForward(), transform->GetUnder()),dt);
+	//}
 
-	transform->position += transform->GetForward() * speed * dt;
+	// スピードが早くなりすぎないようにクランプ
+	m_Speed = std::clamp<int>(m_Speed,150,30000);
+
+	transform->position += transform->GetForward() * m_Speed * dt;
 }
 
 void Player::Draw()
@@ -109,4 +113,17 @@ void Player::Draw()
 
 
 	Parent->GetComponent<ModelRenderer>()->DrawModel("asset\\model\\fighter.obj");
+}
+
+void Player::CompInfo()
+{
+	using namespace ImGui;
+	SeparatorText("playerComponent");
+
+	if (TreeNode("PlayerInfo")) {
+		// 色変更
+		DragInt("Speed", &m_Speed, 0, 100000);
+
+		TreePop();
+	}
 }

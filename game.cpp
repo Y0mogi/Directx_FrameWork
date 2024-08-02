@@ -39,7 +39,7 @@ void Game::Init()
 		OrientedBox{},
 		Field{{ 1.0f, 1.0f, 1.0f, 1.0f },L"asset\\texture\\field.png"}
 	);
-	a->GetComponent<Transform>()->scale = { 10000,0,10000 };
+	a->GetComponent<Transform>()->scale = { 100000,0,100000 };
 	
 
 	a = AddObjComp<ModelRenderer,Player, OrientedBox, Audio>(

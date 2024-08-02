@@ -13,12 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Imgui">
-      <UniqueIdentifier>{4ef4a0e0-9a9b-4375-ad36-39eeb0c1a315}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MagicEnum">
-      <UniqueIdentifier>{065bc649-8485-49bd-8a3f-cf97354a3688}</UniqueIdentifier>
-    </Filter>
     <Filter Include="DirectXTK">
       <UniqueIdentifier>{1e3e6121-7783-4741-aaed-37c7b16ab8d9}</UniqueIdentifier>
     </Filter>
@@ -28,14 +22,32 @@
     <Filter Include="DirectXTK\Src">
       <UniqueIdentifier>{52069c5e-1ab4-4b99-93b8-85de0f49f69a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="パーティクル">
-      <UniqueIdentifier>{5c016c96-ef58-48f2-9beb-bff413cccab9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Font">
       <UniqueIdentifier>{17d6d167-609f-49b3-ac44-cab5ad4d805a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Scenes">
       <UniqueIdentifier>{f08ea133-081b-4b31-867a-e08fa3ba18d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components">
+      <UniqueIdentifier>{e85dc9d9-6368-4c82-a855-0dab5227d4e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Collisions">
+      <UniqueIdentifier>{c2d874a2-caba-47de-a495-67b195b2a21d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\パーティクル">
+      <UniqueIdentifier>{5c016c96-ef58-48f2-9beb-bff413cccab9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Core">
+      <UniqueIdentifier>{4ef70df6-b8cd-4b98-b51d-395fc529f492}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib">
+      <UniqueIdentifier>{e5733b8f-91e1-4dd8-9e39-e677b5c1ec09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\Imgui">
+      <UniqueIdentifier>{4ef4a0e0-9a9b-4375-ad36-39eeb0c1a315}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\MagicEnum">
+      <UniqueIdentifier>{065bc649-8485-49bd-8a3f-cf97354a3688}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -48,53 +60,32 @@
     <ClCompile Include="manager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="camera.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="field.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="gameobject.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="sprite.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="modelRenderer.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="player.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="input.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="jump.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="camera_fps.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Imgui\imgui_impl_win32.cpp">
-      <Filter>Imgui</Filter>
+      <Filter>lib\Imgui</Filter>
     </ClCompile>
     <ClCompile Include="Imgui\imgui_tables.cpp">
-      <Filter>Imgui</Filter>
+      <Filter>lib\Imgui</Filter>
     </ClCompile>
     <ClCompile Include="Imgui\imgui_widgets.cpp">
-      <Filter>Imgui</Filter>
+      <Filter>lib\Imgui</Filter>
     </ClCompile>
     <ClCompile Include="Imgui\imgui.cpp">
-      <Filter>Imgui</Filter>
+      <Filter>lib\Imgui</Filter>
     </ClCompile>
     <ClCompile Include="Imgui\imgui_draw.cpp">
-      <Filter>Imgui</Filter>
+      <Filter>lib\Imgui</Filter>
     </ClCompile>
     <ClCompile Include="Imgui\imgui_impl_dx11.cpp">
-      <Filter>Imgui</Filter>
+      <Filter>lib\Imgui</Filter>
     </ClCompile>
     <ClCompile Include="Imgui\imgui_stdlib.cpp">
-      <Filter>Imgui</Filter>
+      <Filter>lib\Imgui</Filter>
     </ClCompile>
     <ClCompile Include="Src\PrimitiveBatch.cpp">
       <Filter>DirectXTK\Src</Filter>
@@ -216,26 +207,14 @@
     <ClCompile Include="DebugDraw.cpp">
       <Filter>DirectXTK</Filter>
     </ClCompile>
-    <ClCompile Include="mydebugdraw.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="enemy.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="boxcollision.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="orientedbox.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="audio.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="particleemitter.cpp">
-      <Filter>パーティクル</Filter>
+      <Filter>Components\パーティクル</Filter>
     </ClCompile>
     <ClCompile Include="particle_flare.cpp">
-      <Filter>パーティクル</Filter>
+      <Filter>Components\パーティクル</Filter>
     </ClCompile>
     <ClCompile Include="scene.cpp">
       <Filter>Scenes</Filter>
@@ -255,6 +234,36 @@
     <ClCompile Include="memleakcheck.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="jump.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="field.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="boxcollision.cpp">
+      <Filter>Components\Collisions</Filter>
+    </ClCompile>
+    <ClCompile Include="orientedbox.cpp">
+      <Filter>Components\Collisions</Filter>
+    </ClCompile>
+    <ClCompile Include="modelRenderer.cpp">
+      <Filter>Components\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="sprite.cpp">
+      <Filter>Components\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="camera_fps.cpp">
+      <Filter>Components\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="camera.cpp">
+      <Filter>Components\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="renderer.h">
@@ -269,12 +278,6 @@
     <ClInclude Include="XMFLOAT_Helper.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="camera.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="field.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="gameobject.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -284,83 +287,65 @@
     <ClInclude Include="component.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="transform.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="sprite.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="modelRenderer.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="player.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="input.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="jump.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="camera_fps.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Imgui\imgui_impl_win32.h">
-      <Filter>Imgui</Filter>
+      <Filter>lib\Imgui</Filter>
     </ClInclude>
     <ClInclude Include="Imgui\imgui_internal.h">
-      <Filter>Imgui</Filter>
+      <Filter>lib\Imgui</Filter>
     </ClInclude>
     <ClInclude Include="Imgui\imstb_rectpack.h">
-      <Filter>Imgui</Filter>
+      <Filter>lib\Imgui</Filter>
     </ClInclude>
     <ClInclude Include="Imgui\imstb_textedit.h">
-      <Filter>Imgui</Filter>
+      <Filter>lib\Imgui</Filter>
     </ClInclude>
     <ClInclude Include="Imgui\imstb_truetype.h">
-      <Filter>Imgui</Filter>
+      <Filter>lib\Imgui</Filter>
     </ClInclude>
     <ClInclude Include="Imgui\imconfig.h">
-      <Filter>Imgui</Filter>
+      <Filter>lib\Imgui</Filter>
     </ClInclude>
     <ClInclude Include="Imgui\imgui.h">
-      <Filter>Imgui</Filter>
+      <Filter>lib\Imgui</Filter>
     </ClInclude>
     <ClInclude Include="Imgui\imgui_impl_dx11.h">
-      <Filter>Imgui</Filter>
+      <Filter>lib\Imgui</Filter>
     </ClInclude>
     <ClInclude Include="magic_enum\magic_enum.hpp">
-      <Filter>MagicEnum</Filter>
+      <Filter>lib\MagicEnum</Filter>
     </ClInclude>
     <ClInclude Include="magic_enum\magic_enum_all.hpp">
-      <Filter>MagicEnum</Filter>
+      <Filter>lib\MagicEnum</Filter>
     </ClInclude>
     <ClInclude Include="magic_enum\magic_enum_containers.hpp">
-      <Filter>MagicEnum</Filter>
+      <Filter>lib\MagicEnum</Filter>
     </ClInclude>
     <ClInclude Include="magic_enum\magic_enum_flags.hpp">
-      <Filter>MagicEnum</Filter>
+      <Filter>lib\MagicEnum</Filter>
     </ClInclude>
     <ClInclude Include="magic_enum\magic_enum_format.hpp">
-      <Filter>MagicEnum</Filter>
+      <Filter>lib\MagicEnum</Filter>
     </ClInclude>
     <ClInclude Include="magic_enum\magic_enum_fuse.hpp">
-      <Filter>MagicEnum</Filter>
+      <Filter>lib\MagicEnum</Filter>
     </ClInclude>
     <ClInclude Include="magic_enum\magic_enum_iostream.hpp">
-      <Filter>MagicEnum</Filter>
+      <Filter>lib\MagicEnum</Filter>
     </ClInclude>
     <ClInclude Include="magic_enum\magic_enum_switch.hpp">
-      <Filter>MagicEnum</Filter>
+      <Filter>lib\MagicEnum</Filter>
     </ClInclude>
     <ClInclude Include="magic_enum\magic_enum_utility.hpp">
-      <Filter>MagicEnum</Filter>
+      <Filter>lib\MagicEnum</Filter>
     </ClInclude>
     <ClInclude Include="quaternion.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Imgui\imgui_stdlib.h">
-      <Filter>Imgui</Filter>
+      <Filter>lib\Imgui</Filter>
     </ClInclude>
     <ClInclude Include="Src\PlatformHelpers.h">
       <Filter>DirectXTK\Src</Filter>
@@ -467,32 +452,17 @@
     <ClInclude Include="DebugDraw.h">
       <Filter>DirectXTK</Filter>
     </ClInclude>
-    <ClInclude Include="mydebugdraw.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="enemy.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="boxcollision.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="collision_base.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="orientedbox.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="audio.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="particle_base.h">
-      <Filter>パーティクル</Filter>
+      <Filter>Components\パーティクル</Filter>
     </ClInclude>
     <ClInclude Include="particleemitter.h">
-      <Filter>パーティクル</Filter>
+      <Filter>Components\パーティクル</Filter>
     </ClInclude>
     <ClInclude Include="particle_flare.h">
-      <Filter>パーティクル</Filter>
+      <Filter>Components\パーティクル</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>ヘッダー ファイル</Filter>
@@ -517,6 +487,42 @@
     </ClInclude>
     <ClInclude Include="memleakcheck.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="field.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="jump.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="boxcollision.h">
+      <Filter>Components\Collisions</Filter>
+    </ClInclude>
+    <ClInclude Include="orientedbox.h">
+      <Filter>Components\Collisions</Filter>
+    </ClInclude>
+    <ClInclude Include="collision_base.h">
+      <Filter>Components\Collisions</Filter>
+    </ClInclude>
+    <ClInclude Include="modelRenderer.h">
+      <Filter>Components\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="transform.h">
+      <Filter>Components\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="sprite.h">
+      <Filter>Components\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="camera_fps.h">
+      <Filter>Components\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="camera.h">
+      <Filter>Components\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

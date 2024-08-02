@@ -13,11 +13,15 @@ public:
 	void Update(const float& dt) override;
 	void Draw() override;
 
-private:
+	void CompInfo() override;
 
+private:
 	ID3D11VertexShader* m_VertexShader;
 	ID3D11PixelShader*	m_PixelShader;
 	ID3D11InputLayout*	m_VertexLayout;
+
+	int m_Speed{};
+
 };
 
 #endif // PLAYER_H

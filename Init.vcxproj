@@ -161,7 +161,6 @@
     <ClCompile Include="manager.cpp" />
     <ClCompile Include="memleakcheck.cpp" />
     <ClCompile Include="modelRenderer.cpp" />
-    <ClCompile Include="mydebugdraw.cpp" />
     <ClCompile Include="orientedbox.cpp" />
     <ClCompile Include="particleemitter.cpp" />
     <ClCompile Include="particle_flare.cpp" />
@@ -270,7 +269,6 @@
     <ClInclude Include="math_helper.h" />
     <ClInclude Include="memleakcheck.h" />
     <ClInclude Include="modelRenderer.h" />
-    <ClInclude Include="mydebugdraw.h" />
     <ClInclude Include="orientedbox.h" />
     <ClInclude Include="particle_base.h" />
     <ClInclude Include="particleemitter.h" />

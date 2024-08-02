@@ -1,3 +1,16 @@
+//=============================================================================
+// Contents   : カメラコンポーネント
+//  
+// Author     : 髙橋 脩也
+// LastUpdate : 2024/08/01
+// Since      : 2024/06/01
+//
+// === 更新ログ ===
+//	2024/08/01	Targetの真後ろに追従するように処理を変更
+//		
+//	
+//	
+//=============================================================================
 #include "main.h"
 #include "renderer.h"
 
@@ -61,9 +74,15 @@ void Camera::Draw()
 	m_Transform->position = newPosition;
 
 	// カメラの向きをターゲットに合わせる
-	XMFLOAT3 up = m_Target->GetUp();
-	XMFLOAT3 forward = targetPosition + m_Target->GetForward() * 30;
-
+	XMFLOAT3 up{};
+	XMFLOAT3 forward{};
+	if (Input::GetKeyPress('R')) {
+		forward = { 0,0,0 };
+	}
+	else {
+		forward = targetPosition + m_Target->GetForward() * 30;
+	}
+	up = m_Target->GetUp();
 	// ビュー行列を設定
 	XMMATRIX viewMatrix = XMMatrixLookAtLH(
 		XMLoadFloat3(&m_Transform->position),
@@ -76,7 +95,7 @@ void Camera::Draw()
 
 	// プロジェクションマトリックス設定
 	XMMATRIX projectionMatrix;
-	projectionMatrix = XMMatrixPerspectiveFovLH(1.0f, (float)SCREEN_WIDTH / SCREEN_HEIGHT, 0.1f, 10000.0f);
+	projectionMatrix = XMMatrixPerspectiveFovLH(1.0f, (float)SCREEN_WIDTH / SCREEN_HEIGHT, 0.1f, 1000000.0f);
 	Renderer::SetProjectionMatrix(projectionMatrix);
 }
 
