@@ -15,9 +15,9 @@ void Particle_flare::Update(const float& dt)
 		m_Transform.position = m_Emitter->Parent->GetComponent<Transform>()->position;
 	
 		// 動きをランダムにする
-		m_Velocity.x = (rand() % 100 - 50) / 500.0f;
-		m_Velocity.y = (rand() % 100 + 50) / 500.0f;
-		m_Velocity.z = (rand() % 100 - 50) / 500.0f;
+		//m_Velocity.x = (rand() % 100 - 50) / 500.0f;
+		//m_Velocity.y = (rand() % 100 + 50) / 500.0f;
+		//m_Velocity.z = (rand() % 100 - 50) / 500.0f;
 	
 		m_LifeTime = 60;
 	
@@ -26,7 +26,7 @@ void Particle_flare::Update(const float& dt)
 	if (m_Enable == true) {
 
 		// 重力加速度を加算する
-		m_Velocity.y += -0.01f;
+		//m_Velocity.y += -0.01f;
 
 		// 座標を更新
 		m_Transform.position += m_Velocity;

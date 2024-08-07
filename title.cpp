@@ -8,11 +8,10 @@
 
 #include "sprite.h"
 
-#include "DirectWriteCustomFont.h"
 #include "result.h"
 
-DirectWriteCustomFont* font{};
-FontData data;
+//DirectWriteCustomFont* font{};
+//FontData data;
 
 void Title::Init()
 {
@@ -20,25 +19,25 @@ void Title::Init()
 	a->GetComponent<Transform>()->position = { 200,200,0 };
 	a->GetComponent<Transform>()->scale = { 100,100,0 };
 	
-	if (font == nullptr) {
-		font = new DirectWriteCustomFont(&data);
-
-		font->Init(Renderer::GetSwapChain());
-		font->FontLoader();
-
-		font->GetFontFamilyName(font->fontCollection.Get(), L"ja-JP");
-
-		data.fontSize = 60;
-		data.fontWeight = DWRITE_FONT_WEIGHT_ULTRA_BLACK;
-		data.Color = D2D1::ColorF(D2D1::ColorF::White);
-		data.font = L"クラフト明朝";
-
-		int b = font->GetFontNameNum();
-		if (b > 0) {
-			font->SetFont(data);
-		}
-	}
-	
+	//if (font == nullptr) {
+	//	font = new DirectWriteCustomFont(&data);
+	//
+	//	font->Init(Renderer::GetSwapChain());
+	//	font->FontLoader();
+	//
+	//	font->GetFontFamilyName(font->fontCollection.Get(), L"ja-JP");
+	//
+	//	data.fontSize = 60;
+	//	data.fontWeight = DWRITE_FONT_WEIGHT_ULTRA_BLACK;
+	//	data.Color = D2D1::ColorF(D2D1::ColorF::White);
+	//	data.font = L"クラフト明朝";
+	//
+	//	int b = font->GetFontNameNum();
+	//	if (b > 0) {
+	//		font->SetFont(data);
+	//	}
+	//}
+	//
 
 }
 
@@ -67,5 +66,5 @@ void Title::Draw()
 	static int num = 0;
 	num--;
 
-	font->DrawString(std::to_string(num), XMFLOAT2(50, 50), D2D1_DRAW_TEXT_OPTIONS_NONE);
+	//font->DrawString(std::to_string(num), XMFLOAT2(50, 50), D2D1_DRAW_TEXT_OPTIONS_NONE);
 }

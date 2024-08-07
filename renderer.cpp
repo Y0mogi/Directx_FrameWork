@@ -27,6 +27,8 @@ ID3D11BlendState*		Renderer::m_BlendState{};
 ID3D11BlendState*		Renderer::m_BlendStateAdd{};
 ID3D11BlendState*		Renderer::m_BlendStateATC{};
 
+XMMATRIX Renderer::m_ViewMatrix;
+XMMATRIX Renderer::m_ProjectionMatrix;
 
 Microsoft::WRL::ComPtr<ID3D11Debug> mD3dDebug;
 
@@ -34,6 +36,9 @@ void Renderer::Init()
 {
 	HRESULT hr = S_OK;
 
+	// ビュー行列とプロジェクション行列の初期化
+	m_ViewMatrix = XMMatrixIdentity();
+	m_ProjectionMatrix = XMMatrixIdentity();
 
 	// デバイス、スワップチェーン作成
 	DXGI_SWAP_CHAIN_DESC swapChainDesc{};

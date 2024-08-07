@@ -56,8 +56,10 @@ public:
 	BoundingBox& GetCollision() { return m_Collision; }
 
 	// コンストラクタ・デストラクタ
-
-	inline BoxCollision() { SetCollisionType(CollisionType::AABB); }
+	inline BoxCollision(bool transform = true)
+		:Collision_Base(transform) {
+		SetCollisionType(CollisionType::AABB);
+	}
 	inline ~BoxCollision() override {}
 
 	

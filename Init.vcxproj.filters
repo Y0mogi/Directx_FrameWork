@@ -219,9 +219,6 @@
     <ClCompile Include="scene.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="DirectWriteCustomFont.cpp">
-      <Filter>Font</Filter>
-    </ClCompile>
     <ClCompile Include="title.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
@@ -263,6 +260,21 @@
     </ClCompile>
     <ClCompile Include="camera.cpp">
       <Filter>Components\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="normalmissile.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="missiletest.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="missile_base.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="bullet.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="billboard_sprite.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -470,9 +482,6 @@
     <ClInclude Include="scene.h">
       <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="DirectWriteCustomFont.h">
-      <Filter>Font</Filter>
-    </ClInclude>
     <ClInclude Include="templatefactory.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -523,6 +532,21 @@
     </ClInclude>
     <ClInclude Include="camera.h">
       <Filter>Components\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="missile_base.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="normalmissile.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="missiletest.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="bullet.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="billboard_sprite.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

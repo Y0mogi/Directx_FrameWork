@@ -21,7 +21,7 @@ private:
 	ID3D11InputLayout*	m_VertexLayout;
 
 	int m_Speed{};
-
+	double m_Yaw{}, m_Pitch{}, m_Roll{};	// épê®êßå‰óp
 };
 
 #endif // PLAYER_H

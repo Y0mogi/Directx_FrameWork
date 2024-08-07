@@ -72,15 +72,12 @@ void ParticleEmitter::Uninit()
 void ParticleEmitter::Update(const float& dt)
 {
 	int tmp = m_Count;
-	for (const auto& it : m_Particles) {
-		it->Update(dt);
-
-		tmp--;
-		if (tmp < 0) break;
-	}
-
-	for (size_t i = m_Count; i < m_Particles.size(); i++) {
-		m_Particles[i]->GetEnable() = false;
+	for (int it = 0; it < m_Particles.size(); it++) {
+		m_Particles[it]->Update(dt);
+		if (!m_Particles[it]->GetEnable()) {
+			tmp--;
+			if (tmp <= 0) break;
+		}
 	}
 }
 

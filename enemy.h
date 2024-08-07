@@ -16,10 +16,13 @@ public:
 
 	void OnCollisionEnter(const GameObject* collision);
 
+	void CompInfo() override;
+
 private:
 	ID3D11VertexShader* _VertexShader;
 	ID3D11PixelShader* _PixelShader;
 	ID3D11InputLayout* _VertexLayout;
+
 };
 
 #endif // ENEMY_H

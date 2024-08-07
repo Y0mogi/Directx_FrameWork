@@ -139,11 +139,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="audio.cpp" />
+    <ClCompile Include="billboard_sprite.cpp" />
     <ClCompile Include="boxcollision.cpp" />
+    <ClCompile Include="bullet.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="camera_fps.cpp" />
     <ClCompile Include="DebugDraw.cpp" />
-    <ClCompile Include="DirectWriteCustomFont.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="field.cpp" />
     <ClCompile Include="game.cpp" />
@@ -160,7 +161,10 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="manager.cpp" />
     <ClCompile Include="memleakcheck.cpp" />
+    <ClCompile Include="missiletest.cpp" />
+    <ClCompile Include="missile_base.cpp" />
     <ClCompile Include="modelRenderer.cpp" />
+    <ClCompile Include="normalmissile.cpp" />
     <ClCompile Include="orientedbox.cpp" />
     <ClCompile Include="particleemitter.cpp" />
     <ClCompile Include="particle_flare.cpp" />
@@ -212,13 +216,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="audio.h" />
+    <ClInclude Include="billboard_sprite.h" />
     <ClInclude Include="boxcollision.h" />
+    <ClInclude Include="bullet.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="camera_fps.h" />
     <ClInclude Include="collision_base.h" />
     <ClInclude Include="component.h" />
     <ClInclude Include="DebugDraw.h" />
-    <ClInclude Include="DirectWriteCustomFont.h" />
     <ClInclude Include="directxTK_all.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="field.h" />
@@ -255,6 +260,8 @@
     <ClInclude Include="Inc\WICTextureLoader.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="jump.h" />
+    <ClInclude Include="missiletest.h" />
+    <ClInclude Include="missile_base.h" />
     <ClInclude Include="magic_enum\magic_enum.hpp" />
     <ClInclude Include="magic_enum\magic_enum_all.hpp" />
     <ClInclude Include="magic_enum\magic_enum_containers.hpp" />
@@ -269,6 +276,7 @@
     <ClInclude Include="math_helper.h" />
     <ClInclude Include="memleakcheck.h" />
     <ClInclude Include="modelRenderer.h" />
+    <ClInclude Include="normalmissile.h" />
     <ClInclude Include="orientedbox.h" />
     <ClInclude Include="particle_base.h" />
     <ClInclude Include="particleemitter.h" />

@@ -32,6 +32,7 @@ public:
 
 	inline void SetTarget(Transform* pTarget) { this->m_Target = pTarget; }
 	inline XMMATRIX GetViewMatrix() { return XMLoadFloat4x4(&m_ViewMatrix); };
+	inline XMMATRIX GetProjectionMatrix() { return XMLoadFloat4x4(&m_ViewMatrix); };
 
 private:
 	void UpdatePosition();
@@ -39,6 +40,8 @@ private:
 	Transform* m_Transform = nullptr;
 	Transform* m_Target = nullptr;
 	XMFLOAT4X4 m_ViewMatrix{};
+	XMFLOAT4X4 m_ProjectionMatrix{};
+	
 	float m_Length{}, m_Yaw{}, m_Pitch{};
 };
 

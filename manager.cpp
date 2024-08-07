@@ -28,6 +28,8 @@ void Manager::Init()
     m_NowScene = new Title();
     m_NowScene->Init();
 
+
+
 }
 
 void Manager::Uninit()
@@ -85,6 +87,7 @@ void Manager::Update(const float& dt)
 
 void Manager::Draw()
 {
+
     // 描画開始
     Renderer::Begin();
    

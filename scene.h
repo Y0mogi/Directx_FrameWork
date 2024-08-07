@@ -223,6 +223,21 @@ public:
 		return returnList;
 	}
 
+	/// <summary>
+	/// オブジェクトが存在しているか
+	/// </summary>
+	/// <param name="object">調べたいオブジェクトのポインタ</param>
+	/// <returns></returns>
+	bool GetGameObjectAlive(GameObject* object){
+		auto tmp = std::find_if(m_Objects.begin(), m_Objects.end(), [object](const std::unique_ptr<GameObject>& a)
+			{
+				return a.get() == object;
+			});
+		
+		if (tmp != m_Objects.end()) { return true; }
+
+		return false;
+	}
 	//==============================================================================
 	//
 	//==============================================================================
@@ -248,7 +263,7 @@ public:
 				if (ImGui::Button("Close"))
 					ImGui::CloseCurrentPopup();
 				// ImGui::SeparatorText("Components");
-				for (auto& comp : obj->componentList) {
+				for (auto& comp : obj->m_ComponentList) {
 
 					comp->CompInfo();
 					ImGui::NewLine();
@@ -268,7 +283,7 @@ public:
 		for (auto& obj : this->m_Objects) {
 
 			if (ImGui::TreeNode(obj->GetObjectName().c_str())) {
-				for (auto& comp : obj->componentList) {
+				for (auto& comp : obj->m_ComponentList) {
 					std::string tmp = typeid(*comp).name();
 					tmp.erase(0, 5); // classのみ削除
 					if (ImGui::TreeNode(tmp.c_str())) {

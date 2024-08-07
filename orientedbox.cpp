@@ -33,7 +33,13 @@ void OrientedBox::Update(const float& dt)
 {
     
     m_Collision.Center = m_Transform->position;
-    m_Collision.Extents = m_Transform->scale;
+    if (m_transform) {
+        m_Collision.Extents = m_Transform->scale;
+    }
+    else {
+        m_Collision.Extents = m_Scale;
+    }
+   
     m_Collision.Orientation  = m_Transform->rotation;
 
 }
@@ -51,8 +57,8 @@ void OrientedBox::Draw()
     Renderer::GetDeviceContext()->PSSetShader(m_PixelShader, NULL, 0);
 
     XMMATRIX world, scl, rot, trans;
-    scl = DirectX::XMMatrixScaling(m_Transform->scale.x * 2, m_Transform->scale.y * 2, m_Transform->scale.z * 2);
-    rot = Matrix::CreateFromQuaternion(m_Transform->rotation);
+    scl = DirectX::XMMatrixScaling(m_Collision.Extents.x * 2, m_Collision.Extents.y * 2, m_Collision.Extents.z * 2);
+    rot = Matrix::CreateFromQuaternion(m_Collision.Orientation);
     trans = DirectX::XMMatrixTranslation(m_Collision.Center.x, m_Collision.Center.y, m_Collision.Center.z);
     world = scl * rot * trans;
     Renderer::SetWorldMatrix(world);

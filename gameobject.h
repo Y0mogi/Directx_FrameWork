@@ -11,10 +11,10 @@ class GameObject
 {
 public:
 
-	void Init();	// 初期化
+	void Init();					// 初期化
 	void Update(const float& dt);	// 更新
-	void Uninit();	// 開放
-	void Draw();	// 描画
+	void Uninit();					// 開放
+	void Draw();					// 描画
 	inline bool IsDiscard(){
 		if (this->m_Discard) {
 			this->Uninit();
@@ -25,7 +25,7 @@ public:
 		}
 	}   
 
-	inline void Discard() { this->m_Discard = true; };	// 削除予約
+	inline void Destroy() { this->m_Discard = true; };	// 削除予約
 	void OnCollisionEnter(GameObject* Collision);		// 衝突処理
 	void CompInfo();									// コンポーネントの情報表示
 
@@ -36,7 +36,7 @@ public:
 	/// <returns>コンポーネントのポインタ</returns>
 	template<class T>
 	T* GetComponent(){
-		for (auto& it : this->componentList) {
+		for (auto& it : this->m_ComponentList) {
 			T* tmp = dynamic_cast<T*>(it);
 			if (tmp != nullptr)
 				return tmp;
@@ -53,14 +53,14 @@ public:
 	T* AddComponent(){
 		T* tmp = new T();
 		tmp->Parent = this;
-		this->componentList.push_back(tmp);
+		this->m_ComponentList.push_back(tmp);
 		return tmp;
 	}
 
 	template<class T>
 	T* AddComponent(T* comp) {
 		comp->Parent = this;
-		this->componentList.push_back(comp);
+		this->m_ComponentList.push_back(comp);
 		return comp;
 	}
 
@@ -75,7 +75,7 @@ public:
 	T* AddComponent(Args&&... args) {
 		T* tmp = new T(std::forward<Args>(args)...);
 		tmp->Parent = this;
-		this->componentList.push_back(tmp);
+		this->m_ComponentList.push_back(tmp);
 		return tmp;
 	}
 
@@ -86,10 +86,10 @@ public:
 	/// <returns>削除が成功したか</returns>
 	template<class T>
 	bool RemoveComponent() {
-		for (auto it = this->componentList.begin(); it != this->componentList.end(); ++it) {
+		for (auto it = this->m_ComponentList.begin(); it != this->m_ComponentList.end(); ++it) {
 			if (typeid(**it) == typeid(T)) {  // typeid で型を比較
 				Component* tmp = *it;
-				it = this->componentList.erase(it);  // リストから要素を削除し、イテレータを更新
+				it = this->m_ComponentList.erase(it);  // リストから要素を削除し、イテレータを更新
 				delete tmp;  // メモリを解放
 				return true;  // 成功
 			}
@@ -99,9 +99,9 @@ public:
 
 	// getter
 
-	std::string&	GetObjectName()	{ return this->m_ObjectName;	}
+	std::string&	GetObjectName()	{ return this->m_ObjectName;}
 	Layer&			GetLayer()		{ return this->m_Layer;		}
-	Tag&			GetTag()		{ return this->m_Tag;			}
+	Tag&			GetTag()		{ return this->m_Tag;		}
 
 
 	// コンストラクタ・デストラクタ
@@ -113,8 +113,8 @@ public:
 
 
 public:
-	std::list<Component*> componentList{};	// 自身についているコンポーネント
-	class Scene* scene = nullptr;			// 自身を管理しているシーンのポインタ
+	std::list<Component*> m_ComponentList{};// 自身についているコンポーネント
+	class Scene* m_Scene = nullptr;			// 自身を管理しているシーンのポインタ
 
 private:
 	bool		m_Discard = false;			// 削除予約

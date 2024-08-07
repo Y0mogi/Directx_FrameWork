@@ -38,9 +38,11 @@ public:
 
 	inline BoundingOrientedBox& GetCollision() { return m_Collision; }
 
-
+	inline void SetScale(const XMFLOAT3 scale) { m_Scale = scale; }
 	// コンストラクタ・デストラクタ
-	inline OrientedBox() { SetCollisionType(CollisionType::OBB); }
+	
+	inline OrientedBox(bool transform = true) 
+	:Collision_Base(transform){ SetCollisionType(CollisionType::OBB); }
 	inline ~OrientedBox() override {}
 
 	
@@ -48,7 +50,7 @@ public:
 private: 
 	BoundingOrientedBox m_Collision;
 	class Transform*    m_Transform{};
-	
+	XMFLOAT3			m_Scale{};
 	// デバッグ表示用
 
 	ID3D11VertexShader* m_VertexShader{};

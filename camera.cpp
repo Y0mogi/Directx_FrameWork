@@ -20,6 +20,7 @@
 #include "input.h"
 #include "scene.h"
 #include "manager.h"
+#include "enemy.h"
 
 using namespace DirectX::SimpleMath;
 
@@ -31,7 +32,8 @@ void Camera::Init()
 	}
 
 	if (m_Target == nullptr) {
-	m_Target = Parent->scene->GetGameObject("Player")->GetComponent<Transform>();
+	m_Target = Parent->m_Scene->GetGameObject("Player")->GetComponent<Transform>();
+
 	NULLSEARCH(m_Target)
 	}
 	
@@ -54,6 +56,7 @@ void Camera::Update(const float& dt)
 
 void Camera::Draw()
 {
+
 	m_Transform->rotation = m_Target->rotation;
 
 	// ターゲットの位置（XMFLOAT3で取得）
@@ -77,12 +80,19 @@ void Camera::Draw()
 	XMFLOAT3 up{};
 	XMFLOAT3 forward{};
 	if (Input::GetKeyPress('R')) {
-		forward = { 0,0,0 };
+		auto tmp = Manager::GetScene()->GetGameObject<Enemy>();
+		if (tmp) {
+			forward = tmp->GetComponent<Transform>()->position;
+		}
+		else {
+			forward = { 0,0,0 };
+		}
 	}
 	else {
 		forward = targetPosition + m_Target->GetForward() * 30;
 	}
-	up = m_Target->GetUp();
+	up = m_Transform->GetUp();
+
 	// ビュー行列を設定
 	XMMATRIX viewMatrix = XMMatrixLookAtLH(
 		XMLoadFloat3(&m_Transform->position),
@@ -90,12 +100,14 @@ void Camera::Draw()
 		XMLoadFloat3(&up)
 	);
 
+
 	Renderer::SetViewMatrix(viewMatrix);
 	XMStoreFloat4x4(&m_ViewMatrix, viewMatrix);
 
 	// プロジェクションマトリックス設定
 	XMMATRIX projectionMatrix;
-	projectionMatrix = XMMatrixPerspectiveFovLH(1.0f, (float)SCREEN_WIDTH / SCREEN_HEIGHT, 0.1f, 1000000.0f);
+	projectionMatrix = XMMatrixPerspectiveFovLH(ToRadian(45), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100000.0);
+	XMStoreFloat4x4(&m_ProjectionMatrix, projectionMatrix);
 	Renderer::SetProjectionMatrix(projectionMatrix);
 }
 

@@ -47,8 +47,8 @@ using namespace DirectX;
 // XMFLOATÉwÉãÉp
 #include "XMFLOAT_Helper.h"
 
-#define SCREEN_WIDTH	(1280)
-#define SCREEN_HEIGHT	(720)
+#define SCREEN_WIDTH	(1980)
+#define SCREEN_HEIGHT	(1080)
 
 #define NULLSEARCH(target) if(!target) assert(0 && "Ç ÇÈÇ€ Å® ÉKÉb");
 

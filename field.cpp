@@ -113,7 +113,7 @@ void Field::Draw()
 	// materialê›íË
 	MATERIAL material;
 	ZeroMemory(&material, sizeof(material));
-	material.Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	material.Diffuse = m_Color;
 	material.TextureEnable = true;
 	Renderer::SetMaterial(material);
 

@@ -46,9 +46,13 @@ public:
 	virtual bool Intersects(Collision_Base* other) const = 0; // 交差しているか
 	virtual bool Contains(Collision_Base* other) const = 0;   // 内包しているか
 
-	Collision_Base() {};
+	Collision_Base() = default;
+	Collision_Base(bool transform = false)
+	:m_transform(transform){};
 	virtual ~Collision_Base() {};
 
+protected:
+	bool m_transform;			// 親のトランスフォームに従うか(スケールのみ)
 private:
 	bool m_IsActive = true;		// 接触処理をするか
 	bool m_IsHit	= false;	// 接触しているか
